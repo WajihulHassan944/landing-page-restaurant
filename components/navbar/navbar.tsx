@@ -94,7 +94,7 @@ export default function Navbar() {
               <Link href="#">Pricing</Link>
               <Link href="#">Contact</Link>
 
-              <Button className="mt-4 rounded-full bg-[#CE181B] text-white hover:bg-[#b51619]">
+              <Button className="mt-4 py-3 rounded-full bg-[#CE181B] text-white hover:bg-[#b51619]">
                 Registration / Sign In
               </Button>
             </div>

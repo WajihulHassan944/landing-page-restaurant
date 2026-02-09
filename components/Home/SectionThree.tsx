@@ -41,29 +41,29 @@ const categories = [
 
 export default function SectionThree() {
   return (
-    <section className="w-full bg-white py-24">
+    <section className="w-full bg-white py-14 md:py-24">
       <div className="mx-auto max-w-7xl px-4">
         {/* Header */}
-        <div className="mb-12 max-w-xl">
-          <h2 className="text-4xl font-bold text-gray-900 font-heading">
+        <div className="mb-10 md:mb-12 max-w-xl text-center md:text-left">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 font-heading">
             Browse Popular Categories
           </h2>
-          <p className="mt-4 text-[16px] text-gray-600">
+          <p className="mt-3 md:mt-4 text-sm md:text-[16px] text-gray-600">
             Discover the perfect course from our top-loved selections,
             designed to help you learn, grow, and succeed
           </p>
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
           {categories.map((item, index) => (
             <Card
               key={index}
-              className="rounded-[24px] border-none bg-[#F7F7F7] shadow-none"
+              className="rounded-[20px] md:rounded-[24px] border-none bg-[#F7F7F7] shadow-none"
             >
-              <CardContent className="flex items-center gap-4 px-4 py-0">
+              <CardContent className="flex items-center gap-3 md:gap-4 px-4  md:py-0">
                 {/* Icon */}
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary">
+                <div className="flex h-12 w-12 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-primary">
                   <Image
                     src={item.icon}
                     alt={item.title}
@@ -75,10 +75,10 @@ export default function SectionThree() {
 
                 {/* Content */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                  <p className="mt-1 text-xs md:text-sm leading-relaxed text-gray-600">
                     {item.description}
                   </p>
                 </div>
@@ -86,11 +86,11 @@ export default function SectionThree() {
             </Card>
           ))}
         </div>
-        
-        <div className="mt-12">
-          <center><Button className="rounded-full bg-black px-8 py-3.5 text-sm font-medium text-white hover:bg-black/90">
+
+        <div className="mt-10 md:mt-12 text-center">
+          <Button className="w-full sm:w-auto rounded-full bg-black px-8 py-3 text-sm md:py-3.5 font-medium text-white hover:bg-black/90">
             View all
-          </Button></center>
+          </Button>
         </div>
       </div>
     </section>

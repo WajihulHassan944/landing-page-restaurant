@@ -6,7 +6,7 @@ const stats = [
     value: "120K+",
     title:
       "A complete operating system designed to help restaurants increase revenue and run daily operations effortlessly.",
-    iconSize: 76, // bigger icon
+    iconSize: 76,
   },
   {
     icon: "/assets/sectionTwo/star.png",
@@ -26,13 +26,13 @@ const stats = [
 
 export default function SectionTwo() {
   return (
-    <section className="w-full bg-white py-10 pt-35">
+    <section className="w-full bg-white py-8 pt-20 md:py-10 md:pt-35">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="grid grid-cols-1 gap-20 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-10 md:gap-20 md:grid-cols-3">
           {stats.map((item, index) => (
-            <div key={index}>
-              {/* Icon + Value (ROW) */}
-              <div className="flex items-center gap-3">
+            <div key={index} className="text-center md:text-left">
+              {/* Icon + Value */}
+              <div className="flex items-center justify-center md:justify-start gap-3">
                 <Image
                   src={item.icon}
                   alt={item.value}
@@ -40,13 +40,13 @@ export default function SectionTwo() {
                   height={item.iconSize}
                   className="object-contain"
                 />
-                <h3 className="text-3xl font-semibold text-gray-900 font-heading">
+                <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 font-heading">
                   {item.value}
                 </h3>
               </div>
 
               {/* Description */}
-              <p className="mt-3 max-w-sm text-[16px] leading-relaxed text-gray-600">
+              <p className="mt-3 max-w-sm mx-auto md:mx-0 text-sm md:text-[16px] leading-relaxed text-gray-600">
                 {item.title}
               </p>
             </div>

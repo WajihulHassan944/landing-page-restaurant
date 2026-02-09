@@ -10,7 +10,7 @@ export default function Hero() {
       {/* ================= TEXT CONTENT ================= */}
       <div className="relative z-10 mx-auto px-4 text-center">
         {/* SUBTITLE */}
-        <div className="pr-4 font-heading mx-auto mb-6 inline-flex items-center gap-2 rounded-full bg-[#E9E9E9] text-sm font-medium text-gray-900">
+        <div className="pr-4 font-heading mx-auto mb-6 inline-flex items-center gap-2 rounded-full bg-[#E9E9E9] text-sm sm:text-[14px] font-medium text-gray-900">
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
             <ShieldCheck />
           </span>
@@ -18,28 +18,30 @@ export default function Hero() {
         </div>
 
         {/* TITLE */}
-        <h1 className="mx-auto max-w-6xl text-4xl font-[500] leading-tight md:text-6xl font-sans">
-          The Complete Restaurant Management
-          <br />
-          System That Handles Everything.
-        </h1>
+      <h1 className="mx-auto max-w-6xl text-2xl sm:text-3xl md:text-6xl font-[500] leading-tight font-sans px-4 sm:px-0">
+  The Complete Restaurant Management
+  System That Handles Everything.
+</h1>
+
 
         {/* DESCRIPTION */}
-        <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-white/90">
-          Empower Your Brand, Control Your Revenue. Launch Your Own Branded Food
-          Ordering App in Days, Not Months.
-        </p>
+       <p className="mx-auto mt-6 max-w-3xl text-sm sm:text-base md:text-lg leading-relaxed text-white/90 px-4 sm:px-0">
+  Empower Your Brand, Control Your Revenue. Launch Your Own Branded Food
+  Ordering App in Days, Not Months.
+</p>
+
 
         {/* ACTION BUTTONS */}
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Button className="rounded-full bg-white px-9 py-4 text-sm font-medium text-[#CE181B] hover:bg-white/90">
-            Get Started
-          </Button>
+       <div className="mt-8 flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4 sm:px-0">
+  <Button className="w-full sm:w-auto rounded-full bg-white px-9 py-3 sm:py-4 text-sm font-medium text-[#CE181B] hover:bg-white/90">
+    Get Started
+  </Button>
 
-          <Button className="rounded-full bg-black px-9 py-4 text-sm font-medium text-white hover:bg-black/90">
-            Request a demo
-          </Button>
-        </div>
+  <Button className="w-full sm:w-auto rounded-full bg-black px-9 py-3 sm:py-4 text-sm font-medium text-white hover:bg-black/90">
+    Request a demo
+  </Button>
+</div>
+
       </div>
 
       {/* ================= VISUAL AREA ================= */}
