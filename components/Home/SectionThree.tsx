@@ -1,43 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import CategoriesCard from "../cards/CategoriesCard";
 import { Button } from "../ui/button";
-
-const categories = [
-  {
-    title: "Menu Management",
-    description: "Easily update dishes, variations, prices & stock levels.",
-    icon: "/assets/sectionThree/menu.png",
-  },
-  {
-    title: "Order & Delivery Flow",
-    description: "Easily update dishes, variations, prices & stock levels.",
-    icon: "/assets/sectionThree/order.png",
-  },
-  {
-    title: "Sales & Analytics",
-    description:
-      "Monitor revenue, popular items, peak hours & performance insights.",
-    icon: "/assets/sectionThree/analytics.png",
-  },
-  {
-    title: "Customer Feedback",
-    description:
-      "View ratings, respond to reviews & boost your reputation.",
-    icon: "/assets/sectionThree/feedback.png",
-  },
-  {
-    title: "Promotions & Discounts",
-    description:
-      "Create offers, promo codes & highlight best-selling meals.",
-    icon: "/assets/sectionThree/discount.png",
-  },
-  {
-    title: "Staff & Role Control",
-    description:
-      "Manage staff accounts, access levels & activity logs.",
-    icon: "/assets/sectionThree/staff.png",
-  },
-];
+import { sectionThreeCategories } from "@/constants/categories";
 
 export default function SectionThree() {
   return (
@@ -56,37 +19,17 @@ export default function SectionThree() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
-          {categories.map((item, index) => (
-            <Card
+          {sectionThreeCategories.map((item, index) => (
+            <CategoriesCard
               key={index}
-              className="rounded-[20px] md:rounded-[24px] border-none bg-[#F7F7F7] shadow-none"
-            >
-              <CardContent className="flex items-center gap-3 md:gap-4 px-4  md:py-0">
-                {/* Icon */}
-                <div className="flex h-12 w-12 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-primary">
-                  <Image
-                    src={item.icon}
-                    alt={item.title}
-                    width={26}
-                    height={26}
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* Content */}
-                <div>
-                  <h3 className="text-base md:text-lg font-semibold text-gray-900">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1 text-xs md:text-sm leading-relaxed text-gray-600">
-                    {item.description}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+              title={item.title}
+              description={item.description}
+              icon={item.icon}
+            />
           ))}
         </div>
 
+        {/* CTA */}
         <div className="mt-10 md:mt-12 text-center">
           <Button className="w-full sm:w-auto rounded-full bg-black px-8 py-3 text-sm md:py-3.5 font-medium text-white hover:bg-black/90">
             View all

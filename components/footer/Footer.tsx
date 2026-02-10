@@ -10,7 +10,7 @@ import SectionNine from "../Home/SectionNine";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gray-100 pt-95">
+    <footer className="relative bg-gray-100 pt-110 md:pt-95">
       {/* SECTION NINE (OVERLAPPING CTA) */}
       <div className="absolute inset-x-0 -top-55 z-20">
         <SectionNine />
@@ -34,7 +34,9 @@ export default function Footer() {
               </span>
             </div>
 
-            <h4 className="mt-6 font-medium text-gray-900 font-semibold font-heading">Subscribe</h4>
+            <h4 className="mt-6 font-heading font-semibold text-gray-900">
+              Subscribe
+            </h4>
             <p className="mt-2 text-[15px] text-gray-600">
               Join our newsletter to stay up to date on features and releases.
             </p>
@@ -58,7 +60,9 @@ export default function Footer() {
 
           {/* QUICK LINKS (CENTER LEFT) */}
           <div>
-            <h4 className="font-medium text-gray-900 font-heading font-bold">Quick Links</h4>
+            <h4 className="font-heading font-bold text-gray-900">
+              Quick Links
+            </h4>
             <ul className="mt-4 space-y-2 text-[15px] text-gray-600">
               <li>Home</li>
               <li>About</li>
@@ -69,7 +73,9 @@ export default function Footer() {
 
           {/* PRODUCTS (CENTER RIGHT) */}
           <div>
-            <h4 className="font-medium text-gray-900">Products</h4>
+            <h4 className="font-medium text-gray-900">
+              Products
+            </h4>
             <ul className="mt-4 space-y-2 text-[15px] text-gray-600">
               <li>Super Admin Dashboard</li>
               <li>Restaurant Admin Dashboard</li>
@@ -81,7 +87,9 @@ export default function Footer() {
 
           {/* COMPANY (RIGHT) */}
           <div className="md:text-left">
-            <h4 className="font-medium text-gray-900">Company</h4>
+            <h4 className="font-medium text-gray-900">
+              Company
+            </h4>
             <ul className="mt-4 space-y-2 text-[15px] text-gray-600">
               <li>About</li>
               <li>Privacy Policy</li>

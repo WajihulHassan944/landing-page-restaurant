@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const router = useRouter();
   return (
     <>
       {/* OUTER BAR */}
@@ -49,6 +50,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Button
                 className="hidden md:inline-flex rounded-full bg-white px-7 py-3 text-[15px] font-sans font-medium text-[#CE181B] hover:bg-white/90"
+              onClick={()=>router.push("/register")}
               >
                 Registration / Sign In
               </Button>
@@ -94,7 +96,7 @@ export default function Navbar() {
               <Link href="#">Pricing</Link>
               <Link href="#">Contact</Link>
 
-              <Button className="mt-4 py-3 rounded-full bg-[#CE181B] text-white hover:bg-[#b51619]">
+              <Button className="mt-4 py-3 rounded-full bg-[#CE181B] text-white hover:bg-[#b51619]" onClick={()=>router.push("/register")}>
                 Registration / Sign In
               </Button>
             </div>
