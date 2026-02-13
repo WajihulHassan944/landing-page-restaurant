@@ -4,7 +4,7 @@ import { faqs } from "@/constants/faq";
 
 export default function SectionEight() {
   return (
-    <section className="w-full bg-white pt-12 md:pt-15 pb-80 md:pb-90">
+    <section className="w-full bg-white pt-12 md:pt-15 pb-30 md:pb-30">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
           {/* LEFT CONTENT */}

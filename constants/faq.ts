@@ -38,3 +38,29 @@ export const faqs: FaqItemType[] = [
       "Yes. Your account stays synchronized across all devices, allowing you to manage orders, menus, and analytics from multiple tablets, phones, or desktops simultaneously.",
   },
 ];
+
+
+
+
+export const pricingFaqData = [
+  {
+    question: "Can I switch plans later?",
+    answer:
+      "Yes, you can upgrade or downgrade your plan at any time. When upgrading, new features become available immediately. Downgrades take effect at the end of your current billing cycle.",
+  },
+  {
+    question: "Does Gusto work with my existing hardware?",
+    answer:
+      "Gusto is hardware-agnostic. We support most modern POS terminals, iPads, and Android tablets. Contact our team to verify your specific setup.",
+  },
+  {
+    question: "What kind of support is included?",
+    answer:
+      "Starter plans include email support. Professional and Enterprise plans include 24/7 priority phone and chat support with guaranteed response times under 30 minutes.",
+  },
+  {
+    question: "Are there any hidden setup fees?",
+    answer:
+      "No. We believe in transparent pricing. There are no mandatory implementation fees. Custom onboarding is available for Enterprise teams if needed.",
+  },
+];

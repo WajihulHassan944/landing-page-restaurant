@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className="mx-auto max-w-7xl">
           <div className="flex h-[64px] items-center justify-between rounded-full bg-[rgba(255,255,255,0.09)] pl-7 pr-3">
             {/* LEFT: LOGO */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={()=>router.push('/')}>
               <Image
                 src="/assets/logo_nav.png"
                 alt="Food logo"
@@ -32,16 +32,16 @@ export default function Navbar() {
 
             {/* CENTER: LINKS (DESKTOP) */}
             <div className="hidden md:flex items-center gap-8 text-[15px] font-sans text-white ml-20">
-              <Link href="#" className="hover:opacity-80">
+              <Link href="/about" className="hover:opacity-80">
                 About
               </Link>
-              <Link href="#" className="hover:opacity-80">
+              <Link href="/services" className="hover:opacity-80">
                 Services
               </Link>
-              <Link href="#" className="hover:opacity-80">
+              <Link href="/pricing" className="hover:opacity-80">
                 Pricing
               </Link>
-              <Link href="#" className="hover:opacity-80">
+              <Link href="/contact" className="hover:opacity-80">
                 Contact
               </Link>
             </div>

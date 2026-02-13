@@ -6,16 +6,11 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 
-import SectionNine from "../Home/SectionNine";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gray-100 pt-110 md:pt-95">
-      {/* SECTION NINE (OVERLAPPING CTA) */}
-      <div className="absolute inset-x-0 -top-55 z-20">
-        <SectionNine />
-      </div>
-
+    <footer className="relative bg-gray-100 pt-20">
+  
       {/* FOOTER CONTENT */}
       <div className="mx-auto max-w-7xl px-4 pb-12">
         {/* GRID WITH SPACE-BETWEEN BEHAVIOR */}

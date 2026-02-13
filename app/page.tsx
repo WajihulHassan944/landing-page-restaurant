@@ -7,6 +7,7 @@ import SectionSix from "@/components/Home/SectionSix";
 import SectionSeven from "@/components/Home/SectionSeven";
 import SectionEight from "@/components/Home/SectionEight";
 import Hero from "@/components/Home/Hero";
+import SectionNine from "@/components/Home/SectionNine";
 
 export default function Home() {
     return (
@@ -19,6 +20,11 @@ export default function Home() {
           <SectionSix />
           <SectionSeven />
           <SectionEight />
+        <div className="relative">
+  <SectionNine />
+  <div className="absolute bottom-0 left-0 w-full h-2/3 bg-gray-100" />
+</div>
+
         </Container>
     )
 }
