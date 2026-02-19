@@ -70,12 +70,7 @@ export default function SectionFour() {
           </div>
         </div>
 
-        {/* Button */}
-        <div className="mt-12">
-          <Button className="rounded-full bg-black px-8 py-3.5 text-sm font-medium text-white hover:bg-black/90">
-            View all
-          </Button>
-        </div>
+     
       </div>
     </section>
   );

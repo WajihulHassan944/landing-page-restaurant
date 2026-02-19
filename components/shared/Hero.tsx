@@ -51,7 +51,7 @@ const Hero: React.FC<HeroProps> = ({
           </div>
       
       {/* Content */}
-      <div className="relative w-full max-w-4xl flex flex-col items-center gap-4 text-center">
+      <div className="relative w-full max-w-5xl flex flex-col items-center gap-4 text-center">
         {/* Badge */}
         {badgeText  && (
           <div className={`px-4 py-1 rounded-full inline-flex justify-center items-center ${showBackground ? "bg-neutral-50/10":""}`}>
@@ -67,7 +67,7 @@ const Hero: React.FC<HeroProps> = ({
         </h1>
 
         {/* Description */}
-        <p className={`text-base sm:text-lg leading-7 mt-4 text-gray-200`}>
+        <p className={`text-base sm:text-lg leading-7 text-gray-200 max-w-2xl`}>
           {description}
         </p>
 

@@ -2,7 +2,6 @@ import BuiltForChefs from '@/components/services/BuiltForChefs'
 import RequestDemo from '@/components/services/RequestDemo'
 import Services from '@/components/services/Services'
 import Hero from '@/components/shared/Hero'
-import React from 'react'
 
 const page = () => {
   return (
@@ -16,7 +15,6 @@ const page = () => {
     </>
   }
   description="Streamline your operations, from back-of-house inventory to front-of-house service. Our unified platform empowers your team to deliver excellence in every dish and every interaction."
-  primaryButton={{ label: "Start Free Trial" }}
   secondaryButton={{ label: "Watch Video" }}
 />
 

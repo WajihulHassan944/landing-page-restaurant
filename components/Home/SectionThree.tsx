@@ -1,8 +1,11 @@
+'use client'
+import { useRouter } from "next/navigation";
 import CategoriesCard from "../cards/CategoriesCard";
 import { Button } from "../ui/button";
 import { sectionThreeCategories } from "@/constants/categories";
 
 export default function SectionThree() {
+  const router = useRouter();
   return (
     <section className="w-full bg-white py-14 md:py-24">
       <div className="mx-auto max-w-7xl px-4">
@@ -31,7 +34,7 @@ export default function SectionThree() {
 
         {/* CTA */}
         <div className="mt-10 md:mt-12 text-center">
-          <Button className="w-full sm:w-auto rounded-full bg-black px-8 py-3 text-sm md:py-3.5 font-medium text-white hover:bg-black/90">
+          <Button onClick={()=>router.push('/categories')} className="w-full sm:w-auto rounded-full bg-black px-8 py-3 text-sm md:py-3.5 font-medium text-white hover:bg-black/90">
             View all
           </Button>
         </div>
