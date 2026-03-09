@@ -7,6 +7,7 @@ import UserInfoStep from "./form/UserInfoStep";
 import TenantInfoStep from "./TenantInfoStep";
 import BranchStep from "./BranchStep";
 import SettingsStep from "./SettingsStep";
+import { API_BASE_URL } from "@/lib/constants";
 
 const steps = [
   { id: 1, label: "Account" },
@@ -174,12 +175,15 @@ export default function BusinessOnboarding() {
     };
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/register-tenant`, {
+      console.log("📤 Payload sent to backend:", payload);
+      const response = await fetch(`${API_BASE_URL}/v1/auth/register-tenant`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+  const data = await response.json();
 
+    console.log("📥 Backend JSON Response:", data);
       if (response.ok) {
         setActiveStep(5); // Move to "Published" step on success
       } else {

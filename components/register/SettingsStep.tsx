@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import FormInput from "./form/FormInput";
@@ -16,7 +15,31 @@ interface Props {
 
 export default function SettingsStep({ formData, updateFormData, next, back, isLoading }: Props) {
   const settings = formData.branch.settings;
-
+  const orderTypes = [
+  {
+    label: "Takeaway",
+    value: "TAKEAWAY",
+    description: "Customers collect orders from you",
+    icon: <ShoppingBag className="text-primary" size={28} />,
+  },
+  {
+    label: "Delivery",
+    value: "DELIVERY",
+    description: "Delivered to customer's location",
+    icon: <Bike className="text-primary" size={28} />,
+  },
+  {
+    label: "Dine-in / QR",
+    value: "DINE_IN",
+    description: "Table service with QR code ordering",
+    icon: <UtensilsCrossed className="text-primary" size={28} />,
+  },
+];
+const paymentMethods = [
+  { label: "Cash on Delivery", value: "COD" },
+  { label: "Stripe", value: "STRIPE" },
+  { label: "JazzCash", value: "JAZZCASH" },
+];
   const toggleFreeDelivery = (value: boolean) => {
     updateFormData("branch", { settings: { ...settings, isFreeDelivery: value } });
   };
@@ -76,29 +99,18 @@ export default function SettingsStep({ formData, updateFormData, next, back, isL
         Order Types Supported
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <OrderTypeCard
-          icon={<ShoppingBag className="text-primary" size={28} />}
-          title="Takeaway"
-          description="Customers collect orders from you"
-          enabled={settings.allowedOrderTypes.includes("Takeaway")}
-          onToggle={() => toggleOrderType("Takeaway")}
-        />
-        <OrderTypeCard
-          icon={<Bike className="text-primary" size={28} />}
-          title="Delivery"
-          description="Delivered to customer's location"
-          enabled={settings.allowedOrderTypes.includes("Delivery")}
-          onToggle={() => toggleOrderType("Delivery")}
-        />
-        <OrderTypeCard
-          icon={<UtensilsCrossed className="text-primary" size={28} />}
-          title="Dine-in / QR"
-          description="Table service with QR code ordering"
-          enabled={settings.allowedOrderTypes.includes("Dine-in / QR")}
-          onToggle={() => toggleOrderType("Dine-in / QR")}
-        />
-      </div>
+     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+  {orderTypes.map((type) => (
+    <OrderTypeCard
+      key={type.value}
+      icon={type.icon}
+      title={type.label}
+      description={type.description}
+      enabled={settings.allowedOrderTypes.includes(type.value)}
+      onToggle={() => toggleOrderType(type.value)}
+    />
+  ))}
+</div>
 
       {/* PAYMENT METHODS */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
@@ -106,15 +118,19 @@ export default function SettingsStep({ formData, updateFormData, next, back, isL
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        {["Cash on Delivery", "Stripe", "JazzCash"].map((method) => (
-          <div key={method} className="flex items-center justify-between bg-[#F5F5F5] rounded-xl px-6 py-5">
-            <span className="font-medium">{method}</span>
-            <Switch
-              checked={settings.allowedPaymentMethods.includes(method)}
-              onCheckedChange={() => togglePaymentMethod(method)}
-            />
-          </div>
-        ))}
+        {paymentMethods.map((method) => (
+    <div
+      key={method.value}
+      className="flex items-center justify-between bg-[#F5F5F5] rounded-xl px-6 py-5"
+    >
+      <span className="font-medium">{method.label}</span>
+
+      <Switch
+        checked={settings.allowedPaymentMethods.includes(method.value)}
+        onCheckedChange={() => togglePaymentMethod(method.value)}
+      />
+    </div>
+  ))}
       </div>
 
       {/* ORDER PROCESSING */}

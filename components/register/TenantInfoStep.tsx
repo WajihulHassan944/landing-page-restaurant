@@ -22,7 +22,16 @@ export default function TenantInfoStep({
   back,
 }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
+/* ---------------- SLUG GENERATOR ---------------- */
 
+const generateSlug = (name: string) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")   // remove special chars
+    .replace(/\s+/g, "-")           // spaces -> dash
+    .replace(/-+/g, "-");           // remove duplicate dashes
+};
   /* ---------------- REFS FOR UX ---------------- */
 
   const refs: any = {
@@ -225,10 +234,17 @@ export default function TenantInfoStep({
             label="Restaurant Name*"
             placeholder="KFC Pakistan"
             value={formData.restaurant.name || ""}
-            onChange={(val: string) => {
-              updateFormData("restaurant", { name: val });
-              clearError("restaurant.name");
-            }}
+          onChange={(val: string) => {
+  const slug = generateSlug(val);
+
+  updateFormData("restaurant", {
+    name: val,
+    slug: slug,
+  });
+
+  clearError("restaurant.name");
+  clearError("restaurant.slug");
+}}
             onBlur={() =>
               validateField(restaurantSchema, formData.restaurant, "name")
             }
@@ -274,19 +290,13 @@ export default function TenantInfoStep({
         </div>
 
         <div>
-          <FormInput
-            ref={refs.slug}
-            label="Slug*"
-            placeholder="kfc-pakistan"
-            value={formData.restaurant.slug || ""}
-            onChange={(val: string) => {
-              updateFormData("restaurant", { slug: val });
-              clearError("restaurant.slug");
-            }}
-            onBlur={() =>
-              validateField(restaurantSchema, formData.restaurant, "slug")
-            }
-          />
+         <FormInput
+  ref={refs.slug}
+  label="Slug*"
+  placeholder="kfc-pakistan"
+  value={formData.restaurant.slug || ""}
+  
+/>
           {errors["restaurant.slug"] && (
             <p className="text-red-500 text-xs mt-1">
               {errors["restaurant.slug"]}
