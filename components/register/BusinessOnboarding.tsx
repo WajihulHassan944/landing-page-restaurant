@@ -186,6 +186,7 @@ export default function BusinessOnboarding() {
     console.log("📥 Backend JSON Response:", data);
       if (response.ok) {
         setActiveStep(5); // Move to "Published" step on success
+      window.location.href = "http://saas-restaurant-admin-dashboard.vercel.app/login";
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message || "Failed to register"}`);
