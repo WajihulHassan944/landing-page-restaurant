@@ -6,6 +6,7 @@ import { onest } from "@/lib/fonts";
 import Navbar from "@/components/navbar/navbar";
 import { usePathname } from "next/navigation";
 import Footer from "@/components/footer/Footer";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -21,6 +22,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${onest.className}`}>
         {!hideLayout && <Navbar />}
+         <Toaster position="top-right" richColors />
+
           <div>{children}</div>
           {!hideLayout &&  <Footer />}
       </body>

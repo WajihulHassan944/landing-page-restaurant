@@ -8,7 +8,7 @@ import TenantInfoStep from "./TenantInfoStep";
 import BranchStep from "./BranchStep";
 import SettingsStep from "./SettingsStep";
 import { API_BASE_URL } from "@/lib/constants";
-
+import { toast } from "sonner";
 const steps = [
   { id: 1, label: "Account" },
   { id: 2, label: "Tenant & Restaurant" },
@@ -19,7 +19,7 @@ const steps = [
 
 export default function BusinessOnboarding() {
   const [activeStep, setActiveStep] = useState<number>(1);
-
+const [publishedData, setPublishedData] = useState<any>(null);
   /* ================= GLOBAL FORM DATA ================= */
 
   const [formData, setFormData] = useState({
@@ -109,95 +109,140 @@ export default function BusinessOnboarding() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    setLoading(true);
-    
-    // Mapping local state to the Backend's expected JSON structure
-    const payload = {
-      user: {
-        email: formData.user.email,
-        password: formData.user.password,
-        firstName: formData.user.firstName,
-        lastName: formData.user.lastName,
-        avatarUrl: formData.user.profileUrl,
-        bio: "", // Add if available in your form
-      },
-      tenant: {
-        name: formData.tenant.name,
-        slug: formData.restaurant.slug, // Common practice to use restaurant slug for tenant
-        logoUrl: formData.tenant.logoUrl,
-        bio: formData.tenant.bio,
-        socialLinks: {},
-        settings: {},
-      },
-      restaurant: {
-        name: formData.restaurant.name,
-        slug: formData.restaurant.slug,
-        logoUrl: formData.restaurant.logoUrl,
-        customDomain: "", 
-        bio: "",
-        tagline: formData.restaurant.tagline,
-        supportContact: formData.restaurant.supportContact,
-        branding: formData.restaurant.branding,
-        socialMedia: {},
-      },
-      branch: {
-        name: formData.branch.name,
-        street: formData.branch.address.street,
-        city: formData.branch.address.city,
-        state: formData.branch.address.state,
-        country: formData.branch.address.country,
-        area: formData.branch.address.area,
-        coverImage: formData.branch.coverImage,
-        description: formData.branch.description,
-        settings: {
-          allowedOrderTypes: formData.branch.settings.allowedOrderTypes,
-          allowedPaymentMethods: formData.branch.settings.allowedPaymentMethods,
-          deliveryConfig: {
-            radiusKm: formData.branch.settings.radiusKm,
-            minOrderAmount: formData.branch.settings.minOrderAmount,
-            deliveryFee: formData.branch.settings.deliveryFee,
-            isFreeDelivery: formData.branch.settings.isFreeDelivery,
-            freeDeliveryThreshold: formData.branch.settings.freeDeliveryThreshold,
-          },
-          automation: {
-            autoAcceptOrders: formData.branch.settings.autoAcceptOrders,
-            estimatedPrepTime: formData.branch.settings.estimatedPrepTime,
-          },
-          taxation: {
-            taxPercentage: formData.branch.settings.taxPercentage,
-          },
-          contact: {
-            whatsapp: formData.restaurant.supportContact.whatsapp,
-            phone: formData.restaurant.supportContact.phone,
-          },
+  setLoading(true);
+
+  const payload = {
+    user: {
+      email: formData.user.email,
+      password: formData.user.password,
+      firstName: formData.user.firstName,
+      lastName: formData.user.lastName,
+      avatarUrl: formData.user.profileUrl,
+      bio: "",
+    },
+    tenant: {
+      name: formData.tenant.name,
+      slug: formData.restaurant.slug,
+      logoUrl: formData.tenant.logoUrl,
+      bio: formData.tenant.bio,
+      socialLinks: {},
+      settings: {},
+    },
+    restaurant: {
+      name: formData.restaurant.name,
+      slug: formData.restaurant.slug,
+      logoUrl: formData.restaurant.logoUrl,
+      customDomain: "",
+      bio: "",
+      tagline: formData.restaurant.tagline,
+      supportContact: formData.restaurant.supportContact,
+      branding: formData.restaurant.branding,
+      socialMedia: {},
+    },
+    branch: {
+      name: formData.branch.name,
+      street: formData.branch.address.street,
+      city: formData.branch.address.city,
+      state: formData.branch.address.state,
+      country: formData.branch.address.country,
+      area: formData.branch.address.area,
+      coverImage: formData.branch.coverImage,
+      description: formData.branch.description,
+      settings: {
+        allowedOrderTypes: formData.branch.settings.allowedOrderTypes,
+        allowedPaymentMethods: formData.branch.settings.allowedPaymentMethods,
+        deliveryConfig: {
+          radiusKm: formData.branch.settings.radiusKm,
+          minOrderAmount: formData.branch.settings.minOrderAmount,
+          deliveryFee: formData.branch.settings.deliveryFee,
+          isFreeDelivery: formData.branch.settings.isFreeDelivery,
+          freeDeliveryThreshold: formData.branch.settings.freeDeliveryThreshold,
+        },
+        automation: {
+          autoAcceptOrders: formData.branch.settings.autoAcceptOrders,
+          estimatedPrepTime: formData.branch.settings.estimatedPrepTime,
+        },
+        taxation: {
+          taxPercentage: formData.branch.settings.taxPercentage,
+        },
+        contact: {
+          whatsapp: formData.restaurant.supportContact.whatsapp,
+          phone: formData.restaurant.supportContact.phone,
         },
       },
-    };
+    },
+  };
 
-    try {
-      console.log("📤 Payload sent to backend:", payload);
-      const response = await fetch(`${API_BASE_URL}/v1/auth/register-tenant`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-  const data = await response.json();
+  try {
+    console.log("📤 Payload sent to backend:", payload);
+
+    const response = await fetch(`${API_BASE_URL}/v1/auth/register-tenant`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
 
     console.log("📥 Backend JSON Response:", data);
-      if (response.ok) {
-        setActiveStep(5); // Move to "Published" step on success
-      window.location.href = "http://saas-restaurant-admin-dashboard.vercel.app/login";
-      } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message || "Failed to register"}`);
-      }
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+
+    if (!response.ok) {
+      toast.error(data?.message || "Failed to register");
+      return;
     }
-  };
+
+const { verificationToken,email, ...rest } = data?.data;
+
+// store backend data except verificationToken
+setPublishedData(rest);
+
+    /* ================= AUTO VERIFY EMAIL (DEV MODE) ================= */
+
+    if (email && verificationToken) {
+      try {
+        const verifyRes = await fetch(`${API_BASE_URL}/v1/auth/verify-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            token: verificationToken,
+          }),
+        });
+
+        const verifyData = await verifyRes.json();
+
+        console.log("✅ Email verification response:", verifyData);
+
+        if (verifyRes.ok) {
+          toast.success("Email verified automatically (Dev Mode)");
+        } else {
+          toast.warning("User created but email verification failed");
+        }
+      } catch (verifyErr) {
+        console.error("Verification error:", verifyErr);
+        toast.warning("User created but email verification failed");
+      }
+    }
+
+    toast.success("Business registered successfully!");
+
+    setActiveStep(5);
+
+    // setTimeout(() => {
+    //   window.location.href =
+    //     "http://saas-restaurant-admin-dashboard.vercel.app/login";
+    // }, 1500);
+  } catch (error) {
+    console.error("Submission error:", error);
+    toast.error("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   /* ================= RENDER STEP ================= */
 
@@ -243,8 +288,8 @@ export default function BusinessOnboarding() {
           />
         );
 
-      case 5:
-        return <StorePublished formData={formData} />;
+     case 5:
+  return <StorePublished formData={formData} publishedData={publishedData} />;
 
       default:
         return null;
