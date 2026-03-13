@@ -119,96 +119,95 @@ export default function BusinessOnboarding() {
 
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    setLoading(true);
+const handleSubmit = async () => {
+  setLoading(true);
 
-    const payload = {
-      user: {
-        email: formData.user.email,
-        password: formData.user.password,
-        firstName: formData.user.firstName,
-        lastName: formData.user.lastName,
-        avatarUrl: formData.user.profileUrl,
-        bio: "",
+  const payload = {
+    user: {
+      email: formData.user.email,
+      password: formData.user.password,
+      firstName: formData.user.firstName,
+      lastName: formData.user.lastName,
+      avatarUrl: formData.user.profileUrl,
+      bio: "",
+    },
+    tenant: {
+      name: formData.tenant.name,
+      slug: formData.restaurant.slug,
+      logoUrl: formData.tenant.logoUrl,
+      bio: formData.tenant.bio,
+      socialLinks: {},
+      settings: {},
+    },
+    restaurant: {
+      name: formData.restaurant.name,
+      slug: formData.restaurant.slug,
+      logoUrl: formData.restaurant.logoUrl,
+      customDomain: "",
+      bio: "",
+      tagline: formData.restaurant.tagline,
+      supportContact: formData.restaurant.supportContact,
+      branding: formData.restaurant.branding,
+      socialMedia: {},
+    },
+    branch: {
+      name: formData.branch.name,
+      street: formData.branch.address.street,
+      city: formData.branch.address.city,
+      state: formData.branch.address.state,
+      country: formData.branch.address.country,
+      area: formData.branch.address.area,
+      coverImage: formData.branch.coverImage,
+      description: formData.branch.description,
+      settings: {
+        allowedOrderTypes: formData.branch.settings.allowedOrderTypes,
+        allowedPaymentMethods: formData.branch.settings.allowedPaymentMethods,
       },
-      tenant: {
-        name: formData.tenant.name,
-        slug: formData.restaurant.slug,
-        logoUrl: formData.tenant.logoUrl,
-        bio: formData.tenant.bio,
-        socialLinks: {},
-        settings: {},
-      },
-      restaurant: {
-        name: formData.restaurant.name,
-        slug: formData.restaurant.slug,
-        logoUrl: formData.restaurant.logoUrl,
-        customDomain: "",
-        bio: "",
-        tagline: formData.restaurant.tagline,
-        supportContact: formData.restaurant.supportContact,
-        branding: formData.restaurant.branding,
-        socialMedia: {},
-      },
-      branch: {
-        name: formData.branch.name,
-        street: formData.branch.address.street,
-        city: formData.branch.address.city,
-        state: formData.branch.address.state,
-        country: formData.branch.address.country,
-        area: formData.branch.address.area,
-        coverImage: formData.branch.coverImage,
-        description: formData.branch.description,
-        settings: {
-          allowedOrderTypes: formData.branch.settings.allowedOrderTypes,
-          allowedPaymentMethods: formData.branch.settings.allowedPaymentMethods,
-        },
-      },
-    };
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/v1/auth/register-tenant`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast.error(data?.message || "Failed to register");
-        return;
-      }
-
-      const { accessToken, ...rest } = data?.data;
-
-      setPublishedData(rest);
-
-      if (!accessToken) {
-        toast.error("Access token not received");
-        return;
-      }
-
-      /* ===== STORE TOKEN ===== */
-
-      setAccessToken(accessToken);
-      localStorage.setItem("tenantSignupToken", accessToken);
-
-      toast.success("Registration successful! Please verify OTP");
-
-      /* ===== SWITCH STEP 4 UI TO OTP ===== */
-
-      setShowOtpVerification(true);
-
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    },
   };
 
+  try {
+    const response = await fetch(`${API_BASE_URL}/v1/auth/register-tenant`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // READ JSON ONCE
+    const data = await response.json();
+
+    if (!response.ok) {
+      // show the backend message directly
+      toast.error(data?.message || "Failed to register");
+      return;
+    }
+
+    const { accessToken, ...rest } = data?.data;
+
+    setPublishedData(rest);
+
+    if (!accessToken) {
+      toast.error("Access token not received");
+      return;
+    }
+
+    /* ===== STORE TOKEN ===== */
+    setAccessToken(accessToken);
+    localStorage.setItem("tenantSignupToken", accessToken);
+
+    toast.success("Registration successful! Please verify OTP");
+
+    /* ===== SWITCH STEP 4 UI TO OTP ===== */
+    setShowOtpVerification(true);
+  } catch (error: any) {
+    // if fetch itself fails
+    toast.error(error?.message || "Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
   /* ================= VERIFY EMAIL ================= */
 
   const handleVerifyOtp = async () => {
