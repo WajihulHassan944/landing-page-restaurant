@@ -16,7 +16,7 @@ export default function StorePublished({ formData, publishedData }: Props) {
 
   const baseUrl =
     process.env.NEXT_PUBLIC_ADMIN_URL ||
-    "http://localhost:3000";
+    "https://saas-restaurant-admin-dashboard.vercel.app/";
 
   const loginUrl = `${baseUrl}/login?email=${formData?.user?.email}&restaurantId=${publishedData?.restaurantId}`;
 
