@@ -159,6 +159,12 @@ const handleSubmit = async () => {
       area: formData.branch.address.area,
       coverImage: formData.branch.coverImage,
       description: formData.branch.description,
+       lat: formData.branch.address.lat
+    ? String(formData.branch.address.lat)
+    : "0",
+  lng: formData.branch.address.lng
+    ? String(formData.branch.address.lng)
+    : "0",
       settings: {
         allowedOrderTypes: formData.branch.settings.allowedOrderTypes,
         allowedPaymentMethods: formData.branch.settings.allowedPaymentMethods,
