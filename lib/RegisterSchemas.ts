@@ -1,26 +1,68 @@
 import { z } from "zod";
 
+/* ---------------- FILE HELPERS ---------------- */
+
+const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg"] as const;
+
+const createRequiredImageSchema = (maxSizeInMB: number, requiredMessage: string) =>
+  z
+    .custom<File>((file) => file instanceof File, {
+      message: requiredMessage,
+    })
+    .refine(
+      (file) => file.size <= maxSizeInMB * 1024 * 1024,
+      `File must be less than ${maxSizeInMB}MB`
+    )
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file.type as (typeof ACCEPTED_IMAGE_TYPES)[number]),
+      "Only PNG, JPG, JPEG allowed"
+    );
+
+const createOptionalImageSchema = (maxSizeInMB: number) =>
+  z
+    .custom<File | undefined>((file) => file === undefined || file instanceof File, {
+      message: "Invalid file",
+    })
+    .refine(
+      (file) => !file || file.size <= maxSizeInMB * 1024 * 1024,
+      `File must be less than ${maxSizeInMB}MB`
+    )
+    .refine(
+      (file) =>
+        !file ||
+        ACCEPTED_IMAGE_TYPES.includes(file.type as (typeof ACCEPTED_IMAGE_TYPES)[number]),
+      "Only PNG, JPG, JPEG allowed"
+    );
+
 /* ---------------- FILE SCHEMAS ---------------- */
 
-export const image2MB = z
-  .any()
-  .refine((file) => file instanceof File, "File is required")
-  .refine((file) => file?.size <= 2 * 1024 * 1024, "File must be less than 2MB")
-  .refine(
-    (file) =>
-      ["image/png", "image/jpeg", "image/jpg"].includes(file?.type),
-    "Only PNG, JPG, JPEG allowed"
-  );
+export const image2MB = createRequiredImageSchema(2, "File is required");
+export const image1MB = createRequiredImageSchema(1, "Image is required");
 
-export const image1MB = z
-  .any()
-  .refine((file) => file instanceof File, "Image is required")
-  .refine((file) => file?.size <= 1 * 1024 * 1024, "Image must be less than 1MB")
-  .refine(
-    (file) =>
-      ["image/png", "image/jpeg", "image/jpg"].includes(file?.type),
-    "Only PNG, JPG, JPEG allowed"
-  );
+export const image2MBOptional = createOptionalImageSchema(2);
+export const image1MBOptional = createOptionalImageSchema(1);
+
+/* ---------------- COMMON ---------------- */
+
+const optionalString = z.string().optional().or(z.literal(""));
+
+const requiredUploadedImageSchema = (fileSchema: z.ZodTypeAny, urlFieldLabel: string) =>
+  z
+    .object({
+      file: fileSchema,
+      url: optionalString,
+      previewUrl: optionalString,
+    })
+    .superRefine((data, ctx) => {
+      // valid if either a new file is selected OR an uploaded URL already exists
+      if (!data.file && !data.url) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["file"],
+          message: `${urlFieldLabel} is required`,
+        });
+      }
+    });
 
 /* ---------------- USER ---------------- */
 
@@ -50,7 +92,9 @@ export const userSchema = z.object({
     .min(1, "Password is required")
     .min(8, "Password must be at least 8 characters"),
 
-  profileUrl: image2MB,
+  profileUrl: optionalString,
+  profilePreviewUrl: optionalString,
+  profileFile: image2MBOptional.optional(),
 });
 
 /* ---------------- TENANT ---------------- */
@@ -58,15 +102,19 @@ export const userSchema = z.object({
 export const tenantSchema = z.object({
   name: z.string().min(1, "Tenant name is required"),
   bio: z.string().min(1, "Tenant bio is required"),
-  logoUrl: image2MB,
-});
 
+  logoUrl: optionalString,
+  logoPreviewUrl: optionalString,
+  logoFile: image2MBOptional.optional(),
+});
 /* ---------------- RESTAURANT ---------------- */
 
 export const restaurantSchema = z.object({
   name: z.string().min(1, "Restaurant name is required"),
 
-  logoUrl: image2MB,
+  logoUrl: optionalString,
+  logoPreviewUrl: optionalString,
+  logoFile: image2MBOptional.optional(),
 
   slug: z
     .string()
@@ -98,7 +146,6 @@ export const restaurantSchema = z.object({
     fontFamily: z.string().min(1, "Font family is required"),
   }),
 });
-
 /* ---------------- BRANCH ---------------- */
 
 export const branchSchema = z.object({
@@ -106,7 +153,9 @@ export const branchSchema = z.object({
 
   description: z.string().min(1, "Description is required"),
 
-  coverImage: image1MB,
+  coverImageUrl: optionalString,
+  coverImagePreviewUrl: optionalString,
+  coverImageFile: image1MBOptional.optional(),
 
   address: z.object({
     street: z.string().min(1, "Street is required"),
@@ -135,7 +184,7 @@ export const branchSchema = z.object({
       .number({ invalid_type_error: "Minimum order required" })
       .min(0, "Invalid amount"),
 
-    radiusKm: z
+    radiusKm: z.coerce
       .number({ invalid_type_error: "Radius required" })
       .min(0, "Invalid radius"),
 
@@ -144,3 +193,9 @@ export const branchSchema = z.object({
       .min(0, "Invalid prep time"),
   }),
 });
+/* ---------------- TYPES ---------------- */
+
+export type UserFormValues = z.infer<typeof userSchema>;
+export type TenantFormValues = z.infer<typeof tenantSchema>;
+export type RestaurantFormValues = z.infer<typeof restaurantSchema>;
+export type BranchFormValues = z.infer<typeof branchSchema>;

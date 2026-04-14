@@ -113,11 +113,11 @@ const paymentMethods = [
 </div>
 
       {/* PAYMENT METHODS */}
-      <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
+      {/* <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
         Payment Methods
-      </h2>
+      </h2> */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
         {paymentMethods.map((method) => (
     <div
       key={method.value}
@@ -131,7 +131,7 @@ const paymentMethods = [
       />
     </div>
   ))}
-      </div>
+      </div> */}
 
       {/* ORDER PROCESSING */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">

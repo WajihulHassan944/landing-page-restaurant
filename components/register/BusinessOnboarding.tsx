@@ -32,68 +32,76 @@ export default function BusinessOnboarding() {
 
   /* ================= GLOBAL FORM DATA ================= */
 
+
   const [formData, setFormData] = useState({
-    user: {
+  user: {
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    profileUrl: "",
+    profilePreviewUrl: "",
+    profileFile: undefined as File | undefined,
+  },
+
+  tenant: {
+    name: "",
+    bio: "",
+    logoUrl: "",
+    logoPreviewUrl: "",
+    logoFile: undefined as File | undefined,
+  },
+
+  restaurant: {
+    name: "",
+    slug: "",
+    tagline: "",
+    logoUrl: "",
+    logoPreviewUrl: "",
+    logoFile: undefined as File | undefined,
+    supportContact: {
       email: "",
-      password: "",
-      firstName: "",
-      lastName: "",
+      whatsapp: "",
       phone: "",
-      profileUrl: "",
+    },
+    branding: {
+      primaryColor: "#e4002b",
+      secondaryColor: "#ffffff",
+      fontFamily: "Poppins",
+    },
+  },
+
+  branch: {
+    name: "",
+    description: "",
+    coverImage: "",
+    coverImagePreviewUrl: "",
+    coverImageFile: undefined as File | undefined,
+    address: {
+      street: "",
+      area: "",
+      city: "",
+      state: "",
+      country: "Pakistan",
+      lat: "",
+      lng: "",
     },
 
-    tenant: {
-      name: "",
-      bio: "",
-      logoUrl: "",
+    settings: {
+      taxPercentage: 0,
+      isFreeDelivery: false,
+      freeDeliveryThreshold: 0,
+      deliveryFee: 0,
+      minOrderAmount: 0,
+      radiusKm: 0,
+      allowedOrderTypes: [],
+      allowedPaymentMethods: [],
+      autoAcceptOrders: false,
+      estimatedPrepTime: 0,
     },
-
-    restaurant: {
-      name: "",
-      slug: "",
-      tagline: "",
-      logoUrl: "",
-      supportContact: {
-        email: "",
-        whatsapp: "",
-        phone: "",
-      },
-      branding: {
-        primaryColor: "#e4002b",
-        secondaryColor: "#ffffff",
-        fontFamily: "Poppins",
-      },
-    },
-
-    branch: {
-      name: "",
-      description: "",
-      coverImage: "",
-      address: {
-        street: "",
-        area: "",
-        city: "",
-        state: "",
-        country: "Pakistan",
-        lat: "",
-        lng: "",
-      },
-
-      settings: {
-        taxPercentage: 0,
-        isFreeDelivery: false,
-        freeDeliveryThreshold: 0,
-        deliveryFee: 0,
-        minOrderAmount: 0,
-        radiusKm: 0,
-        allowedOrderTypes: [],
-        allowedPaymentMethods: [],
-        autoAcceptOrders: false,
-        estimatedPrepTime: 0,
-      },
-    },
-  });
-
+  },
+});
   useEffect(() => {
     window.scrollTo({
       top: 0,

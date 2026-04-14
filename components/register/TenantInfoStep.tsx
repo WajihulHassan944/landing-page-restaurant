@@ -7,6 +7,7 @@ import FormInput from "./form/FormInput";
 import FormSelect from "./form/FormSelect";
 import { validateZod } from "@/hooks/useZodValidator";
 import { restaurantSchema, tenantSchema } from "@/lib/RegisterSchemas";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
 interface Props {
   formData: any;
@@ -23,7 +24,7 @@ export default function TenantInfoStep({
 }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 /* ---------------- SLUG GENERATOR ---------------- */
-
+const { uploadFile, uploading, progress } = useFileUpload();
 const generateSlug = (name: string) => {
   return name
     .toLowerCase()
@@ -79,23 +80,63 @@ const generateSlug = (name: string) => {
 
   /* ---------------- FILE HANDLERS ---------------- */
 
-  const handleTenantLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      updateFormData("tenant", { logoUrl: file });
-      clearError("tenant.logoUrl");
-    }
-  };
+  const handleTenantLogoChange = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-  const handleRestaurantLogoChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      updateFormData("restaurant", { logoUrl: file });
-      clearError("restaurant.logoUrl");
-    }
-  };
+  const blobUrl = URL.createObjectURL(file);
+
+  updateFormData("tenant", {
+    logoFile: file,
+    logoPreviewUrl: blobUrl,
+  });
+
+  setErrors((prev) => {
+    const updated = { ...prev };
+    delete updated["tenant.logoUrl"];
+    delete updated["tenant.logoFile"];
+    return updated;
+  });
+
+  const res = await uploadFile(e);
+
+  if (res?.fileUrl) {
+    updateFormData("tenant", {
+      logoUrl: res.fileUrl,
+    });
+  }
+};
+
+const handleRestaurantLogoChange = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const blobUrl = URL.createObjectURL(file);
+
+  updateFormData("restaurant", {
+    logoFile: file,
+    logoPreviewUrl: blobUrl,
+  });
+
+  setErrors((prev) => {
+    const updated = { ...prev };
+    delete updated["restaurant.logoUrl"];
+    delete updated["restaurant.logoFile"];
+    return updated;
+  });
+
+  const res = await uploadFile(e);
+
+  if (res?.fileUrl) {
+    updateFormData("restaurant", {
+      logoUrl: res.fileUrl,
+    });
+  }
+};
 
   /* ---------------- NEXT VALIDATION ---------------- */
 
@@ -174,19 +215,42 @@ const generateSlug = (name: string) => {
           <label className="text-sm font-medium">Tenant Logo*</label>
 
           <label className="flex items-center gap-4 cursor-pointer rounded-lg hover:bg-gray-50 transition">
-            <div className="w-14 h-14 border border-[#909090] rounded-lg flex items-center justify-center">
-              <Upload className="text-[#909090]" />
-            </div>
+         <div className="relative w-14 h-14">
+  {uploading && (
+    <div className="absolute inset-0 rounded-lg bg-gray-200 animate-pulse" />
+  )}
 
-            <div>
-              <p className="text-sm font-medium">
-                {formData.tenant.logoUrl?.name || "Choose File"}
-              </p>
-              <p className="text-xs text-[#909090]">
-                PNG, JPG, JPEG upto 2MB
-              </p>
-            </div>
+  {formData.tenant.logoPreviewUrl ? (
+    <img
+      src={formData.tenant.logoPreviewUrl}
+      alt="tenant logo preview"
+      className="w-14 h-14 rounded-lg object-cover border"
+    />
+  ) : (
+    <div className="w-14 h-14 border border-[#909090] rounded-lg flex items-center justify-center">
+      <Upload className="text-[#909090]" />
+    </div>
+  )}
 
+  {uploading && formData.tenant.logoPreviewUrl && (
+    <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+      <span className="text-white text-xs font-semibold">{progress}%</span>
+    </div>
+  )}
+</div>
+
+<div>
+  <p className="text-sm font-medium">
+    {uploading
+      ? "Uploading..."
+      : formData.tenant.logoPreviewUrl
+      ? "Image selected"
+      : "Choose File"}
+  </p>
+  <p className="text-xs text-[#909090]">
+    PNG, JPG, JPEG upto 2MB
+  </p>
+</div>
             <input
               type="file"
               accept=".png,.jpg,.jpeg"
@@ -195,11 +259,11 @@ const generateSlug = (name: string) => {
             />
           </label>
 
-          {errors["tenant.logoUrl"] && (
-            <p className="text-red-500 text-xs">
-              {errors["tenant.logoUrl"]}
-            </p>
-          )}
+       {(errors["tenant.logoFile"] || errors["tenant.logoUrl"]) && (
+  <p className="text-red-500 text-xs">
+    {errors["tenant.logoFile"] || errors["tenant.logoUrl"]}
+  </p>
+)}
         </div>
 
         <div className="sm:col-span-2">
@@ -261,19 +325,42 @@ const generateSlug = (name: string) => {
           <label className="text-sm font-medium">Restaurant Logo*</label>
 
           <label className="flex items-center gap-4 cursor-pointer rounded-lg hover:bg-gray-50 transition">
-            <div className="w-14 h-14 border border-[#909090] rounded-lg flex items-center justify-center">
-              <Upload className="text-[#909090]" />
-            </div>
+           <div className="relative w-14 h-14">
+  {uploading && (
+    <div className="absolute inset-0 rounded-lg bg-gray-200 animate-pulse" />
+  )}
 
-            <div>
-              <p className="text-sm font-medium">
-                {formData.restaurant.logoUrl?.name || "Choose File"}
-              </p>
-              <p className="text-xs text-[#909090]">
-                PNG, JPG, JPEG upto 2MB
-              </p>
-            </div>
+  {formData.restaurant.logoPreviewUrl ? (
+    <img
+      src={formData.restaurant.logoPreviewUrl}
+      alt="restaurant logo preview"
+      className="w-14 h-14 rounded-lg object-cover border"
+    />
+  ) : (
+    <div className="w-14 h-14 border border-[#909090] rounded-lg flex items-center justify-center">
+      <Upload className="text-[#909090]" />
+    </div>
+  )}
 
+  {uploading && formData.restaurant.logoPreviewUrl && (
+    <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+      <span className="text-white text-xs font-semibold">{progress}%</span>
+    </div>
+  )}
+</div>
+
+<div>
+  <p className="text-sm font-medium">
+    {uploading
+      ? "Uploading..."
+      : formData.restaurant.logoPreviewUrl
+      ? "Image selected"
+      : "Choose File"}
+  </p>
+  <p className="text-xs text-[#909090]">
+    PNG, JPG, JPEG upto 2MB
+  </p>
+</div>
             <input
               type="file"
               accept=".png,.jpg,.jpeg"
@@ -282,11 +369,11 @@ const generateSlug = (name: string) => {
             />
           </label>
 
-          {errors["restaurant.logoUrl"] && (
-            <p className="text-red-500 text-xs">
-              {errors["restaurant.logoUrl"]}
-            </p>
-          )}
+        {(errors["restaurant.logoFile"] || errors["restaurant.logoUrl"]) && (
+  <p className="text-red-500 text-xs">
+    {errors["restaurant.logoFile"] || errors["restaurant.logoUrl"]}
+  </p>
+)}
         </div>
 
         <div>
@@ -480,12 +567,13 @@ const generateSlug = (name: string) => {
           Back
         </Button>
 
-        <Button
-          onClick={handleNext}
-          className="bg-primary hover:bg-red-800 px-6 py-2.5 rounded-[10px]"
-        >
-          Save & Continue
-        </Button>
+    <Button
+  onClick={handleNext}
+  disabled={uploading}
+  className="bg-primary hover:bg-red-800 px-6 py-2.5 rounded-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  {uploading ? "Uploading..." : "Save & Continue"}
+</Button>
       </div>
     </div>
   );

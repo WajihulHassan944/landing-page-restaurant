@@ -6,6 +6,7 @@ import FormInput from "./FormInput";
 import { Upload } from "lucide-react";
 import { validateZod } from "@/hooks/useZodValidator";
 import { userSchema } from "@/lib/RegisterSchemas";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
 interface Props {
   formData: any;
@@ -15,8 +16,38 @@ interface Props {
 
 export default function UserInfoStep({ formData, updateFormData, next }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+const [preview, setPreview] = useState<string | null>(null);
   /* ---------------- INPUT REFS (AUTO FOCUS) ---------------- */
+const { uploadFile, uploading, progress } = useFileUpload();
+console.log(formData);
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const blobUrl = URL.createObjectURL(file);
+
+  updateFormData("user", {
+    profileFile: file,
+    profilePreviewUrl: blobUrl,
+  });
+
+  setPreview(blobUrl);
+
+  setErrors((prev) => {
+    const newErrors = { ...prev };
+    delete newErrors.profileUrl;
+    delete newErrors.profileFile;
+    return newErrors;
+  });
+
+  const res = await uploadFile(e);
+
+  if (res?.fileUrl) {
+    updateFormData("user", {
+      profileUrl: res.fileUrl,
+    });
+  }
+};
 
   const inputRefs = {
     firstName: useRef<HTMLInputElement>(null),
@@ -53,21 +84,6 @@ export default function UserInfoStep({ formData, updateFormData, next }: Props) 
     }
   };
 
-  /* ---------------- FILE CHANGE ---------------- */
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      updateFormData("user", { profileUrl: file });
-
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors.profileUrl;
-        return newErrors;
-      });
-    }
-  };
 
   /* ---------------- VALIDATION (NEXT STEP) ---------------- */
 
@@ -195,29 +211,66 @@ export default function UserInfoStep({ formData, updateFormData, next }: Props) 
 
         {/* FILE UPLOAD */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Profile Photo*</label>
+          <label className="text-sm font-medium">Profile Photo (Optional)</label>
 
-          <label className="flex items-center gap-4 cursor-pointer rounded-lg pt-1 hover:bg-gray-50 transition">
-            <div className="w-12 h-12 border border-[#909090] rounded-lg flex items-center justify-center">
-              <Upload className="text-[#909090]" />
-            </div>
+         <label className="flex items-center gap-4 cursor-pointer rounded-lg pt-1 hover:bg-gray-50 transition">
 
-            <div>
-              <p className="text-sm font-medium">
-                {formData.user.profileUrl?.name || "Choose File"}
-              </p>
-              <p className="text-xs text-[#909090]">
-                PNG, JPG, JPEG upto 2MB
-              </p>
-            </div>
+  {/* AVATAR BOX */}
+  <div className="relative w-14 h-14">
+    
+    {/* 🔥 shimmer while uploading */}
+    {uploading && (
+      <div className="absolute inset-0 rounded-full bg-gray-200 animate-pulse" />
+    )}
 
-            <input
-              type="file"
-              accept=".png,.jpg,.jpeg"
-              className="hidden"
-              onChange={handleFileChange}
-            />
-          </label>
+    {/* 🔥 image preview replaces icon */}
+    {(preview || formData.user.profileUrl) ? (
+      <img
+        src={
+           formData.user.profilePreviewUrl ||
+      formData.user.profileUrl ||
+          "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
+        }
+        alt="profile"
+        className="w-14 h-14 rounded-full object-cover border"
+      />
+    ) : (
+      <div className="w-14 h-14 border border-[#909090] rounded-full flex items-center justify-center">
+        <Upload className="text-[#909090]" />
+      </div>
+    )}
+
+    {/* 🔥 progress overlay */}
+    {uploading && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full">
+        <span className="text-white text-xs font-semibold">
+          {progress}%
+        </span>
+      </div>
+    )}
+  </div>
+
+  <div>
+    <p className="text-sm font-medium">
+      {uploading
+        ? "Uploading..."
+        : formData.user.profileUrl
+        ? "Image uploaded"
+        : "Choose File"}
+    </p>
+
+    <p className="text-xs text-[#909090]">
+      PNG, JPG, JPEG upto 2MB
+    </p>
+  </div>
+
+  <input
+    type="file"
+    accept=".png,.jpg,.jpeg"
+    className="hidden"
+    onChange={handleFileChange}
+  />
+</label>
 
           {errors.profileUrl && (
             <p className="text-red-500 text-xs">{errors.profileUrl}</p>
@@ -226,12 +279,13 @@ export default function UserInfoStep({ formData, updateFormData, next }: Props) 
       </div>
 
       <div className="flex justify-end mt-8">
-        <Button
-          onClick={handleNext}
-          className="bg-primary hover:bg-red-800 px-6 py-2.5 rounded-[10px]"
-        >
-          Save & Continue
-        </Button>
+   <Button
+  onClick={handleNext}
+  disabled={uploading}
+  className="bg-primary hover:bg-red-800 px-6 py-2.5 rounded-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  {uploading ? "Uploading..." : "Save & Continue"}
+</Button>
       </div>
     </div>
   );

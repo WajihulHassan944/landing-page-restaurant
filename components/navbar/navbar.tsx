@@ -52,7 +52,7 @@ export default function Navbar() {
                 className="hidden md:inline-flex rounded-full bg-white px-7 py-3 text-[15px] font-sans font-medium text-[#CE181B] hover:bg-white/90"
               onClick={()=>router.push("/register")}
               >
-                Registration / Sign In
+                Registration
               </Button>
 
               {/* MOBILE MENU BUTTON */}
