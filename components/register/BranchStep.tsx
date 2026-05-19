@@ -2,9 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MapPin, Image as ImageIcon, Loader2 } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Image as ImageIcon,
+  Loader2,
+  MapPin,
+  Search,
+} from "lucide-react";
 import FormInput from "./form/FormInput";
-import FormSelect from "./form/FormSelect";
 import { validateZod } from "@/hooks/useZodValidator";
 import { branchSchema } from "@/lib/RegisterSchemas";
 import { useFileUpload } from "@/hooks/useFileUpload";
@@ -22,21 +28,57 @@ interface Props {
   back: () => void;
 }
 
+const GOOGLE_MAPS_SCRIPT_ID = "google-maps-places-script";
+const GOOGLE_MAPS_API_KEY =
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "YOUR_GOOGLE_MAPS_API_KEY";
+
+const DEFAULT_MAP_CENTER = {
+  lat: 33.6844,
+  lng: 73.0479,
+};
+
+const isGoogleMapsKeyConfigured = () => {
+  return (
+    Boolean(GOOGLE_MAPS_API_KEY) &&
+    GOOGLE_MAPS_API_KEY !== "YOUR_GOOGLE_MAPS_API_KEY"
+  );
+};
+
+const toFiniteNumber = (value: unknown) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
 export default function BranchStep({
   formData,
   updateFormData,
   next,
   back,
 }: Props) {
-  const branch = formData.branch;
+  const branch = formData.branch || {};
+  const branchAddress = branch.address || {};
+  const branchSettings = branch.settings || {};
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [gettingLocation, setGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState("");
   const [addressQuery, setAddressQuery] = useState("");
+  const [mapsLoading, setMapsLoading] = useState(false);
+  const [mapsReady, setMapsReady] = useState(false);
+  const [mapsError, setMapsError] = useState("");
+  const [selectedGoogleAddress, setSelectedGoogleAddress] = useState("");
+  const [addressSearching, setAddressSearching] = useState(false);
 
   const autocompleteInputRef = useRef<HTMLInputElement | null>(null);
   const autocompleteInstanceRef = useRef<any>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+  const branchAddressRef = useRef<any>(branchAddress);
+
+  useEffect(() => {
+    branchAddressRef.current = branchAddress;
+  }, [branchAddress]);
 
   const { uploadFile, uploading, progress } = useFileUpload();
 
@@ -54,14 +96,24 @@ export default function BranchStep({
 
   const composeAddress = (address: any) => {
     return [
-      address.street,
-      address.area,
-      address.city,
-      address.state,
-      address.country,
+      address?.street,
+      address?.area,
+      address?.city,
+      address?.state,
+      address?.country,
     ]
       .filter(Boolean)
       .join(", ");
+  };
+
+  const hasMeaningfulAddress = (address: any) => {
+    return Boolean(
+      address?.street ||
+        address?.area ||
+        address?.city ||
+        address?.state ||
+        (address?.lat && address?.lng)
+    );
   };
 
   const updateField = (field: keyof typeof branch, value: any) => {
@@ -70,21 +122,21 @@ export default function BranchStep({
   };
 
   const updateAddressField = (
-    field: keyof typeof branch.address,
+    field: keyof typeof branchAddress,
     value: any
   ) => {
     updateFormData("branch", {
-      address: { ...branch.address, [field]: value },
+      address: { ...branchAddress, [field]: value },
     });
     clearError(`branch.address.${String(field)}`);
   };
 
   const updateSettingsField = (
-    field: keyof typeof branch.settings,
+    field: keyof typeof branchSettings,
     value: any
   ) => {
     updateFormData("branch", {
-      settings: { ...branch.settings, [field]: value },
+      settings: { ...branchSettings, [field]: value },
     });
     clearError(`branch.settings.${String(field)}`);
   };
@@ -97,15 +149,103 @@ export default function BranchStep({
     const component = components.find((item) =>
       types.some((type) => item.types?.includes(type))
     );
+
     return component?.[mode] || "";
   };
 
-  const applyPlaceToForm = (place: any) => {
-    if (!place) return;
+  const getCurrentCoordinates = () => {
+    const lat = toFiniteNumber(branchAddress.lat);
+    const lng = toFiniteNumber(branchAddress.lng);
 
-    const components = place.address_components || [];
+    if (lat !== null && lng !== null) {
+      return { lat, lng, hasSavedCoordinates: true };
+    }
+
+    return {
+      ...DEFAULT_MAP_CENTER,
+      hasSavedCoordinates: false,
+    };
+  };
+
+  const updateMapMarker = (
+    lat: number | string,
+    lng: number | string,
+    shouldCenter = true
+  ) => {
+    const nextLat = Number(lat);
+    const nextLng = Number(lng);
+
+    if (!Number.isFinite(nextLat) || !Number.isFinite(nextLng)) return;
+    if (!window.google?.maps || !mapInstanceRef.current) return;
+
+    const position = { lat: nextLat, lng: nextLng };
+
+    if (!markerRef.current) {
+      markerRef.current = new window.google.maps.Marker({
+        position,
+        map: mapInstanceRef.current,
+        draggable: true,
+        title: "Branch location",
+      });
+
+      markerRef.current.addListener("dragend", () => {
+        const markerPosition = markerRef.current?.getPosition?.();
+        const markerLat = markerPosition?.lat?.();
+        const markerLng = markerPosition?.lng?.();
+
+        if (
+          Number.isFinite(Number(markerLat)) &&
+          Number.isFinite(Number(markerLng))
+        ) {
+          applyCoordinatesToForm(String(markerLat), String(markerLng));
+          reverseGeocodeCoordinates(String(markerLat), String(markerLng), {
+            stopLocationLoading: false,
+            showFallbackError: true,
+          });
+        }
+      });
+    } else {
+      markerRef.current.setPosition(position);
+    }
+
+    if (shouldCenter) {
+      mapInstanceRef.current.panTo(position);
+      mapInstanceRef.current.setZoom(16);
+    }
+  };
+
+  const applyCoordinatesToForm = (lat: string, lng: string) => {
+    const latestAddress = branchAddressRef.current || {};
+
+    updateFormData("branch", {
+      address: {
+        ...latestAddress,
+        lat,
+        lng,
+      },
+    });
+
+    clearError("branch.address.lat");
+    clearError("branch.address.lng");
+  };
+
+  const applyPlaceToForm = (place: any) => {
+    if (!place) return false;
+
+    const components = Array.isArray(place.address_components)
+      ? place.address_components
+      : [];
+
     const lat = place.geometry?.location?.lat?.();
     const lng = place.geometry?.location?.lng?.();
+
+    const hasCoordinates =
+      Number.isFinite(Number(lat)) && Number.isFinite(Number(lng));
+
+    if (!components.length && !hasCoordinates) {
+      setLocationError("Please select a valid Google Maps address.");
+      return false;
+    }
 
     const streetNumber = getAddressComponent(components, ["street_number"]);
     const route = getAddressComponent(components, ["route"]);
@@ -118,42 +258,62 @@ export default function BranchStep({
       getAddressComponent(components, [
         "sublocality",
         "sublocality_level_1",
+        "sublocality_level_2",
         "neighborhood",
         "premise",
       ]) || "";
 
     const city =
       getAddressComponent(components, ["locality"]) ||
+      getAddressComponent(components, ["postal_town"]) ||
       getAddressComponent(components, ["administrative_area_level_2"]) ||
       "";
 
     const state =
-      getAddressComponent(components, ["administrative_area_level_1"], "short_name") ||
+      getAddressComponent(
+        components,
+        ["administrative_area_level_1"],
+        "short_name"
+      ) ||
       getAddressComponent(components, ["administrative_area_level_1"]) ||
       "";
 
-    const country = getAddressComponent(components, ["country"]) || "Pakistan";
+    const country =
+      getAddressComponent(components, ["country"]) ||
+      branchAddressRef.current?.country ||
+      branchAddress.country ||
+      "";
 
-    updateFormData("branch", {
-      address: {
-        ...branch.address,
-        street,
-        area,
-        city,
-        state,
-        country,
-        lat: lat ? String(lat) : branch.address.lat,
-        lng: lng ? String(lng) : branch.address.lng,
-      },
-    });
-
-    setAddressQuery(place.formatted_address || composeAddress({
+    const nextAddress = {
+      ...(branchAddressRef.current || branchAddress),
       street,
       area,
       city,
       state,
       country,
-    }));
+      lat: hasCoordinates
+        ? String(lat)
+        : branchAddressRef.current?.lat || branchAddress.lat,
+      lng: hasCoordinates
+        ? String(lng)
+        : branchAddressRef.current?.lng || branchAddress.lng,
+    };
+
+    const formattedAddress =
+      place.formatted_address || composeAddress(nextAddress) || "";
+
+    updateFormData("branch", {
+      address: nextAddress,
+    });
+
+    if (hasCoordinates) {
+      updateMapMarker(String(lat), String(lng));
+    }
+
+    setAddressQuery(formattedAddress);
+    setSelectedGoogleAddress(formattedAddress);
+    setLocationError("");
+    setMapsError("");
 
     [
       "branch.address.street",
@@ -164,6 +324,8 @@ export default function BranchStep({
       "branch.address.lat",
       "branch.address.lng",
     ].forEach(clearError);
+
+    return true;
   };
 
   /* ---------------- FILE ---------------- */
@@ -195,154 +357,378 @@ export default function BranchStep({
     }
   };
 
-  /* ---------------- GOOGLE MAPS AUTOCOMPLETE ---------------- */
+  /* ---------------- GOOGLE MAPS SCRIPT ---------------- */
 
   useEffect(() => {
-    if (!addressQuery) {
-      const composed = composeAddress(branch.address);
-      if (composed) {
-        setAddressQuery(composed);
-      }
+    const composed = composeAddress(branchAddress);
+
+    if (!addressQuery && composed && hasMeaningfulAddress(branchAddress)) {
+      setAddressQuery(composed);
     }
     // intentionally only on mount/revisit
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | null = null;
-    let tries = 0;
+    if (typeof window === "undefined") return;
 
-    const initAutocomplete = () => {
-      if (
-        !autocompleteInputRef.current ||
-        !window.google?.maps?.places?.Autocomplete ||
-        autocompleteInstanceRef.current
-      ) {
-        return;
-      }
-
-      autocompleteInstanceRef.current = new window.google.maps.places.Autocomplete(
-        autocompleteInputRef.current,
-        {
-          fields: ["address_components", "formatted_address", "geometry", "name"],
-          types: ["geocode"],
-          componentRestrictions: { country: "pk" },
-        }
-      );
-
-      autocompleteInstanceRef.current.addListener("place_changed", () => {
-        const place = autocompleteInstanceRef.current?.getPlace?.();
-        applyPlaceToForm(place);
-      });
-    };
-
-    initAutocomplete();
-
-    if (!autocompleteInstanceRef.current) {
-      intervalId = setInterval(() => {
-        tries += 1;
-        initAutocomplete();
-
-        if (autocompleteInstanceRef.current || tries >= 20) {
-          if (intervalId) clearInterval(intervalId);
-        }
-      }, 500);
-    }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /* ---------------- CURRENT LOCATION ---------------- */
-const handleGetCurrentLocation = async () => {
-  setLocationError("");
-
-  if (!navigator.geolocation) {
-    setLocationError("Geolocation is not supported in this browser.");
-    return;
-  }
-
-  setGettingLocation(true);
-
-  try {
-    // ✅ Check permission first
-    const permission = await navigator.permissions.query({
-      name: "geolocation" as PermissionName,
-    });
-
-    if (permission.state === "denied") {
-      setGettingLocation(false);
-      setLocationError("Location access is blocked. Please enable it in browser settings.");
+    if (window.google?.maps?.places) {
+      setMapsReady(true);
+      setMapsLoading(false);
+      setMapsError("");
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const lat = String(position.coords.latitude);
-        const lng = String(position.coords.longitude);
+    if (!isGoogleMapsKeyConfigured()) {
+      setMapsReady(false);
+      setMapsLoading(false);
+      setMapsError(
+        "Google Maps API key is missing. Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in env."
+      );
+      return;
+    }
 
-        updateFormData("branch", {
-          address: {
-            ...branch.address,
-            lat,
-            lng,
-          },
+    const existingScript = document.getElementById(
+      GOOGLE_MAPS_SCRIPT_ID
+    ) as HTMLScriptElement | null;
+
+    const handleLoad = () => {
+      setMapsReady(true);
+      setMapsLoading(false);
+      setMapsError("");
+    };
+
+    const handleError = () => {
+      setMapsReady(false);
+      setMapsLoading(false);
+      setMapsError("Failed to load Google Maps. Please verify the API key.");
+    };
+
+    setMapsLoading(true);
+
+    if (existingScript) {
+      existingScript.addEventListener("load", handleLoad);
+      existingScript.addEventListener("error", handleError);
+
+      if (window.google?.maps?.places) {
+        handleLoad();
+      }
+
+      return () => {
+        existingScript.removeEventListener("load", handleLoad);
+        existingScript.removeEventListener("error", handleError);
+      };
+    }
+
+    const script = document.createElement("script");
+    script.id = GOOGLE_MAPS_SCRIPT_ID;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
+      GOOGLE_MAPS_API_KEY
+    )}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+
+    script.addEventListener("load", handleLoad);
+    script.addEventListener("error", handleError);
+
+    document.head.appendChild(script);
+
+    return () => {
+      script.removeEventListener("load", handleLoad);
+      script.removeEventListener("error", handleError);
+    };
+  }, []);
+
+  /* ---------------- GOOGLE MAP + AUTOCOMPLETE ---------------- */
+
+  useEffect(() => {
+    if (!mapsReady || !autocompleteInputRef.current) return;
+    if (!window.google?.maps?.places?.Autocomplete) return;
+    if (autocompleteInstanceRef.current) return;
+
+    autocompleteInstanceRef.current = new window.google.maps.places.Autocomplete(
+      autocompleteInputRef.current,
+      {
+        fields: [
+          "address_components",
+          "formatted_address",
+          "geometry",
+          "name",
+          "place_id",
+        ],
+        types: ["geocode"],
+      }
+    );
+
+    autocompleteInstanceRef.current.addListener("place_changed", () => {
+      const place = autocompleteInstanceRef.current?.getPlace?.();
+
+      if (!place?.geometry) {
+        setLocationError("Please select an address from Google Maps suggestions.");
+        return;
+      }
+
+      applyPlaceToForm(place);
+    });
+
+    return () => {
+      if (window.google?.maps?.event && autocompleteInstanceRef.current) {
+        window.google.maps.event.clearInstanceListeners(
+          autocompleteInstanceRef.current
+        );
+      }
+
+      autocompleteInstanceRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapsReady]);
+
+  useEffect(() => {
+    if (!mapsReady || !mapContainerRef.current || !window.google?.maps?.Map) {
+      return;
+    }
+
+    const currentCoordinates = getCurrentCoordinates();
+
+    if (!mapInstanceRef.current) {
+      mapInstanceRef.current = new window.google.maps.Map(mapContainerRef.current, {
+        center: {
+          lat: currentCoordinates.lat,
+          lng: currentCoordinates.lng,
+        },
+        zoom: currentCoordinates.hasSavedCoordinates ? 16 : 12,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true,
+        clickableIcons: false,
+      });
+
+      markerRef.current = new window.google.maps.Marker({
+        position: {
+          lat: currentCoordinates.lat,
+          lng: currentCoordinates.lng,
+        },
+        map: mapInstanceRef.current,
+        draggable: true,
+        title: "Branch location",
+      });
+
+      markerRef.current.addListener("dragend", () => {
+        const position = markerRef.current?.getPosition?.();
+        const lat = position?.lat?.();
+        const lng = position?.lng?.();
+
+        if (Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
+          applyCoordinatesToForm(String(lat), String(lng));
+          reverseGeocodeCoordinates(String(lat), String(lng), {
+            stopLocationLoading: false,
+            showFallbackError: true,
+          });
+        }
+      });
+
+      mapInstanceRef.current.addListener("click", (event: any) => {
+        const lat = event?.latLng?.lat?.();
+        const lng = event?.latLng?.lng?.();
+
+        if (Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
+          updateMapMarker(String(lat), String(lng), false);
+          applyCoordinatesToForm(String(lat), String(lng));
+          reverseGeocodeCoordinates(String(lat), String(lng), {
+            stopLocationLoading: false,
+            showFallbackError: true,
+          });
+        }
+      });
+
+      return;
+    }
+
+    if (currentCoordinates.hasSavedCoordinates) {
+      updateMapMarker(currentCoordinates.lat, currentCoordinates.lng, true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapsReady]);
+
+  useEffect(() => {
+    const lat = toFiniteNumber(branchAddress.lat);
+    const lng = toFiniteNumber(branchAddress.lng);
+
+    if (lat === null || lng === null) return;
+
+    updateMapMarker(lat, lng, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branchAddress.lat, branchAddress.lng]);
+
+  const handleAddressQueryChange = (value: string) => {
+    setAddressQuery(value);
+    setLocationError("");
+
+    if (value !== selectedGoogleAddress) {
+      setSelectedGoogleAddress("");
+    }
+  };
+
+  const handleAddressSearch = () => {
+    const query = addressQuery.trim();
+
+    if (!query) {
+      setLocationError("Please enter an address to search.");
+      return;
+    }
+
+    if (!window.google?.maps?.Geocoder) {
+      setMapsError("Google Maps is not ready yet.");
+      return;
+    }
+
+    setAddressSearching(true);
+    setLocationError("");
+
+    const geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode(
+      {
+        address: query,
+      },
+      (results: any, status: string) => {
+        if (status === "OK" && results?.[0]) {
+          applyPlaceToForm(results[0]);
+        } else {
+          setLocationError("No matching address found. Try a more specific address.");
+        }
+
+        setAddressSearching(false);
+      }
+    );
+  };
+
+  const handleAddressKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return;
+
+    event.preventDefault();
+    handleAddressSearch();
+  };
+
+  /* ---------------- CURRENT LOCATION ---------------- */
+
+  const reverseGeocodeCoordinates = (
+    lat: string,
+    lng: string,
+    options?: {
+      stopLocationLoading?: boolean;
+      showFallbackError?: boolean;
+    }
+  ) => {
+    if (!window.google?.maps?.Geocoder) {
+      if (options?.showFallbackError) {
+        setMapsError("Google Maps is not ready yet. Coordinates were saved only.");
+      }
+
+      if (options?.stopLocationLoading) {
+        setGettingLocation(false);
+      }
+
+      return;
+    }
+
+    const geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode(
+      {
+        location: { lat: Number(lat), lng: Number(lng) },
+      },
+      (results: any, status: string) => {
+        if (status === "OK" && results?.[0]) {
+          applyPlaceToForm(results[0]);
+        } else if (options?.showFallbackError) {
+          setLocationError("Location found, but address could not be resolved.");
+        }
+
+        if (options?.stopLocationLoading) {
+          setGettingLocation(false);
+        }
+      }
+    );
+  };
+
+  const handleGetCurrentLocation = async () => {
+    setLocationError("");
+
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation is not supported in this browser.");
+      return;
+    }
+
+    setGettingLocation(true);
+
+    try {
+      if (navigator.permissions?.query) {
+        const permission = await navigator.permissions.query({
+          name: "geolocation" as PermissionName,
         });
 
-        clearError("branch.address.lat");
-        clearError("branch.address.lng");
-
-        // Google reverse geocode
-        if (window.google?.maps?.Geocoder) {
-          const geocoder = new window.google.maps.Geocoder();
-
-          geocoder.geocode(
-            {
-              location: { lat: Number(lat), lng: Number(lng) },
-            },
-            (results: any, status: string) => {
-              if (status === "OK" && results?.[0]) {
-                applyPlaceToForm(results[0]);
-              }
-              setGettingLocation(false);
-            }
+        if (permission.state === "denied") {
+          setGettingLocation(false);
+          setLocationError(
+            "Location access is blocked. Please enable it in browser settings."
           );
           return;
         }
-
-        setGettingLocation(false);
-      },
-      (geoError) => {
-        setGettingLocation(false);
-
-        if (geoError.code === geoError.PERMISSION_DENIED) {
-          setLocationError("Please allow location access in your browser.");
-        } else if (geoError.code === geoError.POSITION_UNAVAILABLE) {
-          setLocationError("Location unavailable.");
-        } else if (geoError.code === geoError.TIMEOUT) {
-          setLocationError("Request timed out.");
-        } else {
-          setLocationError("Unable to fetch location.");
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
       }
-    );
-  } catch (err) {
-    setGettingLocation(false);
-    setLocationError("Permission check failed.");
-  }
-};
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = String(position.coords.latitude);
+          const lng = String(position.coords.longitude);
+
+          applyCoordinatesToForm(lat, lng);
+          updateMapMarker(lat, lng, true);
+
+          if (mapsReady && window.google?.maps?.Geocoder) {
+            reverseGeocodeCoordinates(lat, lng, {
+              stopLocationLoading: true,
+              showFallbackError: true,
+            });
+            return;
+          }
+
+          setGettingLocation(false);
+          setMapsError("Google Maps is not ready yet. Coordinates were saved only.");
+        },
+        (geoError) => {
+          setGettingLocation(false);
+
+          if (geoError.code === geoError.PERMISSION_DENIED) {
+            setLocationError("Please allow location access in your browser.");
+          } else if (geoError.code === geoError.POSITION_UNAVAILABLE) {
+            setLocationError("Location unavailable.");
+          } else if (geoError.code === geoError.TIMEOUT) {
+            setLocationError("Request timed out.");
+          } else {
+            setLocationError("Unable to fetch location.");
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        }
+      );
+    } catch (err) {
+      setGettingLocation(false);
+      setLocationError("Permission check failed.");
+    }
+  };
 
   /* ---------------- VALIDATION ---------------- */
 
   const handleNext = () => {
-    const { success, errors } = validateZod(branchSchema, formData.branch, "branch");
+    const { success, errors } = validateZod(
+      branchSchema,
+      formData.branch,
+      "branch"
+    );
 
     if (!success) {
       setErrors(errors);
@@ -415,11 +801,17 @@ const handleGetCurrentLocation = async () => {
                 <ImageIcon className="text-gray-400 mb-2" size={30} />
               )}
 
-              <p className={`text-sm font-medium mt-2 ${branch.coverImagePreviewUrl ? "text-white" : ""}`}>
+              <p
+                className={`text-sm font-medium mt-2 ${
+                  branch.coverImagePreviewUrl ? "text-white" : ""
+                }`}
+              >
                 <span className="text-primary">Click to upload</span>
                 <span
                   className={`font-semibold ml-1 ${
-                    branch.coverImagePreviewUrl ? "text-white" : "text-[#909090]"
+                    branch.coverImagePreviewUrl
+                      ? "text-white"
+                      : "text-[#909090]"
                   }`}
                 >
                   or drag and drop
@@ -458,24 +850,137 @@ const handleGetCurrentLocation = async () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         <div className="sm:col-span-2">
-          <FormInput
-            ref={autocompleteInputRef}
-            label="Address (Google Maps)*"
-            placeholder="Search and select address from Google Maps"
-            value={addressQuery}
-            onChange={(val) => setAddressQuery(val)}
-          />
-          <p className="text-xs text-[#909090] mt-1">
-            If Google Maps Places API is loaded, selecting an address here will auto-fill
-            street, area, city, state, country, latitude, and longitude.
-          </p>
+          <label className="text-[16px] mb-2 block">
+            Address from Google Maps*
+          </label>
+
+          <div className="flex flex-col gap-3 md:flex-row">
+            <div className="relative flex-1">
+              <Search
+                size={18}
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+
+              <input
+                ref={autocompleteInputRef}
+                type="text"
+                value={addressQuery}
+                onChange={(e) => handleAddressQueryChange(e.target.value)}
+                onKeyDown={handleAddressKeyDown}
+                placeholder="Search restaurant address"
+                className="h-[52px] w-full rounded-[10px] border border-[#bbbbbb] bg-white pl-11 pr-11 text-sm text-gray-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+              />
+
+              {(mapsLoading || gettingLocation || addressSearching) && (
+                <Loader2
+                  size={18}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 animate-spin text-primary"
+                />
+              )}
+
+              {!mapsLoading &&
+              !gettingLocation &&
+              !addressSearching &&
+              mapsReady &&
+              selectedGoogleAddress ? (
+                <CheckCircle2
+                  size={18}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-green-600"
+                />
+              ) : null}
+
+              {!mapsLoading &&
+              !gettingLocation &&
+              !addressSearching &&
+              mapsError ? (
+                <AlertCircle
+                  size={18}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-amber-500"
+                />
+              ) : null}
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleAddressSearch}
+              disabled={!mapsReady || addressSearching || mapsLoading}
+              className="h-[52px] rounded-[10px] border-primary px-5 text-primary disabled:opacity-50"
+            >
+              {addressSearching ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Search size={16} />
+              )}
+              Search Map
+            </Button>
+          </div>
+
+          <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
+            {mapsReady ? (
+              <>
+                <div ref={mapContainerRef} className="h-[280px] w-full" />
+
+                <div className="flex flex-col gap-2 border-t border-gray-200 bg-white px-4 py-3 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+                  <span>
+                    Select a suggestion, search the address, click the map, or
+                    drag the marker to set the branch location.
+                  </span>
+
+                  <span className="shrink-0 font-medium text-gray-700">
+                    {branchAddress.lat && branchAddress.lng
+                      ? `${branchAddress.lat}, ${branchAddress.lng}`
+                      : "Coordinates not selected"}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="flex min-h-[220px] flex-col items-center justify-center px-5 text-center">
+                {mapsLoading ? (
+                  <>
+                    <Loader2 className="mb-3 animate-spin text-primary" size={28} />
+                    <p className="text-sm font-medium text-gray-700">
+                      Loading Google Map
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <MapPin className="mb-3 text-gray-400" size={30} />
+                    <p className="text-sm font-medium text-gray-700">
+                      Google Map preview unavailable
+                    </p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in env to enable map
+                      search and preview.
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-2 space-y-1">
+            {mapsError ? (
+              <p className="text-xs text-amber-600">{mapsError}</p>
+            ) : null}
+
+            {selectedGoogleAddress ? (
+              <p className="text-xs text-gray-500">
+                Selected: {selectedGoogleAddress}
+              </p>
+            ) : null}
+
+            {locationError ? (
+              <p className="text-xs text-red-500">{locationError}</p>
+            ) : null}
+          </div>
         </div>
 
         <div>
           <FormInput
             label="Street*"
             placeholder="Shop 12, Block A"
-            value={branch.address.street || ""}
+            value={branchAddress.street || ""}
             onChange={(val) => updateAddressField("street", val)}
           />
           {error("branch.address.street") && (
@@ -489,7 +994,7 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="Area*"
             placeholder="F-6 Super Market"
-            value={branch.address.area || ""}
+            value={branchAddress.area || ""}
             onChange={(val) => updateAddressField("area", val)}
           />
           {error("branch.address.area") && (
@@ -503,7 +1008,7 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="City*"
             placeholder="Islamabad"
-            value={branch.address.city || ""}
+            value={branchAddress.city || ""}
             onChange={(val) => updateAddressField("city", val)}
           />
           {error("branch.address.city") && (
@@ -517,7 +1022,7 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="State*"
             placeholder="ICT"
-            value={branch.address.state || ""}
+            value={branchAddress.state || ""}
             onChange={(val) => updateAddressField("state", val)}
           />
           {error("branch.address.state") && (
@@ -528,12 +1033,11 @@ const handleGetCurrentLocation = async () => {
         </div>
 
         <div>
-          <label className="text-[16px] mb-2 block">Country*</label>
-          <FormSelect
-            placeholder="Country"
-            options={["Pakistan"]}
-            value={branch.address.country || "Pakistan"}
-            onChange={(value) => updateAddressField("country", value)}
+          <FormInput
+            label="Country*"
+            placeholder="Germany"
+            value={branchAddress.country || ""}
+            onChange={(val) => updateAddressField("country", val)}
           />
           {error("branch.address.country") && (
             <p className="text-red-500 text-xs mt-1">
@@ -564,19 +1068,15 @@ const handleGetCurrentLocation = async () => {
             ) : (
               <MapPin size={16} />
             )}
-            {gettingLocation ? "Fetching Location..." : "Get Current Location"}
+            {gettingLocation ? "Fetching Location..." : "Use Current Location"}
           </Button>
-
-          {locationError && (
-            <p className="text-red-500 text-xs mt-1">{locationError}</p>
-          )}
         </div>
 
         <div>
           <FormInput
             label="Latitude*"
             placeholder="33.7297"
-            value={branch.address.lat || ""}
+            value={branchAddress.lat || ""}
             onChange={(val) => updateAddressField("lat", val)}
           />
           {error("branch.address.lat") && (
@@ -590,7 +1090,7 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="Longitude*"
             placeholder="73.0745"
-            value={branch.address.lng || ""}
+            value={branchAddress.lng || ""}
             onChange={(val) => updateAddressField("lng", val)}
           />
           {error("branch.address.lng") && (
@@ -611,7 +1111,7 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="Minimum Order Amount"
             placeholder="500"
-            value={branch.settings.minOrderAmount ?? ""}
+            value={branchSettings.minOrderAmount ?? ""}
             onChange={(val) =>
               updateSettingsField(
                 "minOrderAmount",
@@ -630,9 +1130,9 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="Delivery Radius (KM)"
             placeholder="7.5"
-            value={branch.settings.radiusKm ?? ""}
+            value={branchSettings.radiusKm ?? ""}
             onChange={(val) =>
-             updateSettingsField("radiusKm", val === "" ? "" : val)
+              updateSettingsField("radiusKm", val === "" ? "" : val)
             }
           />
           {error("branch.settings.radiusKm") && (
@@ -646,7 +1146,7 @@ const handleGetCurrentLocation = async () => {
           <FormInput
             label="Estimated Preparation Time (Minutes)"
             placeholder="25"
-            value={branch.settings.estimatedPrepTime ?? ""}
+            value={branchSettings.estimatedPrepTime ?? ""}
             onChange={(val) =>
               updateSettingsField(
                 "estimatedPrepTime",
