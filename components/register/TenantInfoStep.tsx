@@ -25,6 +25,10 @@ export default function TenantInfoStep({
   const [errors, setErrors] = useState<Record<string, string>>({});
 /* ---------------- SLUG GENERATOR ---------------- */
 const { uploadFile, uploading, progress } = useFileUpload();
+
+const MAX_LOGO_IMAGE_SIZE_MB = 2;
+const MAX_LOGO_IMAGE_SIZE_BYTES = MAX_LOGO_IMAGE_SIZE_MB * 1024 * 1024;
+
 const generateSlug = (name: string) => {
   return name
     .toLowerCase()
@@ -79,12 +83,29 @@ const generateSlug = (name: string) => {
   };
 
   /* ---------------- FILE HANDLERS ---------------- */
-
-  const handleTenantLogoChange = async (
+const handleTenantLogoChange = async (
   e: React.ChangeEvent<HTMLInputElement>
 ) => {
   const file = e.target.files?.[0];
   if (!file) return;
+
+  if (file.size > MAX_LOGO_IMAGE_SIZE_BYTES) {
+    e.target.value = "";
+
+    setErrors((prev) => ({
+      ...prev,
+      "tenant.logoFile": `Tenant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
+      "tenant.logoUrl": `Tenant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
+    }));
+
+    updateFormData("tenant", {
+      logoFile: null,
+      logoPreviewUrl: "",
+      logoUrl: "",
+    });
+
+    return;
+  }
 
   const blobUrl = URL.createObjectURL(file);
 
@@ -109,11 +130,30 @@ const generateSlug = (name: string) => {
   }
 };
 
+
 const handleRestaurantLogoChange = async (
   e: React.ChangeEvent<HTMLInputElement>
 ) => {
   const file = e.target.files?.[0];
   if (!file) return;
+
+  if (file.size > MAX_LOGO_IMAGE_SIZE_BYTES) {
+    e.target.value = "";
+
+    setErrors((prev) => ({
+      ...prev,
+      "restaurant.logoFile": `Restaurant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
+      "restaurant.logoUrl": `Restaurant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
+    }));
+
+    updateFormData("restaurant", {
+      logoFile: null,
+      logoPreviewUrl: "",
+      logoUrl: "",
+    });
+
+    return;
+  }
 
   const blobUrl = URL.createObjectURL(file);
 

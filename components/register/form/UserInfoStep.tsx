@@ -189,36 +189,49 @@ export default function UserInfoStep({ formData, updateFormData, next }: Props) 
   }, [normalizedEmail, emailLooksValid]);
 
   /* ---------------- FILE UPLOAD ---------------- */
+const MAX_PROFILE_IMAGE_SIZE_MB = 2;
+const MAX_PROFILE_IMAGE_SIZE_BYTES = MAX_PROFILE_IMAGE_SIZE_MB * 1024 * 1024;
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    const blobUrl = URL.createObjectURL(file);
+  if (file.size > MAX_PROFILE_IMAGE_SIZE_BYTES) {
+    e.target.value = "";
 
+    setErrors((prev) => ({
+      ...prev,
+      profileFile: `Profile photo must be less than ${MAX_PROFILE_IMAGE_SIZE_MB}MB.`,
+      profileUrl: `Profile photo must be less than ${MAX_PROFILE_IMAGE_SIZE_MB}MB.`,
+    }));
+
+    return;
+  }
+
+  const blobUrl = URL.createObjectURL(file);
+
+  updateFormData("user", {
+    profileFile: file,
+    profilePreviewUrl: blobUrl,
+  });
+
+  setPreview(blobUrl);
+
+  setErrors((prev) => {
+    const newErrors = { ...prev };
+    delete newErrors.profileUrl;
+    delete newErrors.profileFile;
+    return newErrors;
+  });
+
+  const res = await uploadFile(e);
+
+  if (res?.fileUrl) {
     updateFormData("user", {
-      profileFile: file,
-      profilePreviewUrl: blobUrl,
+      profileUrl: res.fileUrl,
     });
-
-    setPreview(blobUrl);
-
-    setErrors((prev) => {
-      const newErrors = { ...prev };
-      delete newErrors.profileUrl;
-      delete newErrors.profileFile;
-      return newErrors;
-    });
-
-    const res = await uploadFile(e);
-
-    if (res?.fileUrl) {
-      updateFormData("user", {
-        profileUrl: res.fileUrl,
-      });
-    }
-  };
-
+  }
+};
   /* ---------------- CLEAR ERROR WHILE TYPING ---------------- */
 
   const clearError = (field: string) => {
@@ -516,9 +529,11 @@ export default function UserInfoStep({ formData, updateFormData, next }: Props) 
             />
           </label>
 
-          {errors.profileUrl && (
-            <p className="text-red-500 text-xs">{errors.profileUrl}</p>
-          )}
+        {(errors.profileFile || errors.profileUrl) && (
+  <p className="text-red-500 text-xs">
+    {errors.profileFile || errors.profileUrl}
+  </p>
+)}
         </div>
       </div>
 

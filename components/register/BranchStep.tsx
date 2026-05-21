@@ -69,7 +69,9 @@ export default function BranchStep({
   const [mapsError, setMapsError] = useState("");
   const [selectedGoogleAddress, setSelectedGoogleAddress] = useState("");
   const [addressSearching, setAddressSearching] = useState(false);
-
+const MAX_BRANCH_COVER_IMAGE_SIZE_MB = 2;
+const MAX_BRANCH_COVER_IMAGE_SIZE_BYTES =
+  MAX_BRANCH_COVER_IMAGE_SIZE_MB * 1024 * 1024;
   const autocompleteInputRef = useRef<HTMLInputElement | null>(null);
   const autocompleteInstanceRef = useRef<any>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -334,31 +336,49 @@ export default function BranchStep({
   /* ---------------- FILE ---------------- */
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    const blobUrl = URL.createObjectURL(file);
+  if (file.size > MAX_BRANCH_COVER_IMAGE_SIZE_BYTES) {
+    e.target.value = "";
+
+    setErrors((prev) => ({
+      ...prev,
+      "branch.coverImageFile": `Cover image must be less than ${MAX_BRANCH_COVER_IMAGE_SIZE_MB}MB.`,
+      "branch.coverImage": `Cover image must be less than ${MAX_BRANCH_COVER_IMAGE_SIZE_MB}MB.`,
+    }));
 
     updateFormData("branch", {
-      coverImageFile: file,
-      coverImagePreviewUrl: blobUrl,
+      coverImageFile: null,
+      coverImagePreviewUrl: "",
+      coverImage: "",
     });
 
-    setErrors((prev) => {
-      const updated = { ...prev };
-      delete updated["branch.coverImage"];
-      delete updated["branch.coverImageFile"];
-      return updated;
+    return;
+  }
+
+  const blobUrl = URL.createObjectURL(file);
+
+  updateFormData("branch", {
+    coverImageFile: file,
+    coverImagePreviewUrl: blobUrl,
+  });
+
+  setErrors((prev) => {
+    const updated = { ...prev };
+    delete updated["branch.coverImage"];
+    delete updated["branch.coverImageFile"];
+    return updated;
+  });
+
+  const res = await uploadFile(e);
+
+  if (res?.fileUrl) {
+    updateFormData("branch", {
+      coverImage: res.fileUrl,
     });
-
-    const res = await uploadFile(e);
-
-    if (res?.fileUrl) {
-      updateFormData("branch", {
-        coverImage: res.fileUrl,
-      });
-    }
-  };
+  }
+};
 
   /* ---------------- GOOGLE MAPS SCRIPT ---------------- */
 
