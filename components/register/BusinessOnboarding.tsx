@@ -47,6 +47,116 @@ const extractAccessToken = (data: any) => {
   );
 };
 
+const toNumber = (value: unknown, fallback = 0) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const toStringValue = (value: unknown, fallback = "") => {
+  if (value === undefined || value === null) return fallback;
+  return String(value);
+};
+
+const normalizeArray = (value: any) => {
+  return Array.isArray(value) ? value : [];
+};
+
+const normalizePlainObject = (value: any) => {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value
+    : {};
+};
+
+const normalizeDeliveryMode = (mode: any) => {
+  return mode === "ZONE" || mode === "POSTAL_CODE" ? mode : "RADIUS";
+};
+
+const normalizeDeliveryZones = (zones: any) => {
+  return normalizeArray(zones)
+    .map((zone: any) => ({
+      name: toStringValue(zone?.name).trim(),
+      deliveryFee: toNumber(zone?.deliveryFee, 0),
+      polygon: normalizeArray(zone?.polygon)
+        .map((point: any) => ({
+          lat: toNumber(point?.lat, NaN),
+          lng: toNumber(point?.lng, NaN),
+        }))
+        .filter(
+          (point: any) =>
+            Number.isFinite(point.lat) && Number.isFinite(point.lng)
+        ),
+    }))
+    .filter(
+      (zone: any) => zone.name || zone.deliveryFee > 0 || zone.polygon.length > 0
+    );
+};
+
+const normalizePostalCodeRules = (rules: any) => {
+  return normalizeArray(rules)
+    .map((rule: any) => ({
+      postalCode: toStringValue(rule?.postalCode).trim(),
+      deliveryFee: toNumber(rule?.deliveryFee, 0),
+    }))
+    .filter((rule: any) => rule.postalCode || rule.deliveryFee > 0);
+};
+
+const buildBranchSettingsPayload = (settings: any) => {
+  const deliveryConfig = normalizePlainObject(settings?.deliveryConfig);
+  const automation = normalizePlainObject(settings?.automation);
+  const taxation = normalizePlainObject(settings?.taxation);
+  const contact = normalizePlainObject(settings?.contact);
+
+  const allowedOrderTypes = normalizeArray(settings?.allowedOrderTypes).length
+    ? normalizeArray(settings.allowedOrderTypes)
+    : ["DELIVERY"];
+
+  const allowedPaymentMethods = normalizeArray(settings?.allowedPaymentMethods)
+    .length
+    ? normalizeArray(settings.allowedPaymentMethods)
+    : ["COD"];
+
+  return {
+    deliveryTime: toNumber(settings?.deliveryTime, 45),
+    tableReservationsEnabled: Boolean(settings?.tableReservationsEnabled ?? false),
+    allowedOrderTypes,
+    allowedPaymentMethods,
+    deliveryConfig: {
+      mode: normalizeDeliveryMode(deliveryConfig?.mode),
+      radiusKm: toNumber(deliveryConfig?.radiusKm ?? settings?.radiusKm, 0),
+      minOrderAmount: toNumber(
+        deliveryConfig?.minOrderAmount ?? settings?.minOrderAmount,
+        0
+      ),
+      deliveryFee: toNumber(deliveryConfig?.deliveryFee ?? settings?.deliveryFee, 0),
+      isFreeDelivery: Boolean(
+        deliveryConfig?.isFreeDelivery ?? settings?.isFreeDelivery ?? false
+      ),
+      freeDeliveryThreshold: toNumber(
+        deliveryConfig?.freeDeliveryThreshold ?? settings?.freeDeliveryThreshold,
+        0
+      ),
+      zones: normalizeDeliveryZones(deliveryConfig?.zones),
+      postalCodeRules: normalizePostalCodeRules(deliveryConfig?.postalCodeRules),
+    },
+    automation: {
+      autoAcceptOrders: Boolean(
+        automation?.autoAcceptOrders ?? settings?.autoAcceptOrders ?? false
+      ),
+      estimatedPrepTime: toNumber(
+        automation?.estimatedPrepTime ?? settings?.estimatedPrepTime,
+        0
+      ),
+    },
+    taxation: {
+      taxPercentage: toNumber(taxation?.taxPercentage ?? settings?.taxPercentage, 0),
+    },
+    contact: {
+      whatsapp: toStringValue(contact?.whatsapp),
+      phone: toStringValue(contact?.phone),
+    },
+  };
+};
+
 export default function BusinessOnboarding() {
   const [activeStep, setActiveStep] = useState<number>(1);
   const [publishedData, setPublishedData] = useState<any>(null);
@@ -75,10 +185,13 @@ export default function BusinessOnboarding() {
 
     tenant: {
       name: "",
+      slug: "",
       bio: "",
       logoUrl: "",
       logoPreviewUrl: "",
       logoFile: undefined as File | undefined,
+      socialLinks: {},
+      settings: {},
     },
 
     restaurant: {
@@ -86,6 +199,9 @@ export default function BusinessOnboarding() {
       slug: "",
       tagline: "",
       logoUrl: "",
+      coverImage: "",
+      customDomain: "",
+      bio: "",
       logoPreviewUrl: "",
       logoFile: undefined as File | undefined,
       supportContact: {
@@ -98,14 +214,16 @@ export default function BusinessOnboarding() {
         secondaryColor: "#ffffff",
         fontFamily: "Poppins",
       },
+      socialMedia: {},
     },
 
     branch: {
       name: "",
-      description: "",
+      logoUrl: "",
       coverImage: "",
       coverImagePreviewUrl: "",
       coverImageFile: undefined as File | undefined,
+      description: "",
       address: {
         street: "",
         area: "",
@@ -117,14 +235,39 @@ export default function BusinessOnboarding() {
       },
 
       settings: {
+        deliveryTime: 45,
+        tableReservationsEnabled: false,
+        allowedOrderTypes: ["DELIVERY"],
+        allowedPaymentMethods: ["COD"],
+        deliveryConfig: {
+          mode: "RADIUS",
+          radiusKm: 0,
+          minOrderAmount: 0,
+          deliveryFee: 0,
+          isFreeDelivery: false,
+          freeDeliveryThreshold: 0,
+          zones: [],
+          postalCodeRules: [],
+        },
+        automation: {
+          autoAcceptOrders: false,
+          estimatedPrepTime: 0,
+        },
+        taxation: {
+          taxPercentage: 0,
+        },
+        contact: {
+          whatsapp: "",
+          phone: "",
+        },
+
+        // Legacy fields kept for backward compatibility with older step components.
         taxPercentage: 0,
         isFreeDelivery: false,
         freeDeliveryThreshold: 0,
         deliveryFee: 0,
         minOrderAmount: 0,
         radiusKm: 0,
-        allowedOrderTypes: [],
-        allowedPaymentMethods: [],
         autoAcceptOrders: false,
         estimatedPrepTime: 0,
       },
@@ -202,6 +345,10 @@ export default function BusinessOnboarding() {
   const handleSubmit = async () => {
     setLoading(true);
 
+    const branchSettingsPayload = buildBranchSettingsPayload(
+      formData.branch.settings
+    );
+
     const payload = {
       user: {
         email: normalizeEmail(formData.user.email),
@@ -213,42 +360,46 @@ export default function BusinessOnboarding() {
       },
       tenant: {
         name: formData.tenant.name,
-        slug: formData.restaurant.slug,
+        slug: formData.tenant.slug || formData.restaurant.slug,
         logoUrl: formData.tenant.logoUrl,
         bio: formData.tenant.bio,
-        socialLinks: {},
-        settings: {},
+        socialLinks: normalizePlainObject(formData.tenant.socialLinks),
+        settings: normalizePlainObject(formData.tenant.settings),
       },
       restaurant: {
         name: formData.restaurant.name,
         slug: formData.restaurant.slug,
         logoUrl: formData.restaurant.logoUrl,
-        customDomain: "",
-        bio: "",
+        coverImage:
+          formData.restaurant.coverImage || formData.branch.coverImage || "",
+        customDomain: formData.restaurant.customDomain || "",
+        bio: formData.restaurant.bio || "",
         tagline: formData.restaurant.tagline,
-        supportContact: formData.restaurant.supportContact,
-        branding: formData.restaurant.branding,
-        socialMedia: {},
+        supportContact: normalizePlainObject(formData.restaurant.supportContact),
+        branding: normalizePlainObject(formData.restaurant.branding),
+        socialMedia: normalizePlainObject(formData.restaurant.socialMedia),
       },
       branch: {
         name: formData.branch.name,
+        logoUrl:
+          formData.branch.logoUrl ||
+          formData.restaurant.logoUrl ||
+          formData.tenant.logoUrl ||
+          "",
+        coverImage: formData.branch.coverImage,
+        description: formData.branch.description,
+        settings: branchSettingsPayload,
         street: formData.branch.address.street,
+        area: formData.branch.address.area,
         city: formData.branch.address.city,
         state: formData.branch.address.state,
         country: formData.branch.address.country,
-        area: formData.branch.address.area,
-        coverImage: formData.branch.coverImage,
-        description: formData.branch.description,
         lat: formData.branch.address.lat
           ? String(formData.branch.address.lat)
           : "0",
         lng: formData.branch.address.lng
           ? String(formData.branch.address.lng)
           : "0",
-        settings: {
-          allowedOrderTypes: formData.branch.settings.allowedOrderTypes,
-          allowedPaymentMethods: formData.branch.settings.allowedPaymentMethods,
-        },
       },
     };
 

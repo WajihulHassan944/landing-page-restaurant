@@ -14,6 +14,7 @@ import FormInput from "./form/FormInput";
 import { validateZod } from "@/hooks/useZodValidator";
 import { branchSchema } from "@/lib/RegisterSchemas";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import BranchDeliveryAreaSettings from "./BranchDeliveryAreaSettings";
 
 declare global {
   interface Window {
@@ -131,14 +132,16 @@ export default function BranchStep({
     clearError(`branch.address.${String(field)}`);
   };
 
-  const updateSettingsField = (
-    field: keyof typeof branchSettings,
-    value: any
-  ) => {
+  const handleBranchSettingsChange = (nextSettings: any) => {
     updateFormData("branch", {
-      settings: { ...branchSettings, [field]: value },
+      settings: nextSettings,
     });
-    clearError(`branch.settings.${String(field)}`);
+
+    [
+      "branch.settings.minOrderAmount",
+      "branch.settings.radiusKm",
+      "branch.settings.estimatedPrepTime",
+    ].forEach(clearError);
   };
 
   const getAddressComponent = (
@@ -1101,66 +1104,12 @@ export default function BranchStep({
         </div>
       </div>
 
-      {/* Settings */}
-      <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Order Settings
-      </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <FormInput
-            label="Minimum Order Amount"
-            placeholder="500"
-            value={branchSettings.minOrderAmount ?? ""}
-            onChange={(val) =>
-              updateSettingsField(
-                "minOrderAmount",
-                val === "" ? 0 : Number(val)
-              )
-            }
-          />
-          {error("branch.settings.minOrderAmount") && (
-            <p className="text-red-500 text-xs mt-1">
-              {error("branch.settings.minOrderAmount")}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <FormInput
-            label="Delivery Radius (KM)"
-            placeholder="7.5"
-            value={branchSettings.radiusKm ?? ""}
-            onChange={(val) =>
-              updateSettingsField("radiusKm", val === "" ? "" : val)
-            }
-          />
-          {error("branch.settings.radiusKm") && (
-            <p className="text-red-500 text-xs mt-1">
-              {error("branch.settings.radiusKm")}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <FormInput
-            label="Estimated Preparation Time (Minutes)"
-            placeholder="25"
-            value={branchSettings.estimatedPrepTime ?? ""}
-            onChange={(val) =>
-              updateSettingsField(
-                "estimatedPrepTime",
-                val === "" ? 0 : Number(val)
-              )
-            }
-          />
-          {error("branch.settings.estimatedPrepTime") && (
-            <p className="text-red-500 text-xs mt-1">
-              {error("branch.settings.estimatedPrepTime")}
-            </p>
-          )}
-        </div>
-      </div>
+      {/* Delivery Area & Order Settings */}
+      <BranchDeliveryAreaSettings
+        branchAddress={branchAddress}
+        settings={branchSettings}
+        onChange={handleBranchSettingsChange}
+      />
 
       {/* Footer */}
       <div className="flex justify-between items-center mt-10">
