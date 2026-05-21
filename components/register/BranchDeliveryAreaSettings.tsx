@@ -1594,7 +1594,7 @@ export default function BranchDeliveryAreaSettings({
 
       <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
         <h2 className="mb-5 text-[20px] font-semibold text-gray-900">
-          Automation & Taxation
+          Automation
         </h2>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
