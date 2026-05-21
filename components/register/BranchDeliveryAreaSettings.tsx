@@ -99,6 +99,12 @@ const toInputNumber = (value: unknown) => {
   return String(value);
 };
 
+const sanitizeDecimalInput = (value: string) => {
+  return value
+    .replace(/[^0-9.]/g, "")
+    .replace(/(\..*)\./g, "$1");
+};
+
 const toNumber = (value: unknown, fallback = 0) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
@@ -1283,13 +1289,15 @@ export default function BranchDeliveryAreaSettings({
             />
 
             <FormInput
-              label="Radius (km)"
-              value={toInputNumber(delivery.radiusKm)}
-              placeholder="Enter radius"
-              onChange={(val) =>
-                updateDeliveryConfig("radiusKm", val === "" ? "" : Number(val))
-              }
-            />
+  label="Radius (km)"
+  value={toInputNumber(delivery.radiusKm)}
+  placeholder="Enter radius"
+  onChange={(val) => {
+    const sanitized = sanitizeDecimalInput(val);
+
+    updateDeliveryConfig("radiusKm", sanitized);
+  }}
+/>
 
             <FormInput
               label="Minimum Order Amount"
