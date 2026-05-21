@@ -1592,46 +1592,49 @@ export default function BranchDeliveryAreaSettings({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-        <h2 className="mb-5 text-[20px] font-semibold text-gray-900">
-          Automation
-        </h2>
+    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+  <h2 className="mb-5 text-[20px] font-semibold text-gray-900">
+    Automation
+  </h2>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <label className="flex h-fit w-fit cursor-pointer items-center gap-3 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
-            <Checkbox
-              checked={Boolean(settings.automation?.autoAcceptOrders)}
-              onCheckedChange={(val) =>
-                updateAutomation("autoAcceptOrders", val === true)
-              }
-            />
-            <span className="text-sm">Auto Accept Orders</span>
-          </label>
+  <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-start">
+    <div>
+      <label className="mb-2 block text-[16px] font-medium text-gray-900">
+        Auto Accept Orders
+      </label>
 
-          <FormInput
-            label="Estimated Preparation Time (Minutes)"
-            placeholder="Preparation time"
-            value={toInputNumber(
-              settings.automation?.estimatedPrepTime ?? settings.estimatedPrepTime
-            )}
-            onChange={(val) =>
-              updateAutomation(
-                "estimatedPrepTime",
-                val === "" ? 0 : Number(val)
-              )
-            }
-          />
+      <label className="flex h-[52px] cursor-pointer items-center justify-between rounded-[10px] border border-[#bbbbbb] bg-white px-4 transition hover:border-primary/40">
+        <span className="text-sm text-gray-700">
+          Automatically accept incoming orders
+        </span>
 
-          {/* <FormInput
-            label="Tax Percentage"
-            placeholder="Enter tax percentage"
-            value={toInputNumber(settings.taxation?.taxPercentage)}
-            onChange={(val) =>
-              updateTaxation("taxPercentage", val === "" ? 0 : Number(val))
-            }
-          /> */}
-        </div>
-      </section>
+        <Checkbox
+          checked={Boolean(settings.automation?.autoAcceptOrders)}
+          onCheckedChange={(val) =>
+            updateAutomation("autoAcceptOrders", val === true)
+          }
+        />
+      </label>
+    </div>
+
+    <div>
+      <FormInput
+        label="Estimated Preparation Time (Minutes)"
+        placeholder="Preparation time"
+        value={toInputNumber(
+          settings.automation?.estimatedPrepTime ??
+            settings.estimatedPrepTime
+        )}
+        onChange={(val) =>
+          updateAutomation(
+            "estimatedPrepTime",
+            val === "" ? 0 : Number(val)
+          )
+        }
+      />
+    </div>
+  </div>
+</section>
     </div>
   );
 }
