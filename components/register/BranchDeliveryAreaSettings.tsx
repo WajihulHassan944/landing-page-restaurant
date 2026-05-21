@@ -1210,7 +1210,7 @@ export default function BranchDeliveryAreaSettings({
         </div>
 
         <div className="space-y-6">
-          <div>
+          {/* <div>
             <p className="mb-3 text-sm font-medium text-gray-900">
               Allowed order types
             </p>
@@ -1225,9 +1225,9 @@ export default function BranchDeliveryAreaSettings({
                 </label>
               ))}
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <p className="mb-3 text-sm font-medium text-gray-900">
               Allowed payment methods
             </p>
@@ -1244,7 +1244,7 @@ export default function BranchDeliveryAreaSettings({
                 </label>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div>
             <p className="mb-3 text-sm font-medium text-gray-900">
