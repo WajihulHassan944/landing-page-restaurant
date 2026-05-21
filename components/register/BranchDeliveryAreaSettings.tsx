@@ -1622,14 +1622,14 @@ export default function BranchDeliveryAreaSettings({
             }
           />
 
-          <FormInput
+          {/* <FormInput
             label="Tax Percentage"
             placeholder="Enter tax percentage"
             value={toInputNumber(settings.taxation?.taxPercentage)}
             onChange={(val) =>
               updateTaxation("taxPercentage", val === "" ? 0 : Number(val))
             }
-          />
+          /> */}
         </div>
       </section>
     </div>
