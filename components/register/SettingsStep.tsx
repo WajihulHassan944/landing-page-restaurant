@@ -69,31 +69,8 @@ const paymentMethods = [
   return (
     <div className="max-w-5xl mx-auto bg-white rounded-xl p-8">
 
-      {/* DELIVERY SETTINGS */}
-      <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Delivery Settings
-      </h2>
-
-      <div className="flex items-center justify-between bg-[#F5F5F5] rounded-xl px-6 py-5 mb-6">
-        <span className="font-medium">Free Delivery</span>
-        <Switch checked={settings.isFreeDelivery} onCheckedChange={toggleFreeDelivery} />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-        <FormInput
-          label="Free Delivery Threshold"
-          placeholder="2000"
-          value={settings.freeDeliveryThreshold || ""}
-          onChange={(val) => updateField("freeDeliveryThreshold", val)}
-        />
-        <FormInput
-          label="Delivery Fee"
-          placeholder="150"
-          value={settings.deliveryFee || ""}
-          onChange={(val) => updateField("deliveryFee", val)}
-        />
-      </div>
-
+   
+  
       {/* ORDER TYPES */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
         Order Types Supported
@@ -134,15 +111,7 @@ const paymentMethods = [
       </div> */}
 
       {/* ORDER PROCESSING */}
-      <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Order Processing
-      </h2>
-
-      <div className="flex items-center justify-between bg-[#F5F5F5] rounded-xl px-6 py-5 mb-10">
-        <span className="font-medium">Auto Accept Orders</span>
-        <Switch checked={settings.autoAcceptOrders} onCheckedChange={toggleAutoAccept} />
-      </div>
-
+    
       {/* FOOTER */}
       <div className="flex justify-between items-center">
         <Button

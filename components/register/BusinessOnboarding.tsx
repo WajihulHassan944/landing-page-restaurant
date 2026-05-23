@@ -16,7 +16,7 @@ const steps = [
   { id: 1, label: "Account" },
   { id: 2, label: "Tenant & Restaurant" },
   { id: 3, label: "Branch" },
-  { id: 4, label: "Payment & Delivery" },
+  { id: 4, label: "Type" },
   { id: 5, label: "Published" },
 ];
 
@@ -273,7 +273,7 @@ export default function BusinessOnboarding() {
       },
     },
   });
-
+console.log(formData)
   useEffect(() => {
     window.scrollTo({
       top: 0,
