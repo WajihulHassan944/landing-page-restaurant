@@ -76,6 +76,8 @@ const normalizeDeliveryZones = (zones: any) => {
     .map((zone: any) => ({
       name: toStringValue(zone?.name).trim(),
       deliveryFee: toNumber(zone?.deliveryFee, 0),
+      minOrderAmount: toNumber(zone?.minOrderAmount, 0),
+      freeDeliveryThreshold: toNumber(zone?.freeDeliveryThreshold, 0),
       polygon: normalizeArray(zone?.polygon)
         .map((point: any) => ({
           lat: toNumber(point?.lat, NaN),
@@ -87,7 +89,31 @@ const normalizeDeliveryZones = (zones: any) => {
         ),
     }))
     .filter(
-      (zone: any) => zone.name || zone.deliveryFee > 0 || zone.polygon.length > 0
+      (zone: any) =>
+        zone.name ||
+        zone.deliveryFee > 0 ||
+        zone.minOrderAmount > 0 ||
+        zone.freeDeliveryThreshold > 0 ||
+        zone.polygon.length > 0
+    );
+};
+
+const normalizeZoneBands = (bands: any) => {
+  return normalizeArray(bands)
+    .map((band: any) => ({
+      fromKm: toNumber(band?.fromKm, 0),
+      toKm: toNumber(band?.toKm, 0),
+      deliveryFee: toNumber(band?.deliveryFee, 0),
+      minOrderAmount: toNumber(band?.minOrderAmount, 0),
+      freeDeliveryThreshold: toNumber(band?.freeDeliveryThreshold, 0),
+    }))
+    .filter(
+      (band: any) =>
+        band.fromKm > 0 ||
+        band.toKm > 0 ||
+        band.deliveryFee > 0 ||
+        band.minOrderAmount > 0 ||
+        band.freeDeliveryThreshold > 0
     );
 };
 
@@ -136,6 +162,7 @@ const buildBranchSettingsPayload = (settings: any) => {
         0
       ),
       zones: normalizeDeliveryZones(deliveryConfig?.zones),
+      zoneBands: normalizeZoneBands(deliveryConfig?.zoneBands),
       postalCodeRules: normalizePostalCodeRules(deliveryConfig?.postalCodeRules),
     },
     automation: {
@@ -181,6 +208,14 @@ export default function BusinessOnboarding() {
       profileUrl: "",
       profilePreviewUrl: "",
       profileFile: undefined as File | undefined,
+    },
+
+    branchAdmin: {
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
     },
 
     tenant: {
@@ -247,6 +282,7 @@ export default function BusinessOnboarding() {
           isFreeDelivery: false,
           freeDeliveryThreshold: 0,
           zones: [],
+          zoneBands: [],
           postalCodeRules: [],
         },
         automation: {
@@ -273,7 +309,6 @@ export default function BusinessOnboarding() {
       },
     },
   });
-console.log(formData)
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -357,6 +392,13 @@ console.log(formData)
         lastName: formData.user.lastName,
         avatarUrl: formData.user.profileUrl,
         bio: "",
+      },
+      branchAdmin: {
+        email: normalizeEmail(formData.branchAdmin?.email),
+        password: formData.branchAdmin?.password || "",
+        firstName: formData.branchAdmin?.firstName || "",
+        lastName: formData.branchAdmin?.lastName || "",
+        phone: formData.branchAdmin?.phone || "",
       },
       tenant: {
         name: formData.tenant.name,

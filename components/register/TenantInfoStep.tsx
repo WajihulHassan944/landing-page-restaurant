@@ -252,7 +252,7 @@ const handleRestaurantLogoChange = async (
 
         {/* Tenant Logo */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Tenant Logo*</label>
+          <label className="text-sm font-medium">Tenant Logo</label>
 
           <label className="flex items-center gap-4 cursor-pointer rounded-lg hover:bg-gray-50 transition">
          <div className="relative w-14 h-14">
@@ -362,7 +362,7 @@ const handleRestaurantLogoChange = async (
 
         {/* Restaurant Logo */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Restaurant Logo*</label>
+          <label className="text-sm font-medium">Restaurant Logo</label>
 
           <label className="flex items-center gap-4 cursor-pointer rounded-lg hover:bg-gray-50 transition">
            <div className="relative w-14 h-14">

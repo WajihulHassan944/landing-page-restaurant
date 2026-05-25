@@ -57,6 +57,7 @@ export default function BranchStep({
   back,
 }: Props) {
   const branch = formData.branch || {};
+  const branchAdmin = formData.branchAdmin || {};
   const branchAddress = branch.address || {};
   const branchSettings = branch.settings || {};
 
@@ -124,14 +125,21 @@ const MAX_BRANCH_COVER_IMAGE_SIZE_BYTES =
     clearError(`branch.${String(field)}`);
   };
 
+  const updateBranchAdminField = (field: keyof typeof branchAdmin, value: any) => {
+    updateFormData("branchAdmin", { [field]: value });
+    clearError(`branchAdmin.${String(field)}`);
+  };
+
   const updateAddressField = (
     field: keyof typeof branchAddress,
     value: any
   ) => {
     updateFormData("branch", {
+      [field]: value,
       address: { ...branchAddress, [field]: value },
     });
     clearError(`branch.address.${String(field)}`);
+    clearError(`branch.${String(field)}`);
   };
 
   const handleBranchSettingsChange = (nextSettings: any) => {
@@ -223,6 +231,8 @@ const MAX_BRANCH_COVER_IMAGE_SIZE_BYTES =
     const latestAddress = branchAddressRef.current || {};
 
     updateFormData("branch", {
+      lat,
+      lng,
       address: {
         ...latestAddress,
         lat,
@@ -308,6 +318,13 @@ const MAX_BRANCH_COVER_IMAGE_SIZE_BYTES =
       place.formatted_address || composeAddress(nextAddress) || "";
 
     updateFormData("branch", {
+      street: nextAddress.street,
+      area: nextAddress.area,
+      city: nextAddress.city,
+      state: nextAddress.state,
+      country: nextAddress.country,
+      lat: nextAddress.lat,
+      lng: nextAddress.lng,
       address: nextAddress,
     });
 
@@ -846,7 +863,7 @@ const MAX_BRANCH_COVER_IMAGE_SIZE_BYTES =
                   branch.coverImagePreviewUrl ? "text-white/90" : "text-gray-400"
                 }`}
               >
-                JPG, JPEG, PNG less than 1MB
+                JPG, JPEG, PNG less than 2MB
               </p>
             </div>
 
@@ -865,6 +882,91 @@ const MAX_BRANCH_COVER_IMAGE_SIZE_BYTES =
           )}
         </div>
       </div>
+
+      {/* Branch Admin */}
+      <section className="mb-10 rounded-2xl border border-gray-100 bg-gray-50/70 p-5">
+        <div className="mb-5 flex flex-col gap-1">
+          <h2 className="text-[20px] font-semibold text-gray-900">
+            Branch Admin Account
+          </h2>
+          <p className="text-sm text-gray-500">
+            Create the branch-level administrator who will manage this branch after registration.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <FormInput
+              label="First Name"
+              placeholder="Branch admin first name"
+              value={branchAdmin.firstName || ""}
+              onChange={(val) => updateBranchAdminField("firstName", val)}
+            />
+            {error("branchAdmin.firstName") && (
+              <p className="mt-1 text-xs text-red-500">
+                {error("branchAdmin.firstName")}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <FormInput
+              label="Last Name"
+              placeholder="Branch admin last name"
+              value={branchAdmin.lastName || ""}
+              onChange={(val) => updateBranchAdminField("lastName", val)}
+            />
+            {error("branchAdmin.lastName") && (
+              <p className="mt-1 text-xs text-red-500">
+                {error("branchAdmin.lastName")}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <FormInput
+              label="Email"
+              placeholder="branch.admin@example.com"
+              value={branchAdmin.email || ""}
+              onChange={(val) => updateBranchAdminField("email", val)}
+            />
+            {error("branchAdmin.email") && (
+              <p className="mt-1 text-xs text-red-500">
+                {error("branchAdmin.email")}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <FormInput
+              label="Phone"
+              placeholder="+92 300 0000000"
+              value={branchAdmin.phone || ""}
+              onChange={(val) => updateBranchAdminField("phone", val)}
+            />
+            {error("branchAdmin.phone") && (
+              <p className="mt-1 text-xs text-red-500">
+                {error("branchAdmin.phone")}
+              </p>
+            )}
+          </div>
+
+          <div className="sm:col-span-2">
+            <FormInput
+              label="Password"
+              placeholder="Set branch admin password"
+              value={branchAdmin.password || ""}
+              onChange={(val) => updateBranchAdminField("password", val)}
+            />
+            {error("branchAdmin.password") && (
+              <p className="mt-1 text-xs text-red-500">
+                {error("branchAdmin.password")}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
 
       {/* Address */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">

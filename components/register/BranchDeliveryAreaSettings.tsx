@@ -37,15 +37,6 @@ type Props = {
   onChange: (nextSettings: any) => void;
 };
 
-const ORDER_TYPES = ["DELIVERY", "TAKEAWAY", "DINE_IN"];
-const PAYMENT_METHODS = [
-  "COD",
-  "STRIPE",
-  "EASYPAISA",
-  "JAZZCASH",
-  "BANK_TRANSFER",
-];
-
 const GOOGLE_MAPS_SCRIPT_ID = "google-maps-places-script";
 const GOOGLE_MAPS_API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "YOUR_GOOGLE_MAPS_API_KEY";
@@ -143,7 +134,17 @@ const createPolygonAroundCenter = (center: LatLngPoint, radiusKm = 1) => {
 const createDefaultZone = (deliveryFee = 0, center?: LatLngPoint | null) => ({
   name: "",
   deliveryFee,
+  minOrderAmount: 0,
+  freeDeliveryThreshold: 0,
   polygon: center ? createPolygonAroundCenter(center) : [],
+});
+
+const createDefaultZoneBand = () => ({
+  fromKm: 0,
+  toKm: 0,
+  deliveryFee: 0,
+  minOrderAmount: 0,
+  freeDeliveryThreshold: 0,
 });
 
 const createDefaultPostalCodeRule = (deliveryFee = 0) => ({
@@ -193,12 +194,16 @@ export default function BranchDeliveryAreaSettings({
     isFreeDelivery: Boolean(deliveryConfig.isFreeDelivery),
     freeDeliveryThreshold: deliveryConfig.freeDeliveryThreshold ?? 0,
     zones: Array.isArray(deliveryConfig.zones) ? deliveryConfig.zones : [],
+    zoneBands: Array.isArray(deliveryConfig.zoneBands)
+      ? deliveryConfig.zoneBands
+      : [],
     postalCodeRules: Array.isArray(deliveryConfig.postalCodeRules)
       ? deliveryConfig.postalCodeRules
       : [],
   };
 
   const zones = delivery.zones;
+  const zoneBands = delivery.zoneBands;
   const postalCodeRules = delivery.postalCodeRules;
 
   const branchCoordinates = useMemo(() => {
@@ -222,6 +227,7 @@ export default function BranchDeliveryAreaSettings({
       ...deliveryConfig,
       mode: deliveryMode,
       zones,
+      zoneBands,
       postalCodeRules,
       [key]: value,
     };
@@ -238,22 +244,6 @@ export default function BranchDeliveryAreaSettings({
     emitSettings(nextSettings);
   };
 
-  const patchSettings = (patch: Record<string, any>) => {
-    emitSettings({
-      ...settings,
-      ...patch,
-    });
-  };
-
-  const toggleArrayValue = (key: string, value: string) => {
-    const current = Array.isArray(settings?.[key]) ? settings[key] : [];
-
-    const updated = current.includes(value)
-      ? current.filter((entry: string) => entry !== value)
-      : [...current, value];
-
-    patchSettings({ [key]: updated });
-  };
 
   const updateAutomation = (key: string, value: any) => {
     const nextAutomation = {
@@ -273,15 +263,6 @@ export default function BranchDeliveryAreaSettings({
     emitSettings(nextSettings);
   };
 
-  const updateTaxation = (key: string, value: any) => {
-    emitSettings({
-      ...settings,
-      taxation: {
-        ...(settings?.taxation || {}),
-        [key]: value,
-      },
-    });
-  };
 
   const updateZone = (index: number, key: string, value: any) => {
     const nextZones = zones.map((zone: any, zoneIndex: number) =>
@@ -446,6 +427,53 @@ export default function BranchDeliveryAreaSettings({
     if (!polygon.length) return;
 
     removeZonePoint(activeZoneIndex, polygon.length - 1);
+  };
+
+
+  const updateZoneBand = (index: number, key: string, value: any) => {
+    const nextBands = zoneBands.map((band: any, bandIndex: number) =>
+      bandIndex === index
+        ? {
+            ...band,
+            [key]: value,
+          }
+        : band
+    );
+
+    updateDeliveryConfig("zoneBands", nextBands);
+  };
+
+  const addZoneBand = () => {
+    const lastBand = zoneBands[zoneBands.length - 1];
+    const nextFromKm = lastBand?.toKm !== undefined ? toNumber(lastBand.toKm, 0) : 0;
+
+    updateDeliveryConfig("zoneBands", [
+      ...zoneBands,
+      {
+        ...createDefaultZoneBand(),
+        fromKm: nextFromKm,
+        toKm: nextFromKm ? nextFromKm + 2.5 : 2.5,
+        deliveryFee: toNumber(delivery.deliveryFee, 0),
+        minOrderAmount: toNumber(delivery.minOrderAmount, 0),
+        freeDeliveryThreshold: toNumber(delivery.freeDeliveryThreshold, 0),
+      },
+    ]);
+  };
+
+  const duplicateZoneBand = (index: number) => {
+    const source = zoneBands[index];
+    if (!source) return;
+
+    const nextBands = [...zoneBands];
+    nextBands.splice(index + 1, 0, { ...source });
+    updateDeliveryConfig("zoneBands", nextBands);
+  };
+
+  const removeZoneBand = (index: number) => {
+    updateDeliveryConfig(
+      "zoneBands",
+      zoneBands.filter((_: any, bandIndex: number) => bandIndex !== index)
+    );
   };
 
   const updatePostalRule = (index: number, key: string, value: any) => {
@@ -960,6 +988,8 @@ export default function BranchDeliveryAreaSettings({
           {
             name: "Delivery Zone 1",
             deliveryFee: toNumber(delivery.deliveryFee, 0),
+            minOrderAmount: toNumber(delivery.minOrderAmount, 0),
+            freeDeliveryThreshold: toNumber(delivery.freeDeliveryThreshold, 0),
             polygon: [
               {
                 lat: Number(lat).toFixed(6),
@@ -1205,46 +1235,11 @@ export default function BranchDeliveryAreaSettings({
             Order & Delivery Area Settings
           </h2>
           <p className="mt-1 text-sm text-gray-500">
-            Configure order methods, delivery charges, radius, polygon zones, or postal-code based delivery rules.
+            Configure customer-facing delivery charges, radius, polygon zones, radius bands, or postal-code based delivery rules.
           </p>
         </div>
 
         <div className="space-y-6">
-          {/* <div>
-            <p className="mb-3 text-sm font-medium text-gray-900">
-              Allowed order types
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {ORDER_TYPES.map((type) => (
-                <label key={type} className="flex items-center gap-2">
-                  <Checkbox
-                    checked={settings.allowedOrderTypes?.includes(type)}
-                    onCheckedChange={() => toggleArrayValue("allowedOrderTypes", type)}
-                  />
-                  <span className="text-sm">{formatLabel(type)}</span>
-                </label>
-              ))}
-            </div>
-          </div> */}
-
-          {/* <div>
-            <p className="mb-3 text-sm font-medium text-gray-900">
-              Allowed payment methods
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {PAYMENT_METHODS.map((method) => (
-                <label key={method} className="flex items-center gap-2">
-                  <Checkbox
-                    checked={settings.allowedPaymentMethods?.includes(method)}
-                    onCheckedChange={() =>
-                      toggleArrayValue("allowedPaymentMethods", method)
-                    }
-                  />
-                  <span className="text-sm">{formatLabel(method)}</span>
-                </label>
-              ))}
-            </div>
-          </div> */}
 
           <div>
             <p className="mb-3 text-sm font-medium text-gray-900">
@@ -1289,15 +1284,14 @@ export default function BranchDeliveryAreaSettings({
             />
 
             <FormInput
-  label="Radius (km)"
-  value={toInputNumber(delivery.radiusKm)}
-  placeholder="Enter radius"
-  onChange={(val) => {
-    const sanitized = sanitizeDecimalInput(val);
-
-    updateDeliveryConfig("radiusKm", sanitized);
-  }}
-/>
+              label="Radius (km)"
+              value={toInputNumber(delivery.radiusKm)}
+              placeholder="Enter radius, e.g. 7.5"
+              onChange={(val) => {
+                const sanitized = sanitizeDecimalInput(val);
+                updateDeliveryConfig("radiusKm", sanitized);
+              }}
+            />
 
             <FormInput
               label="Minimum Order Amount"
@@ -1332,6 +1326,128 @@ export default function BranchDeliveryAreaSettings({
           </label>
 
           {renderDeliveryMap()}
+
+          {deliveryMode === "RADIUS" ? (
+            <div className="space-y-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">
+                    Radius Fee Bands
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Optional distance bands for radius-based delivery. Use decimal values like 2.5 or 7.5 km.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addZoneBand}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90"
+                >
+                  <Plus size={15} />
+                  Add Band
+                </button>
+              </div>
+
+              {zoneBands.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-5 text-center text-sm text-gray-500">
+                  No radius fee band configured. The base delivery fee will be used for the configured radius.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {zoneBands.map((band: any, index: number) => (
+                    <div
+                      key={`zone-band-${index}`}
+                      className="rounded-2xl border border-gray-200 bg-white p-4"
+                    >
+                      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">
+                            Band {index + 1}
+                          </p>
+                          <p className="mt-0.5 text-xs text-gray-500">
+                            {toInputNumber(band?.fromKm) || "0"} km → {toInputNumber(band?.toKm) || "0"} km
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => duplicateZoneBand(index)}
+                            className="inline-flex h-9 items-center gap-2 rounded-full border border-gray-200 px-3 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                          >
+                            <Copy size={13} />
+                            Duplicate
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => removeZoneBand(index)}
+                            className="inline-flex h-9 items-center gap-2 rounded-full border border-red-100 bg-red-50 px-3 text-xs font-medium text-red-600 hover:bg-red-100"
+                          >
+                            <Trash2 size={13} />
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+                        <FormInput
+                          label="From Km"
+                          placeholder="0"
+                          value={toInputNumber(band?.fromKm)}
+                          onChange={(val) =>
+                            updateZoneBand(index, "fromKm", sanitizeDecimalInput(val))
+                          }
+                        />
+
+                        <FormInput
+                          label="To Km"
+                          placeholder="7.5"
+                          value={toInputNumber(band?.toKm)}
+                          onChange={(val) =>
+                            updateZoneBand(index, "toKm", sanitizeDecimalInput(val))
+                          }
+                        />
+
+                        <FormInput
+                          label="Delivery Fee"
+                          placeholder="Fee"
+                          value={toInputNumber(band?.deliveryFee)}
+                          onChange={(val) =>
+                            updateZoneBand(index, "deliveryFee", val ? Number(val) : 0)
+                          }
+                        />
+
+                        <FormInput
+                          label="Min Order"
+                          placeholder="Min order"
+                          value={toInputNumber(band?.minOrderAmount)}
+                          onChange={(val) =>
+                            updateZoneBand(index, "minOrderAmount", val ? Number(val) : 0)
+                          }
+                        />
+
+                        <FormInput
+                          label="Free Delivery From"
+                          placeholder="Threshold"
+                          value={toInputNumber(band?.freeDeliveryThreshold)}
+                          onChange={(val) =>
+                            updateZoneBand(
+                              index,
+                              "freeDeliveryThreshold",
+                              val ? Number(val) : 0
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : null}
+
 
           {deliveryMode === "ZONE" ? (
             <div className="space-y-4">
@@ -1427,6 +1543,32 @@ export default function BranchDeliveryAreaSettings({
                             updateZone(
                               zoneIndex,
                               "deliveryFee",
+                              val ? Number(val) : 0
+                            )
+                          }
+                        />
+
+                        <FormInput
+                          label="Zone Min Order"
+                          placeholder="Minimum order amount"
+                          value={toInputNumber(zone?.minOrderAmount)}
+                          onChange={(val) =>
+                            updateZone(
+                              zoneIndex,
+                              "minOrderAmount",
+                              val ? Number(val) : 0
+                            )
+                          }
+                        />
+
+                        <FormInput
+                          label="Zone Free Delivery From"
+                          placeholder="Free delivery threshold"
+                          value={toInputNumber(zone?.freeDeliveryThreshold)}
+                          onChange={(val) =>
+                            updateZone(
+                              zoneIndex,
+                              "freeDeliveryThreshold",
                               val ? Number(val) : 0
                             )
                           }
