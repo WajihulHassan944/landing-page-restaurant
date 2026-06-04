@@ -1,0 +1,1218 @@
+{
+  "common": {
+    "getStarted": "Loslegen",
+    "actions": {
+      "edit": "Bearbeiten",
+      "view": "Ansehen",
+      "image": "Bild",
+      "message": "Nachricht",
+      "more": "Weitere Aktionen",
+      "back": "Zurück",
+      "saveContinue": "Speichern und fortfahren"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "fileUploaded": "Datei hochgeladen"
+  },
+  "navigation": {
+    "about": "Über uns",
+    "services": "Services",
+    "pricing": "Preise",
+    "contact": "Kontakt",
+    "registration": "Registrierung",
+    "registrationSignIn": "Registrierung / Anmelden",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "changeLanguage": "Sprache wechseln"
+  },
+  "footer": {
+    "subscribe": "Abonnieren",
+    "newsletterText": "Abonnieren Sie unseren Newsletter, um über Funktionen und Veröffentlichungen auf dem Laufenden zu bleiben.",
+    "emailPlaceholder": "E-Mail-Adresse eingeben",
+    "privacyAgreement": "Mit dem Abonnieren stimmen Sie unserer",
+    "quickLinks": "Schnelllinks",
+    "products": "Produkte",
+    "company": "Unternehmen",
+    "home": "Startseite",
+    "about": "Über uns",
+    "services": "Services",
+    "contact": "Kontakt",
+    "superAdminDashboard": "Super-Admin-Dashboard",
+    "restaurantAdminDashboard": "Restaurant-Admin-Dashboard",
+    "customerApp": "Kunden-App",
+    "driverApp": "Fahrer-App",
+    "merchantRestaurantApp": "Händler-App (Restaurant)",
+    "privacyPolicy": "Datenschutzerklärung",
+    "support": "Support",
+    "termsOfService": "Nutzungsbedingungen",
+    "copyright": "Copyright © 2025 Investo. Alle Rechte vorbehalten"
+  },
+  "home": {
+    "hero": {
+      "badge": "Für Food-Unternehmen entwickelt",
+      "titleLineOne": "Das komplette Restaurant-Management",
+      "titleLineTwo": "System, das alles übernimmt.",
+      "descriptionLineOne": "Stärken Sie Ihre Marke und kontrollieren Sie Ihren Umsatz.",
+      "descriptionLineTwo": "Starten Sie Ihre eigene Food-Bestell-App in Tagen, nicht Monaten.",
+      "primaryCta": "Loslegen",
+      "secondaryCta": "Demo anfordern",
+      "totalIncome": "Gesamteinnahmen",
+      "foodLabels": {
+        "hotDog": "Hot Dog",
+        "pasta": "Pasta",
+        "donuts": "Donuts",
+        "burger": "Burger"
+      }
+    },
+    "sectionTwo": {
+      "stats": {
+        "operatingSystem": {
+          "title": "Ein komplettes Betriebssystem, das Restaurants hilft, Umsatz zu steigern und tägliche Abläufe mühelos zu führen."
+        },
+        "trustedOwners": {
+          "title": "Vertraut von Restaurantbesitzern wegen Zuverlässigkeit, intuitivem Design und Echtzeit-Kontrolle von Bestellungen."
+        },
+        "regionalGrowth": {
+          "title": "Wir helfen Restaurants mit starker Präsenz in mehreren Regionen und Liefernetzwerken zu wachsen."
+        }
+      }
+    },
+    "sectionThree": {
+      "title": "Beliebte Kategorien entdecken",
+      "descriptionLineOne": "Entdecken Sie die passende Auswahl aus unseren beliebtesten Optionen,",
+      "descriptionLineTwo": "damit Sie lernen, wachsen und erfolgreich sein können",
+      "viewAll": "Alle ansehen",
+      "categories": {
+        "menuManagement": {
+          "title": "Menüverwaltung",
+          "description": "Aktualisieren Sie Gerichte, Varianten, Preise und Lagerbestände ganz einfach."
+        },
+        "orderDelivery": {
+          "title": "Bestell- und Lieferablauf",
+          "description": "Aktualisieren Sie Gerichte, Varianten, Preise und Lagerbestände ganz einfach."
+        },
+        "salesAnalytics": {
+          "title": "Umsatz und Analysen",
+          "description": "Überwachen Sie Umsatz, beliebte Artikel, Stoßzeiten und Performance-Einblicke."
+        },
+        "customerFeedback": {
+          "title": "Kundenfeedback",
+          "description": "Sehen Sie Bewertungen, antworten Sie auf Reviews und stärken Sie Ihren Ruf."
+        },
+        "promotions": {
+          "title": "Aktionen und Rabatte",
+          "description": "Erstellen Sie Angebote, Promo-Codes und heben Sie Bestseller hervor."
+        },
+        "staffRoles": {
+          "title": "Personal- und Rollensteuerung",
+          "description": "Verwalten Sie Mitarbeiterkonten, Zugriffsstufen und Aktivitätsprotokolle."
+        }
+      }
+    },
+    "sectionFour": {
+      "trustedBy": "Vertraut von über",
+      "industryLeaders": "Branchenführern"
+    },
+    "sectionFive": {
+      "titleLineOne": "Lassen Sie Ihr Restaurant wachsen mit",
+      "titleLineTwo": "einer smarteren Lieferplattform",
+      "descriptionLineOne": "Unsere Technologie hilft Restaurants, Umsätze zu steigern,",
+      "descriptionLineTwo": "Abläufe zu optimieren und Kunden schneller zu erreichen - ganz ohne",
+      "descriptionLineThree": "Aufwand.",
+      "features": {
+        "createAccount": {
+          "title": "Restaurantkonto erstellen",
+          "description": "Richten Sie Ihren digitalen Store in Minuten ein. Laden Sie Ihr Menü hoch, definieren Sie Preise, fügen Sie Bilder hinzu und empfangen Sie sofort Bestellungen über unseren automatisierten Onboarding-Ablauf."
+        },
+        "realTimeOrders": {
+          "title": "Bestellungen in Echtzeit verwalten",
+          "description": "Verfolgen Sie neue Bestellungen, angenommene Bestellungen, Fahrerzuweisungen und Lieferfortschritt - alles live aktualisiert und auf allen Geräten synchron."
+        },
+        "support": {
+          "title": "24/7 Support für Restaurants",
+          "description": "Erhalten Sie jederzeit priorisierte Hilfe. Von technischem Support bis Menüoptimierung sorgt unser Team dafür, dass Ihre Abläufe reibungslos laufen."
+        }
+      }
+    },
+    "sectionSix": {
+      "titleLineOne": "Restaurantwachstum",
+      "titleLineTwo": "transformieren,",
+      "titleLineThree": "Bestellung für Bestellung.",
+      "description": "Unsere Plattform hilft Restaurants, smarter zu arbeiten, schneller zu bedienen und mühelos zu skalieren. Mit fortschrittlicher Automatisierung und Echtzeit-Einblicken bleiben Food-Unternehmen im Liefermarkt voraus.",
+      "checklist": {
+        "manageOrders": "Alle eingehenden Bestellungen sofort verwalten",
+        "performanceTools": "Smarte Tools zur Steigerung der Restaurantleistung",
+        "fasterDeliveries": "Schnellere Lieferungen, zufriedenere Kunden"
+      },
+      "features": {
+        "multiChannelSync": {
+          "title": "Multi-Channel-Synchronisierung",
+          "description": "Gebündelte Bestellungen von UberEats, DoorDash und Ihrer Website."
+        },
+        "kitchenDisplay": {
+          "title": "Kitchen Display System (KDS)",
+          "description": "Direkte papierlose Kommunikation zwischen Servicebereich und Küche."
+        },
+        "realTimeDispatch": {
+          "title": "Echtzeit-Disposition",
+          "description": "Koordinieren Sie lokale Fahrer oder 3PL-Lieferpartner sofort."
+        }
+      }
+    },
+    "sectionSeven": {
+      "titleLineOne": "Reibungslose und einfache",
+      "titleLineTwo": "Restaurant-Bestell",
+      "titleLineThree": "Verwaltung",
+      "description": "Mit benutzerfreundlichen Funktionen, wettbewerbsfähigen Wechselkursen und robusten Sicherheitsmaßnahmen vereinfacht unsere Plattform internationale Transaktionen.",
+      "checklist": {
+        "orderFlow": "Nahtloser Bestellfluss vom Kunden bis in Ihre Küche",
+        "menuControls": "Smarte Menü-, Preis- und Bestandskontrollen"
+      }
+    },
+    "sectionEight": {
+      "eyebrow": "FAQ",
+      "titleLineOne": "Häufig",
+      "titleLineTwo": "gestellte",
+      "titleLineThree": "Fragen",
+      "description": "Stellen Sie Ihre Fragen"
+    },
+    "faq": {
+      "allOrderTypes": {
+        "question": "Kann ich die Plattform für Vor-Ort- und Lieferbestellungen nutzen?",
+        "answer": "Ja, unser System unterstützt alle Bestellarten - Lieferung, Abholung und Vor-Ort-Bestellungen. Restaurants können alles über ein einziges Dashboard verwalten, das auf Geschwindigkeit und Effizienz ausgelegt ist."
+      },
+      "updateMenu": {
+        "question": "Wie aktualisiere ich mein Restaurantmenü?",
+        "answer": "Sie können Ihr Menü direkt im Restaurant-Dashboard aktualisieren. Fügen Sie Artikel hinzu oder entfernen Sie sie, ändern Sie Preise, verwalten Sie Varianten und steuern Sie Verfügbarkeit in Echtzeit ohne technische Hilfe."
+      },
+      "deliveryRiders": {
+        "question": "Stellen Sie Lieferfahrer bereit?",
+        "answer": "Wir unterstützen sowohl interne als auch externe Liefermodelle. Restaurants können eigene Fahrer nutzen oder je nach Geschäftsbedarf unterstützte Lieferpartner integrieren."
+      },
+      "joiningFees": {
+        "question": "Gibt es Gebühren für den Beitritt zur Plattform?",
+        "answer": "Es gibt keine Einrichtungsgebühren im Voraus. Die Preise hängen vom gewählten Plan und Bestellvolumen ab. Alle Details erhalten Sie beim Onboarding oder über unser Sales-Team."
+      },
+      "multipleDevices": {
+        "question": "Kann ich Bestellungen von mehreren Geräten verwalten?",
+        "answer": "Ja. Ihr Konto bleibt auf allen Geräten synchronisiert, sodass Sie Bestellungen, Menüs und Analysen gleichzeitig von Tablets, Smartphones oder Desktops verwalten können."
+      }
+    },
+    "sectionNine": {
+      "titleLineOne": "Laden Sie unsere Restaurant-App herunter",
+      "titleLineTwo": "und verwalten Sie Bestellungen mühelos!",
+      "descriptionLineOne": "Übernehmen Sie von überall die volle Kontrolle über Ihre Restaurantabläufe.",
+      "descriptionLineTwo": "Nehmen Sie Bestellungen an, aktualisieren Sie Menüs, verfolgen Sie Lieferungen und überwachen Sie die Leistung - alles",
+      "descriptionLineThree": "über unsere leistungsstarke, einfach zu nutzende mobile App.",
+      "descriptionLineFour": "Profitieren Sie von Echtzeit-Benachrichtigungen, schnelleren Workflows und einem nahtlosen",
+      "descriptionLineFive": "Management-Erlebnis für vielbeschäftigte Restaurantteams.",
+      "store": {
+        "googlePlayAlt": "Google Play",
+        "googlePlayEyebrow": "Jetzt bei",
+        "googlePlay": "Google Play",
+        "appStoreAlt": "App Store",
+        "appStoreEyebrow": "Laden im",
+        "appStore": "App Store"
+      }
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Food-Unternehmen stärken",
+      "titleLineOne": "Unsere Mission:",
+      "titleLineTwo": "Revolutionieren",
+      "titleLineThree": "wie die Welt isst.",
+      "description": "Wir bauen die Infrastruktur, mit der Restaurants jeder Größe in einer digital geprägten Welt erfolgreich sein können. Von kleinen Cafes bis zu globalen Franchise-Unternehmen liefern wir die Werkzeuge, um jedes Detail nahtlos zu verwalten.",
+      "partnersLabel": "Globale Partner vertrauen uns",
+      "imageOverlayEyebrow": "Innovation in jedem Gericht",
+      "imageOverlayTitle": "Der Kern unserer Abläufe",
+      "growthFactor": "Wachstumsfaktor"
+    },
+    "journey": {
+      "title": "Unsere Reise",
+      "description": "Von einem kleinen Startup in einer Garage zu einem globalen Marktführer für Restauranttechnologie. So sind wir hierher gekommen."
+    },
+    "timeline": {
+      "founded": {
+        "title": "Mit Vision gegründet",
+        "description": "Unsere Gründer erkannten die Reibung zwischen Küchenabläufen und digitalen Bestellsystemen."
+      },
+      "pivot": {
+        "title": "Der große Wandel",
+        "description": "Während der globalen Pandemie halfen wir über 10.000 Restaurants, über Nacht auf digitale Formate umzusteigen."
+      },
+      "globalExpansion": {
+        "title": "Globale Expansion",
+        "description": "Wir eröffneten Büros in London, Singapur und New York, um unseren wachsenden internationalen Kundenstamm besser zu betreuen."
+      }
+    },
+    "teamSection": {
+      "title": "Lernen Sie die Visionäre kennen",
+      "description": "Sie treiben die Neudefinition der Food-Branche voran."
+    },
+    "team": {
+      "marcus": {
+        "role": "CEO & Mitgründer",
+        "description": "Ehemaliger Google-Ingenieur mit Leidenschaft für die Vereinfachung komplexer Logistik."
+      },
+      "sarah": {
+        "role": "CTO",
+        "description": "Leitet unsere Architektur, um über 1 Mio. Transaktionen pro Sekunde zu unterstützen."
+      },
+      "david": {
+        "role": "COO",
+        "description": "Fokussiert auf den Ausbau unserer globalen Präsenz und operative Exzellenz."
+      },
+      "elena": {
+        "role": "Head of Product",
+        "description": "Gestaltet intuitive Erlebnisse für Köche und Kunden."
+      }
+    },
+    "valuesSection": {
+      "title": "Werte, die uns antreiben",
+      "description": "Die Grundprinzipien hinter jeder Codezeile, die wir schreiben."
+    },
+    "values": {
+      "speed": {
+        "title": "Tempo und Agilität",
+        "description": "Die Food-Branche bewegt sich schnell. Unsere Plattform bewegt sich schneller, damit Sie voraus bleiben."
+      },
+      "restaurantFirst": {
+        "title": "Restaurant zuerst",
+        "description": "Jede Funktion, die wir entwickeln, beginnt mit einem Gespräch mit einem Koch oder Restaurantbesitzer."
+      },
+      "trust": {
+        "title": "Unerschütterliches Vertrauen",
+        "description": "Ihre Daten und Ihr Umsatz sind mit unseren Sicherheitsprotokollen auf Unternehmensniveau geschützt."
+      }
+    },
+    "cta": {
+      "title": "Bereit, Ihr Geschäft zu transformieren?",
+      "descriptionLineOne": "Schließen Sie sich über 120.000+ Restaurantbesitzern an, die ihre Abläufe",
+      "descriptionLineTwo": "auf die nächste Stufe gebracht haben.",
+      "primaryButton": "Jetzt loslegen",
+      "secondaryButton": "Demo anfordern"
+    }
+  },
+  "services": {
+    "hero": {
+      "badge": "Die komplette Plattform",
+      "titleLineOne": "Lösungen für",
+      "titleLineTwo": "jede Küche",
+      "description": "Optimieren Sie Ihre Abläufe vom Warenbestand im Hintergrund bis zum Service im Gastraum. Unsere einheitliche Plattform unterstützt Ihr Team dabei, in jedem Gericht und jeder Interaktion Exzellenz zu liefern.",
+      "secondaryCta": "Video ansehen"
+    },
+    "items": {
+      "inventoryManagement": {
+        "title": "Bestandsverwaltung",
+        "description": "Echtzeit-Tracking von Zutaten, Abfallüberwachung und automatisierte Nachbestellung, damit Kosten sinken und die Küche reibungslos läuft."
+      },
+      "staffScheduling": {
+        "title": "Mitarbeiterplanung",
+        "description": "Verwalten Sie Schichten, überwachen Sie Personalkosten und vereinfachen Sie die Teamkommunikation mit unserem intuitiven Drag-and-drop-Planungstool."
+      },
+      "posIntegration": {
+        "title": "POS-Integration",
+        "description": "Verbinden Sie bestehende Hardware nahtlos. Synchronisieren Sie Bestellungen, Zahlungen und Küchenanzeigen in Echtzeit für reibungslosen Service."
+      }
+    },
+    "actions": {
+      "learnMore": "Mehr erfahren"
+    },
+    "builtForChefs": {
+      "title": "Von Köchen entwickelt, für Köche.",
+      "description": "Wir kennen die Hitze der Küche. Deshalb haben wir unsere Oberfläche blitzschnell, gut sichtbar und unglaublich einfach gestaltet - selbst während der hektischsten Abendservices.",
+      "features": {
+        "uptime": "99,9% Uptime-Zuverlässigkeit",
+        "prioritySupport": "24/7 Prioritäts-Supportline",
+        "mobileFirst": "Mobile-first Design für Verwaltung unterwegs"
+      }
+    },
+    "stats": {
+      "locationsSupported": {
+        "label": "Unterstützte Standorte"
+      },
+      "customerSatisfaction": {
+        "label": "Kundenzufriedenheit"
+      }
+    },
+    "requestDemo": {
+      "title": "Individuelle Enterprise-Lösungen",
+      "description": "Betreiben Sie eine Restaurantgruppe oder nationale Kette? Wir bieten maßgeschneiderte Workflows, Konsolidierung für mehrere Standorte und erweiterte Reporting-Tools, die mit Ihrem Wachstum skalieren.",
+      "formTitle": "Individuelle Demo anfordern"
+    },
+    "operationalExcellence": {
+      "features": {
+        "multiChannelSync": {
+          "title": "Multi-Channel-Synchronisierung",
+          "description": "Gebündelte Bestellungen von UberEats, DoorDash und Ihrer Website."
+        },
+        "kitchenDisplay": {
+          "title": "Kitchen Display System (KDS)",
+          "description": "Direkte papierlose Kommunikation zwischen Servicebereich und Küche."
+        },
+        "realTimeDispatch": {
+          "title": "Echtzeit-Disposition",
+          "description": "Koordinieren Sie lokale Fahrer oder 3PL-Lieferpartner sofort."
+        }
+      }
+    }
+  },
+  "categories": {
+    "hero": {
+      "badge": "Die komplette Plattform",
+      "titleLineOne": "Vollständige Suite an",
+      "titleLineTwo": "Restaurantlösungen",
+      "description": "Optimieren Sie Abläufe, steigern Sie Verkäufe und begeistern Sie Kunden mit unserer All-in-one-Managementplattform für moderne Gastronomie.",
+      "secondaryCta": "Video ansehen"
+    },
+    "sectionThree": {
+      "menuManagement": {
+        "title": "Menüverwaltung",
+        "description": "Aktualisieren Sie Gerichte, Varianten, Preise und Lagerbestände ganz einfach."
+      },
+      "orderDelivery": {
+        "title": "Bestell- und Lieferablauf",
+        "description": "Aktualisieren Sie Gerichte, Varianten, Preise und Lagerbestände ganz einfach."
+      },
+      "salesAnalytics": {
+        "title": "Umsatz und Analysen",
+        "description": "Überwachen Sie Umsatz, beliebte Artikel, Stoßzeiten und Performance-Einblicke."
+      },
+      "customerFeedback": {
+        "title": "Kundenfeedback",
+        "description": "Sehen Sie Bewertungen, antworten Sie auf Reviews und stärken Sie Ihren Ruf."
+      },
+      "promotions": {
+        "title": "Aktionen und Rabatte",
+        "description": "Erstellen Sie Angebote, Promo-Codes und heben Sie Bestseller hervor."
+      },
+      "staffRoles": {
+        "title": "Personal- und Rollensteuerung",
+        "description": "Verwalten Sie Mitarbeiterkonten, Zugriffsstufen und Aktivitätsprotokolle."
+      }
+    },
+    "digitalFirst": {
+      "badge": "Digital zuerst",
+      "title": "Menüverwaltung",
+      "description": "Übernehmen Sie die volle Kontrolle über digitale und physische Menüs mit Echtzeit-Updates und nahtloser Integration über alle Kanäle. Reduzieren Sie Druckkosten und passen Sie sich sofort an.",
+      "button": "Mehr erfahren",
+      "imageAlt": "Menüverwaltung",
+      "features": {
+        "qrCode": {
+          "title": "QR-Code-Integration",
+          "description": "Sofortige QR-Erstellung für kontaktlose Tischbestellungen."
+        },
+        "inventorySync": {
+          "title": "Bestandssynchronisierung",
+          "description": "Blenden Sie ausverkaufte Artikel automatisch auf allen Plattformen aus."
+        },
+        "dietaryTagging": {
+          "title": "Ernährungskennzeichnung",
+          "description": "Markieren Sie Allergene und spezielle Ernährungsoptionen einfach (GF, Vegan usw.)."
+        }
+      }
+    },
+    "operationalExcellence": {
+      "badge": "Operative Exzellenz",
+      "title": "Bestell- und Lieferablauf",
+      "description": "Bündeln Sie alle Bestellungen in einer intuitiven Oberfläche. Verwalten Sie In-house Dining und Drittanbieter-Lieferapps ohne Tablet-Chaos.",
+      "button": "Ablauf entdecken",
+      "imageAlt": "Bestell- und Lieferablauf",
+      "features": {
+        "multiChannelSync": {
+          "title": "Multi-Channel-Synchronisierung",
+          "description": "Gebündelte Bestellungen von UberEats, DoorDash und Ihrer Website."
+        },
+        "kitchenDisplay": {
+          "title": "Kitchen Display System (KDS)",
+          "description": "Direkte papierlose Kommunikation zwischen Servicebereich und Küche."
+        },
+        "realTimeDispatch": {
+          "title": "Echtzeit-Disposition",
+          "description": "Koordinieren Sie lokale Fahrer oder 3PL-Lieferpartner sofort."
+        }
+      }
+    },
+    "salesAnalytics": {
+      "badge": "Dateneinblicke",
+      "title": "Umsatz und Analysen",
+      "description": "Treffen Sie datenbasierte Entscheidungen. Verstehen Sie Stoßzeiten, die profitabelsten Gerichte und Kundenverhalten mit detaillierten visuellen Berichten.",
+      "button": "Beispiele ansehen",
+      "stats": {
+        "revenueGrowth": {
+          "label": "Umsatzwachstum"
+        },
+        "avgOrderSpeed": {
+          "label": "Durchschn. Bestelltempo"
+        }
+      },
+      "features": {
+        "profitHeatmaps": {
+          "title": "Profit-Heatmaps",
+          "description": "Erkennen Sie margenstarke Artikel im Vergleich zu Volumenbringern."
+        },
+        "laborCostAnalysis": {
+          "title": "Personalkostenanalyse",
+          "description": "Optimieren Sie die Besetzung anhand historischer Verkaufstrends."
+        }
+      },
+      "chart": {
+        "title": "Wöchentliche Performance",
+        "subtitle": "Echtzeit-Umsatztracking"
+      }
+    }
+  },
+  "pricing": {
+    "hero": {
+      "titleLineOne": "Transparente",
+      "titleLineTwo": "Preispläne",
+      "description": "Einfache, planbare Preise, die mit Ihrem Restaurant skalieren. Wählen Sie den Plan, der zu den Anforderungen Ihrer Küche passt."
+    },
+    "billing": {
+      "monthly": "Monatliche Abrechnung",
+      "annual": "Jährliche Abrechnung",
+      "saveBadge": "20% sparen"
+    },
+    "plans": {
+      "mostPopular": "Am beliebtesten",
+      "starter": {
+        "name": "Starter",
+        "description": "Perfekt für einzelne Standorte und kleine Cafes.",
+        "buttonText": "Starter wählen",
+        "features": {
+          "singleLocation": "Ein Standort",
+          "corePosFeatures": "Kernfunktionen für POS",
+          "basicInventoryTracking": "Einfache Bestandsverfolgung",
+          "emailSupport": "E-Mail-Support"
+        }
+      },
+      "professional": {
+        "name": "Professional",
+        "description": "Optimiert für wachsende Full-Service-Restaurants.",
+        "buttonText": "Kostenlose Testversion starten",
+        "features": {
+          "upToThreeLocations": "Bis zu 3 Standorte",
+          "advancedLaborManagement": "Erweitertes Personalmanagement",
+          "realTimeCostAnalytics": "Kostenanalysen in Echtzeit",
+          "smartInventoryForecasts": "Smarte Bestandsprognosen",
+          "prioritySupport": "24/7 Prioritäts-Support"
+        }
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "Individuelle Lösungen für große Ketten und Franchise-Unternehmen.",
+        "buttonText": "Sales kontaktieren",
+        "features": {
+          "unlimitedLocations": "Unbegrenzte Standorte",
+          "customApiAccess": "Individueller API-Zugriff",
+          "dedicatedAccountManager": "Dedizierter Account Manager",
+          "onsiteImplementation": "Implementierung vor Ort"
+        }
+      }
+    },
+    "comparison": {
+      "title": "Detaillierter Funktionsvergleich",
+      "description": "Alles, was Sie über unsere Möglichkeiten wissen müssen.",
+      "columns": {
+        "feature": "Funktion"
+      },
+      "sections": {
+        "coreOperations": {
+          "title": "Kernabläufe"
+        },
+        "managementTools": {
+          "title": "Management-Tools"
+        }
+      },
+      "features": {
+        "cloudPosIntegration": {
+          "name": "Cloud-POS-Integration"
+        },
+        "inventoryTracking": {
+          "name": "Bestandsverfolgung"
+        },
+        "kitchenDisplaySystem": {
+          "name": "Kitchen Display System"
+        },
+        "staffScheduling": {
+          "name": "Mitarbeiterplanung"
+        },
+        "mobileManagementApp": {
+          "name": "Mobile Management App"
+        },
+        "financialReporting": {
+          "name": "Finanzberichte"
+        }
+      },
+      "values": {
+        "basic": "Basic",
+        "advanced": "Advanced",
+        "advancedApi": "Advanced + API",
+        "weekly": "Wöchentlich",
+        "realTime": "Echtzeit",
+        "realTimeCustom": "Echtzeit + individuell"
+      }
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "description": "Sie haben Fragen? Wir haben Antworten.",
+      "switchPlans": {
+        "question": "Kann ich später den Plan wechseln?",
+        "answer": "Ja, Sie können Ihren Plan jederzeit upgraden oder downgraden. Beim Upgrade sind neue Funktionen sofort verfügbar. Downgrades werden am Ende des aktuellen Abrechnungszeitraums wirksam."
+      },
+      "existingHardware": {
+        "question": "Funktioniert Gusto mit meiner bestehenden Hardware?",
+        "answer": "Gusto ist hardwareunabhängig. Wir unterstützen die meisten modernen POS-Terminals, iPads und Android-Tablets. Kontaktieren Sie unser Team, um Ihr spezifisches Setup zu prüfen."
+      },
+      "supportIncluded": {
+        "question": "Welche Art von Support ist enthalten?",
+        "answer": "Starter-Pläne enthalten E-Mail-Support. Professional- und Enterprise-Pläne enthalten 24/7 priorisierten Telefon- und Chat-Support mit garantierten Antwortzeiten unter 30 Minuten."
+      },
+      "hiddenFees": {
+        "question": "Gibt es versteckte Einrichtungsgebühren?",
+        "answer": "Nein. Wir glauben an transparente Preise. Es gibt keine verpflichtenden Implementierungsgebühren. Individuelles Onboarding ist für Enterprise-Teams bei Bedarf verfügbar."
+      }
+    }
+  },
+  "contact": {
+    "hero": {
+      "badge": "Support kontaktieren",
+      "titleLineOne": "Kontaktieren Sie",
+      "titleLineTwo": "unsere Experten",
+      "description": "Benötigen Sie Hilfe bei der Verwaltung Ihres Restaurants oder interessieren Sie sich für unsere Enterprise-Lösungen? Unser Team ist 24/7 für Sie da."
+    },
+    "sections": {
+      "contactInformation": "Kontaktinformationen",
+      "officeLocations": "Bürostandorte"
+    },
+    "info": {
+      "supportPhone": {
+        "title": "Support-Telefon",
+        "note": "24/7 verfügbar für Professional- und Enterprise-Pläne"
+      },
+      "salesEmail": {
+        "title": "Sales-E-Mail",
+        "note": "Antwortzeit innerhalb von 2 Geschäftsstunden"
+      }
+    },
+    "officeLocations": {
+      "newYork": {
+        "city": "New York"
+      },
+      "london": {
+        "city": "London"
+      }
+    },
+    "infrastructure": {
+      "title": "Globale Support-Infrastruktur",
+      "description": "Nahtlose Restaurant-Management-Lösungen in über 50 Ländern mit lokalisierten Support-Teams."
+    },
+    "stats": {
+      "activeRestaurants": {
+        "label": "Aktive Restaurants"
+      },
+      "liveAssistance": {
+        "label": "Live-Unterstützung"
+      },
+      "expertsGlobally": {
+        "label": "Experten weltweit"
+      },
+      "avgResponseTime": {
+        "label": "Durchschn. Antwortzeit"
+      }
+    }
+  },
+  "register": {
+    "title": "Business-Onboarding",
+    "subtitle": "Schließen Sie die Schritte unten ab, um Ihr Unternehmen einzurichten",
+    "steps": {
+      "account": "Konto",
+      "tenantRestaurant": "Mandant & Restaurant",
+      "branch": "Filiale",
+      "type": "Typ",
+      "published": "Veröffentlicht"
+    },
+    "user": {
+      "title": "Benutzerinformationen",
+      "profilePhoto": {
+        "optionalLabel": "Profilfoto (optional)"
+      },
+      "email": {
+        "checking": "E-Mail-Verfügbarkeit wird geprüft...",
+        "checkingShort": "E-Mail wird geprüft...",
+        "available": "E-Mail ist für diese Rolle verfügbar",
+        "verifyFailed": "E-Mail konnte nicht geprüft werden",
+        "verifyUnavailable": "E-Mail kann momentan nicht geprüft werden",
+        "verifyUnavailableWithRetry": "E-Mail kann momentan nicht geprüft werden. Bitte versuchen Sie es erneut.",
+        "existsForRole": "Diese E-Mail existiert bereits für diese Rolle",
+        "noAccountForRole": "Für diese E-Mail existiert kein Konto mit dieser Rolle",
+        "notAllowed": "Diese E-Mail ist nicht erlaubt",
+        "waitForVerification": "Bitte warten Sie, während wir diese E-Mail prüfen",
+        "useAvailable": "Bitte verwenden Sie eine E-Mail, die für diese Rolle verfügbar ist"
+      }
+    },
+    "tenant": {
+      "title": "Mandanteninformationen",
+      "logo": {
+        "label": "Mandantenlogo"
+      }
+    },
+    "restaurant": {
+      "title": "Restaurantinformationen",
+      "logo": {
+        "label": "Restaurantlogo"
+      }
+    },
+    "support": {
+      "title": "Support-Kontakt"
+    },
+    "branding": {
+      "title": "Branding"
+    },
+    "branch": {
+      "basic": {
+        "title": "Filialinformationen"
+      },
+      "fields": {
+        "name": {
+          "requiredLabel": "Filialname*",
+          "placeholder": "F-6 Super Market"
+        },
+        "description": {
+          "requiredLabel": "Beschreibung*",
+          "placeholder": "Unsere Hauptfiliale in Islamabad."
+        }
+      },
+      "coverImage": {
+        "label": "Titelbild",
+        "previewAlt": "Titelbild-Vorschau",
+        "clickToUpload": "Zum Hochladen klicken",
+        "dragDrop": "oder per Drag-and-drop",
+        "helper": "JPG, JPEG, PNG unter 2 MB"
+      },
+      "admin": {
+        "title": "Filial-Admin-Konto",
+        "description": "Erstellen Sie den Administrator auf Filialebene, der diese Filiale nach der Registrierung verwaltet.",
+        "fields": {
+          "firstName": {
+            "label": "Vorname",
+            "placeholder": "Vorname des Filial-Admins"
+          },
+          "lastName": {
+            "label": "Nachname",
+            "placeholder": "Nachname des Filial-Admins"
+          },
+          "email": {
+            "label": "E-Mail",
+            "placeholder": "branch.admin@example.com"
+          },
+          "phone": {
+            "label": "Telefon",
+            "placeholder": "+92 300 0000000"
+          },
+          "password": {
+            "label": "Passwort",
+            "placeholder": "Passwort für Filial-Admin festlegen"
+          }
+        }
+      },
+      "address": {
+        "title": "Adresse",
+        "fields": {
+          "street": {
+            "requiredLabel": "Straße*",
+            "placeholder": "Shop 12, Block A"
+          },
+          "area": {
+            "requiredLabel": "Gebiet*",
+            "placeholder": "F-6 Super Market"
+          },
+          "city": {
+            "requiredLabel": "Stadt*",
+            "placeholder": "Islamabad"
+          },
+          "state": {
+            "requiredLabel": "Bundesland*",
+            "placeholder": "ICT"
+          },
+          "country": {
+            "requiredLabel": "Land*",
+            "placeholder": "Deutschland"
+          },
+          "latitude": {
+            "requiredLabel": "Breitengrad*",
+            "placeholder": "33.7297"
+          },
+          "longitude": {
+            "requiredLabel": "Längengrad*",
+            "placeholder": "73.0745"
+          }
+        }
+      },
+      "map": {
+        "addressFromGoogle": "Adresse aus Google Maps*",
+        "searchPlaceholder": "Restaurantadresse suchen",
+        "searchButton": "Karte suchen",
+        "helper": "Wählen Sie einen Vorschlag, suchen Sie die Adresse, klicken Sie auf die Karte oder ziehen Sie den Marker, um den Standort der Filiale festzulegen.",
+        "coordinatesNotSelected": "Koordinaten nicht ausgewählt",
+        "loading": "Google Map wird geladen",
+        "previewUnavailable": "Google-Map-Vorschau nicht verfügbar",
+        "enableMapHelp": "Fügen Sie NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in der Umgebung hinzu, um Kartensuche und Vorschau zu aktivieren.",
+        "selectedAddress": "Ausgewählt: {address}",
+        "markerTitle": "Filialstandort",
+        "selectValidAddress": "Bitte wählen Sie eine gültige Google-Maps-Adresse aus.",
+        "missingApiKey": "Google Maps API-Schlüssel fehlt. Fügen Sie NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in der Umgebung hinzu.",
+        "loadFailed": "Google Maps konnte nicht geladen werden. Bitte prüfen Sie den API-Schlüssel.",
+        "selectSuggestion": "Bitte wählen Sie eine Adresse aus den Google-Maps-Vorschlägen aus.",
+        "enterAddress": "Bitte geben Sie eine Adresse für die Suche ein.",
+        "notReady": "Google Maps ist noch nicht bereit.",
+        "noMatch": "Keine passende Adresse gefunden. Versuchen Sie eine genauere Adresse.",
+        "coordinatesSavedOnly": "Google Maps ist noch nicht bereit. Nur die Koordinaten wurden gespeichert.",
+        "addressNotResolved": "Standort gefunden, aber die Adresse konnte nicht aufgelöst werden."
+      },
+      "location": {
+        "title": "Standort",
+        "getLocation": "Standort abrufen",
+        "useCurrent": "Aktuellen Standort verwenden",
+        "fetching": "Standort wird abgerufen...",
+        "unsupported": "Geolocation wird in diesem Browser nicht unterstützt.",
+        "blocked": "Standortzugriff ist blockiert. Bitte aktivieren Sie ihn in den Browsereinstellungen.",
+        "permissionDenied": "Bitte erlauben Sie den Standortzugriff in Ihrem Browser.",
+        "unavailable": "Standort nicht verfügbar.",
+        "timeout": "Anfrage abgelaufen.",
+        "fetchFailed": "Standort konnte nicht abgerufen werden.",
+        "permissionCheckFailed": "Berechtigungsprüfung fehlgeschlagen."
+      },
+      "delivery": {
+        "title": "Bestell- & Liefergebietseinstellungen",
+        "description": "Konfigurieren Sie kundenseitige Liefergebühren, Radius, Polygonzonen, Radiusbänder oder lieferregeln nach Postleitzahl.",
+        "modeLabel": "Berechnungsmodus für Liefergebiet",
+        "modes": {
+          "radius": {
+            "label": "Radius",
+            "description": "Verwendet die Luftlinie vom Filialstandort."
+          },
+          "zone": {
+            "label": "Polygonzonen",
+            "description": "Zeichnen Sie mehrere Liefergebiete direkt in Google Maps."
+          },
+          "postalCode": {
+            "label": "Postleitzahlen",
+            "description": "Berechnet Lieferung nach einer oder mehreren Postleitzahlregeln."
+          }
+        },
+        "fields": {
+          "baseDeliveryFee": {
+            "label": "Basis-Liefergebühr",
+            "placeholder": "Basis-Liefergebühr eingeben"
+          },
+          "radiusKm": {
+            "label": "Radius (km)",
+            "placeholder": "Radius eingeben, z. B. 7.5"
+          },
+          "minOrderAmount": {
+            "label": "Mindestbestellwert",
+            "placeholder": "Mindestbestellwert"
+          },
+          "freeDeliveryThreshold": {
+            "label": "Schwelle für kostenlose Lieferung",
+            "placeholder": "Schwelle für kostenlose Lieferung eingeben"
+          },
+          "enableFreeDelivery": "Kostenlose Lieferung aktivieren",
+          "fromKm": {
+            "label": "Von km"
+          },
+          "toKm": {
+            "label": "Bis km"
+          },
+          "deliveryFee": {
+            "label": "Liefergebühr",
+            "placeholder": "Liefergebühr"
+          },
+          "minOrder": {
+            "label": "Mindestbestellung",
+            "placeholder": "Mindestbestellung"
+          },
+          "freeDeliveryFrom": {
+            "label": "Kostenlose Lieferung ab",
+            "placeholder": "Schwelle"
+          },
+          "zoneName": {
+            "label": "Zonenname",
+            "placeholder": "Zonennamen eingeben"
+          },
+          "zoneDeliveryFee": {
+            "label": "Zonen-Liefergebühr",
+            "placeholder": "Zonen-Liefergebühr"
+          },
+          "zoneMinOrder": {
+            "label": "Zonen-Mindestbestellung"
+          },
+          "zoneFreeDeliveryFrom": {
+            "label": "Zone kostenlos ab"
+          },
+          "postalCode": {
+            "label": "Postleitzahl",
+            "placeholder": "Postleitzahl"
+          }
+        },
+        "actions": {
+          "duplicate": "Duplizieren",
+          "remove": "Entfernen"
+        },
+        "map": {
+          "radiusTitle": "Radius-Kartenvorschau",
+          "zoneTitle": "Polygonzonen-Builder",
+          "radiusDescription": "Zeigt den Luftlinien-Lieferradius ab Breiten- und Längengrad der Filiale.",
+          "zoneDescription": "Suchen Sie zuerst ein Gebiet, erzeugen Sie eine Startzone und passen Sie Punkte anschließend durch Ziehen der Marker an.",
+          "searchPlaceholder": "Gebiet, Straße, Stadt oder Orientierungspunkt suchen",
+          "searchButton": "Karte suchen",
+          "generateStarterZone": "Startzone erzeugen",
+          "addCenterPoint": "Mittelpunkt hinzufügen",
+          "undoLastPoint": "Letzten Punkt rückgängig",
+          "fitActiveZone": "Aktive Zone einpassen",
+          "clearActiveZone": "Aktive Zone leeren",
+          "selectedMapArea": "Ausgewähltes Kartengebiet: {area}",
+          "pointCount": "{count} Punkt(e) ausgewählt",
+          "clickDragHelp": "Klicken Sie auf die Karte zum Hinzufügen · ziehen Sie Marker zum Anpassen",
+          "enableMapHelp": "Fügen Sie NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in der Umgebung hinzu, um die Kartenauswahl zu aktivieren.",
+          "radiusFooter": "Der Filialstandort kommt aus dem oben eingegebenen Breiten- und Längengrad.",
+          "zoneFooter": "Für schnellere Einrichtung: Gebiet suchen → Startzone erzeugen → Punkte bei Bedarf ziehen.",
+          "branchCoordinatesNotSelected": "Filialkoordinaten nicht ausgewählt",
+          "searchedAreaMarker": "Zentrum des gesuchten Gebiets",
+          "invalidSelectedCoordinates": "Das ausgewählte Kartenergebnis enthält keine Koordinaten.",
+          "enterSearch": "Bitte geben Sie ein Gebiet, eine Stadt, Straße oder einen Orientierungspunkt für die Suche ein.",
+          "noMatchingArea": "Kein passendes Gebiet gefunden. Versuchen Sie eine genauere Suche.",
+          "selectSuggestion": "Bitte wählen Sie ein Gebiet aus den Google-Maps-Vorschlägen aus."
+        },
+        "radiusBands": {
+          "title": "Radius-Gebührenbänder",
+          "description": "Optionale Distanzbänder für radiusbasierte Lieferung. Verwenden Sie Dezimalwerte wie 2.5 oder 7.5 km.",
+          "addBand": "Band hinzufügen",
+          "empty": "Kein Radius-Gebührenband konfiguriert. Die Basis-Liefergebühr wird für den konfigurierten Radius verwendet.",
+          "bandLabel": "Band {number}"
+        },
+        "zones": {
+          "title": "Polygon-Lieferzonen",
+          "description": "Fügen Sie mehrere Zonen hinzu. Suchen Sie das Gebiet und verwenden Sie die Startzonen-Erzeugung für schnellere Punktauswahl.",
+          "add": "Zone hinzufügen",
+          "empty": "Noch keine Lieferzone konfiguriert. Suchen Sie ein Gebiet und erzeugen Sie eine Startzone oder klicken Sie auf die Karte, um eine zu zeichnen.",
+          "zoneLabel": "Zone {number}",
+          "defaultName": "Lieferzone {number}",
+          "activePointCount": "{count} Punkt(e) · Aktiv auf der Karte",
+          "clickToEdit": "Zum Bearbeiten auf der Karte klicken",
+          "polygonPoints": "Polygonpunkte",
+          "addEmptyPoint": "Leeren Punkt hinzufügen",
+          "noPoints": "Noch keine Punkte. Wählen Sie diese Zone und klicken Sie auf die Karte, fügen Sie einen Mittelpunkt hinzu oder erzeugen Sie eine Startzone.",
+          "pointLabel": "Punkt {number}",
+          "removePoint": "Punkt entfernen"
+        },
+        "postalRules": {
+          "title": "Postleitzahlregeln",
+          "description": "Fügen Sie eine oder mehrere Postleitzahlen mit separaten Liefergebühren hinzu.",
+          "add": "Postleitzahl hinzufügen",
+          "remove": "Postleitzahlregel entfernen",
+          "empty": "Noch keine Postleitzahlregel konfiguriert."
+        },
+        "automation": {
+          "title": "Automatisierung",
+          "autoAcceptLabel": "Bestellungen automatisch annehmen",
+          "autoAcceptDescription": "Eingehende Bestellungen automatisch annehmen",
+          "estimatedPrepTimeLabel": "Geschätzte Zubereitungszeit (Minuten)",
+          "estimatedPrepTimePlaceholder": "Zubereitungszeit"
+        }
+      }
+    },
+    "fields": {
+      "firstName": {
+        "requiredLabel": "Vorname*"
+      },
+      "lastName": {
+        "requiredLabel": "Nachname*"
+      },
+      "email": {
+        "requiredLabel": "E-Mail*"
+      },
+      "phone": {
+        "requiredLabel": "Telefonnummer*"
+      },
+      "password": {
+        "requiredLabel": "Passwort*"
+      },
+      "tenantName": {
+        "requiredLabel": "Mandantenname*"
+      },
+      "tenantBio": {
+        "requiredLabel": "Mandantenbeschreibung*"
+      },
+      "restaurantName": {
+        "requiredLabel": "Restaurantname*"
+      },
+      "slug": {
+        "requiredLabel": "Slug*"
+      },
+      "tagline": {
+        "requiredLabel": "Tagline*"
+      },
+      "supportEmail": {
+        "requiredLabel": "Support-E-Mail*"
+      },
+      "supportPhone": {
+        "requiredLabel": "Support-Telefon*"
+      },
+      "supportWhatsapp": {
+        "requiredLabel": "Support-WhatsApp*"
+      },
+      "primaryColor": {
+        "requiredLabel": "Primärfarbe*"
+      },
+      "secondaryColor": {
+        "requiredLabel": "Sekundärfarbe*"
+      },
+      "fontFamily": {
+        "label": "Schriftart"
+      }
+    },
+    "upload": {
+      "uploading": "Wird hochgeladen...",
+      "imageUploaded": "Bild hochgeladen",
+      "imageSelected": "Bild ausgewählt",
+      "chooseFile": "Datei auswählen",
+      "helper2Mb": "PNG, JPG, JPEG bis 2 MB"
+    },
+    "otp": {
+      "title": "E-Mail verifizieren",
+      "description": "Geben Sie den OTP ein, der an Ihre E-Mail-Adresse gesendet wurde, um Ihr Business-Onboarding fortzusetzen.",
+      "sentTo": "OTP gesendet an",
+      "fallbackEmail": "Ihre E-Mail-Adresse",
+      "fieldLabel": "OTP eingeben",
+      "placeholder": "OTP eingeben",
+      "helper": "Bitte prüfen Sie Ihren Posteingang oder Spam-Ordner auf den Verifizierungscode.",
+      "verifying": "Wird verifiziert...",
+      "verify": "OTP verifizieren",
+      "changeEmail": "E-Mail ändern",
+      "enterOtpError": "Bitte geben Sie den OTP ein",
+      "validOtpError": "Bitte geben Sie einen gültigen OTP ein",
+      "verificationFailed": "OTP-Verifizierung fehlgeschlagen",
+      "emailVerified": "E-Mail erfolgreich verifiziert!"
+    },
+    "toasts": {
+      "userAlreadyExists": "Benutzer existiert bereits. Bitte verifizieren Sie den OTP, der an Ihre E-Mail gesendet wurde.",
+      "registrationFailed": "Registrierung fehlgeschlagen",
+      "accessTokenMissing": "Access Token nicht erhalten",
+      "registrationSuccessful": "Registrierung erfolgreich! Bitte verifizieren Sie den OTP.",
+      "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "settings": {
+      "title": "Unterstützte Bestellarten",
+      "orderTypes": {
+        "takeaway": {
+          "label": "Abholung",
+          "description": "Kunden holen Bestellungen bei Ihnen ab"
+        },
+        "delivery": {
+          "label": "Lieferung",
+          "description": "Lieferung an den Standort des Kunden"
+        },
+        "dineIn": {
+          "label": "Vor Ort / QR",
+          "description": "Tischservice mit QR-Code-Bestellung"
+        }
+      },
+      "actions": {
+        "publish": "Veröffentlichen",
+        "publishing": "Wird veröffentlicht..."
+      }
+    },
+    "ordersPublish": {
+      "tabs": {
+        "orders": "Bestellungen",
+        "publish": "Veröffentlichen"
+      },
+      "orderProcessing": "Bestellverarbeitung"
+    },
+    "publish": {
+      "storeUsername": "Store-Benutzername",
+      "nameLabel": "Name*",
+      "uniqueUrl": "Eindeutige URL",
+      "chooseUniqueUsername": "Wählen Sie einen eindeutigen Benutzernamen für Ihre Store-URL",
+      "suggestions": "Vorschläge",
+      "previewUrl": "Vorschau-URL-Link",
+      "publishStore": "Store veröffentlichen"
+    },
+    "published": {
+      "successBadge": "Store-Einrichtung erfolgreich abgeschlossen",
+      "title": "Ihr Store ist jetzt live",
+      "description": "Ihr Geschäftskonto, Restaurantprofil, Ihre Filiale und der Dashboard-Zugang sind bereit. Verwenden Sie den sicheren Login-Link oder scannen Sie den QR-Code, um auf das Admin-Dashboard zuzugreifen.",
+      "actions": {
+        "openDashboard": "Dashboard öffnen",
+        "copyLink": "Link kopieren",
+        "copying": "Wird kopiert...",
+        "open": "Öffnen",
+        "visitDashboard": "Dashboard besuchen",
+        "downloadQr": "QR herunterladen",
+        "downloading": "Wird heruntergeladen..."
+      },
+      "toasts": {
+        "dashboardLinkCopied": "Dashboard-Link kopiert",
+        "dashboardLinkCopyFailed": "Dashboard-Link konnte nicht kopiert werden",
+        "qrDownloaded": "QR-Code heruntergeladen",
+        "qrDownloadFailed": "QR-Code konnte nicht heruntergeladen werden"
+      },
+      "summary": {
+        "title": "Store-Zusammenfassung",
+        "description": "Prüfen Sie die während des Onboardings erstellten Details.",
+        "active": "Aktiv"
+      },
+      "dashboardAccess": {
+        "title": "Dashboard-Zugang",
+        "description": "Der Inhaber kann sich mit der registrierten E-Mail-Adresse anmelden. Der Dashboard-Link enthält den Restaurantkontext für eine reibungslosere Anmeldung.",
+        "loginUrl": "Login-URL"
+      },
+      "systemReferences": {
+        "title": "Systemreferenzen",
+        "description": "Interne IDs, die nach erfolgreichem Onboarding von der Plattform generiert wurden."
+      },
+      "qr": {
+        "title": "QR-Code",
+        "description": "Scannen Sie diesen QR-Code, um die Login-Seite des Admin-Dashboards direkt zu öffnen.",
+        "linkedEmail": "Verknüpfte E-Mail",
+        "securityNote": "Teilen Sie diesen QR-Code nur mit autorisierten Geschäftsnutzern. Jeder mit dem Link kann die Login-Seite öffnen, aber die Authentifizierung bleibt erforderlich."
+      },
+      "labels": {
+        "restaurant": "Restaurant",
+        "tenant": "Mandant",
+        "branch": "Filiale",
+        "ownerEmail": "Inhaber-E-Mail",
+        "ownerId": "Inhaber-ID",
+        "tenantId": "Mandanten-ID",
+        "restaurantId": "Restaurant-ID",
+        "branchId": "Filial-ID"
+      },
+      "fallbacks": {
+        "businessAccount": "Geschäftskonto",
+        "mainBranch": "Hauptfiliale",
+        "yourRestaurant": "Ihr Restaurant",
+        "notAvailable": "Nicht verfügbar"
+      }
+    }
+  },
+  "forms": {
+    "fields": {
+      "fullName": {
+        "label": "Vollständiger Name",
+        "placeholder": "John Doe"
+      },
+      "firstName": {
+        "label": "Vorname",
+        "placeholder": "Vorname"
+      },
+      "lastName": {
+        "label": "Nachname",
+        "placeholder": "Nachname"
+      },
+      "workEmail": {
+        "label": "Geschäftliche E-Mail",
+        "placeholder": "john@restaurant.com",
+        "shortPlaceholder": "Geschäftliche E-Mail"
+      },
+      "restaurantName": {
+        "label": "Restaurantname",
+        "placeholder": "The Gusto Kitchen"
+      },
+      "message": {
+        "label": "Nachricht",
+        "placeholder": "Wie können wir Ihrem Unternehmen heute helfen?"
+      },
+      "companySize": {
+        "label": "Unternehmensgröße",
+        "placeholder": "Unternehmensgröße auswählen"
+      }
+    },
+    "companySizeOptions": {
+      "tenToFifty": "10-50 Mitarbeiter",
+      "fiftyOneToTwoHundred": "51-200 Mitarbeiter",
+      "twoHundredOneToFiveHundred": "201-500 Mitarbeiter",
+      "fiveHundredPlus": "500+ Mitarbeiter"
+    },
+    "actions": {
+      "sendMessage": "Nachricht senden",
+      "bookDemo": "Demo buchen",
+      "submitting": "Wird gesendet..."
+    },
+    "contact": {
+      "needInstantAnswers": "Brauchen Sie sofort Antworten?",
+      "checkFaq": "FAQ ansehen"
+    },
+    "status": {
+      "submitSuccess": "Nachricht erfolgreich gesendet.",
+      "submitError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    }
+  },
+  "validation": {
+    "register": {
+      "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "profilePhotoMaxSize": "Profilfoto muss kleiner als {size} MB sein.",
+      "tenantLogoMaxSize": "Mandantenlogo muss kleiner als {size} MB sein.",
+      "restaurantLogoMaxSize": "Restaurantlogo muss kleiner als {size} MB sein.",
+      "branchCoverImageMaxSize": "Titelbild muss kleiner als {size} MB sein.",
+      "areaRequired": "Bereich ist erforderlich",
+      "branchNameRequired": "Filialname ist erforderlich",
+      "cityRequired": "Stadt ist erforderlich",
+      "countryRequired": "Land ist erforderlich",
+      "descriptionRequired": "Beschreibung ist erforderlich",
+      "emailRequired": "E-Mail ist erforderlich",
+      "fileMaxSize": "Datei muss kleiner als {size} MB sein",
+      "fileRequired": "Datei ist erforderlich",
+      "firstNameMin": "Vorname muss mindestens 2 Zeichen lang sein",
+      "firstNameRequired": "Vorname ist erforderlich",
+      "fontFamilyRequired": "Schriftart ist erforderlich",
+      "imageRequired": "Bild ist erforderlich",
+      "imageTypes": "Nur PNG, JPG, JPEG erlaubt",
+      "invalidAmount": "Ungültiger Betrag",
+      "invalidEmail": "Ungültige E-Mail",
+      "invalidEmailFormat": "Ungültiges E-Mail-Format",
+      "invalidFile": "Ungültige Datei",
+      "invalidHexColor": "Ungültige Hex-Farbe",
+      "invalidPhoneNumber": "Ungültige Telefonnummer",
+      "invalidPrepTime": "Ungültige Vorbereitungszeit",
+      "invalidRadius": "Ungültiger Radius",
+      "invalidTaxValue": "Ungültiger Steuerwert",
+      "invalidWhatsappNumber": "Ungültige WhatsApp-Nummer",
+      "lastNameMin": "Nachname muss mindestens 2 Zeichen lang sein",
+      "lastNameRequired": "Nachname ist erforderlich",
+      "latitudeNumber": "Breitengrad muss eine Zahl sein",
+      "latitudeRequired": "Breitengrad ist erforderlich",
+      "longitudeNumber": "Längengrad muss eine Zahl sein",
+      "longitudeRequired": "Längengrad ist erforderlich",
+      "minOrderRequired": "Mindestbestellung ist erforderlich",
+      "passwordMin": "Passwort muss mindestens 8 Zeichen lang sein",
+      "passwordRequired": "Passwort ist erforderlich",
+      "phoneRequired": "Telefonnummer ist erforderlich",
+      "prepTimeRequired": "Vorbereitungszeit ist erforderlich",
+      "primaryColorRequired": "Primärfarbe ist erforderlich",
+      "radiusRequired": "Radius ist erforderlich",
+      "restaurantNameRequired": "Restaurantname ist erforderlich",
+      "secondaryColorRequired": "Sekundärfarbe ist erforderlich",
+      "slugInvalid": "Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten",
+      "slugRequired": "Slug ist erforderlich",
+      "stateRequired": "Bundesland ist erforderlich",
+      "streetRequired": "Straße ist erforderlich",
+      "supportEmailRequired": "Support-E-Mail ist erforderlich",
+      "supportPhoneRequired": "Support-Telefon ist erforderlich",
+      "taglineRequired": "Slogan ist erforderlich",
+      "taxPercentageRequired": "Steuerprozentsatz ist erforderlich",
+      "tenantBioRequired": "Mandantenbeschreibung ist erforderlich",
+      "tenantNameRequired": "Mandantenname ist erforderlich",
+      "whatsappRequired": "WhatsApp-Nummer ist erforderlich"
+    }
+  },
+  "errors": {
+    "uploadUrlFailed": "Upload-URL konnte nicht abgerufen werden",
+    "invalidPresignedResponse": "Ungültige Presigned-Antwort",
+    "uploadFailed": "Upload fehlgeschlagen"
+  }
+}

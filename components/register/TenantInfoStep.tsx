@@ -1,27 +1,76 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import FormInput from "./form/FormInput";
-import FormSelect from "./form/FormSelect";
+import { FormInput } from "./form/FormInput";
+import { FormSelect } from "./form/FormSelect";
 import { validateZod } from "@/hooks/useZodValidator";
-import { restaurantSchema, tenantSchema } from "@/lib/RegisterSchemas";
+import {
+  createRegisterValidationMessages,
+  createRestaurantSchema,
+  createTenantSchema,
+} from "@/lib/RegisterSchemas";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import { useTranslations } from "next-intl";
+import type { RefObject } from "react";
+import type { ZodTypeAny } from "zod";
+
+type TenantSection = {
+  bio?: string;
+  logoFile?: File | null;
+  logoPreviewUrl?: string;
+  logoUrl?: string;
+  name?: string;
+};
+
+type RestaurantSection = {
+  branding: {
+    fontFamily?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+  };
+  logoFile?: File | null;
+  logoPreviewUrl?: string;
+  logoUrl?: string;
+  name?: string;
+  slug?: string;
+  supportContact: {
+    email?: string;
+    phone?: string;
+    whatsapp?: string;
+  };
+  tagline?: string;
+};
 
 interface Props {
-  formData: any;
-  updateFormData: (section: string, data: any) => void;
+  formData: {
+    restaurant: RestaurantSection;
+    tenant: TenantSection;
+  };
+  updateFormData: (section: string, data: Record<string, unknown>) => void;
   next: () => void;
   back: () => void;
 }
 
-export default function TenantInfoStep({
+export function TenantInfoStep({
   formData,
   updateFormData,
   next,
   back,
 }: Props) {
+  const tCommon = useTranslations("common");
+  const tRegister = useTranslations("register");
+  const tValidation = useTranslations("validation");
+  const validationMessages = useMemo(() => {
+    return createRegisterValidationMessages(tValidation);
+  }, [tValidation]);
+  const translatedTenantSchema = useMemo(() => {
+    return createTenantSchema(validationMessages);
+  }, [validationMessages]);
+  const translatedRestaurantSchema = useMemo(() => {
+    return createRestaurantSchema(validationMessages);
+  }, [validationMessages]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 /* ---------------- SLUG GENERATOR ---------------- */
 const { uploadFile, uploading, progress } = useFileUpload();
@@ -39,7 +88,7 @@ const generateSlug = (name: string) => {
 };
   /* ---------------- REFS FOR UX ---------------- */
 
-  const refs: any = {
+  const refs: Record<string, RefObject<HTMLInputElement | null>> = {
     tenantName: useRef<HTMLInputElement>(null),
     tenantBio: useRef<HTMLInputElement>(null),
 
@@ -65,12 +114,12 @@ const generateSlug = (name: string) => {
     });
   };
 
-  const validateField = (schema: any, data: any, path: string) => {
+  const validateField = (schema: ZodTypeAny, data: unknown, path: string) => {
     const result = schema.safeParse(data);
 
     if (!result.success) {
       const issue = result.error.issues.find(
-        (i: any) => i.path.join(".") === path
+        (i) => i.path.join(".") === path
       );
 
       if (issue) {
@@ -94,8 +143,12 @@ const handleTenantLogoChange = async (
 
     setErrors((prev) => ({
       ...prev,
-      "tenant.logoFile": `Tenant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
-      "tenant.logoUrl": `Tenant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
+      "tenant.logoFile": tValidation("register.tenantLogoMaxSize", {
+        size: MAX_LOGO_IMAGE_SIZE_MB,
+      }),
+      "tenant.logoUrl": tValidation("register.tenantLogoMaxSize", {
+        size: MAX_LOGO_IMAGE_SIZE_MB,
+      }),
     }));
 
     updateFormData("tenant", {
@@ -142,8 +195,12 @@ const handleRestaurantLogoChange = async (
 
     setErrors((prev) => ({
       ...prev,
-      "restaurant.logoFile": `Restaurant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
-      "restaurant.logoUrl": `Restaurant logo must be less than ${MAX_LOGO_IMAGE_SIZE_MB}MB.`,
+      "restaurant.logoFile": tValidation("register.restaurantLogoMaxSize", {
+        size: MAX_LOGO_IMAGE_SIZE_MB,
+      }),
+      "restaurant.logoUrl": tValidation("register.restaurantLogoMaxSize", {
+        size: MAX_LOGO_IMAGE_SIZE_MB,
+      }),
     }));
 
     updateFormData("restaurant", {
@@ -181,9 +238,13 @@ const handleRestaurantLogoChange = async (
   /* ---------------- NEXT VALIDATION ---------------- */
 
   const handleNext = () => {
-    const tenant = validateZod(tenantSchema, formData.tenant, "tenant");
+    const tenant = validateZod(
+      translatedTenantSchema,
+      formData.tenant,
+      "tenant"
+    );
     const restaurant = validateZod(
-      restaurantSchema,
+      translatedRestaurantSchema,
       formData.restaurant,
       "restaurant"
     );
@@ -198,7 +259,7 @@ const handleRestaurantLogoChange = async (
 
       const firstError = Object.keys(mergedErrors)[0];
 
-      const focusMap: any = {
+      const focusMap: Record<string, RefObject<HTMLInputElement | null>> = {
         "tenant.name": refs.tenantName,
         "tenant.bio": refs.tenantBio,
 
@@ -227,21 +288,23 @@ const handleRestaurantLogoChange = async (
     <div className="max-w-5xl mx-auto bg-white rounded-xl p-8">
       {/* Tenant Info */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Tenant Info
+        {tRegister("tenant.title")}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         <div>
           <FormInput
             ref={refs.tenantName}
-            label="Tenant Name*"
+            label={tRegister("fields.tenantName.requiredLabel")}
             placeholder="Indus Foods Group"
             value={formData.tenant.name || ""}
             onChange={(val: string) => {
               updateFormData("tenant", { name: val });
               clearError("tenant.name");
             }}
-            onBlur={() => validateField(tenantSchema, formData.tenant, "name")}
+            onBlur={() =>
+              validateField(translatedTenantSchema, formData.tenant, "name")
+            }
           />
           {errors["tenant.name"] && (
             <p className="text-red-500 text-xs mt-1">
@@ -252,7 +315,9 @@ const handleRestaurantLogoChange = async (
 
         {/* Tenant Logo */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Tenant Logo</label>
+          <label className="text-sm font-medium">
+            {tRegister("tenant.logo.label")}
+          </label>
 
           <label className="flex items-center gap-4 cursor-pointer rounded-lg hover:bg-gray-50 transition">
          <div className="relative w-14 h-14">
@@ -282,13 +347,13 @@ const handleRestaurantLogoChange = async (
 <div>
   <p className="text-sm font-medium">
     {uploading
-      ? "Uploading..."
+      ? tRegister("upload.uploading")
       : formData.tenant.logoPreviewUrl
-      ? "Image selected"
-      : "Choose File"}
+      ? tRegister("upload.imageSelected")
+      : tRegister("upload.chooseFile")}
   </p>
   <p className="text-xs text-[#909090]">
-    PNG, JPG, JPEG upto 2MB
+    {tRegister("upload.helper2Mb")}
   </p>
 </div>
             <input
@@ -309,14 +374,16 @@ const handleRestaurantLogoChange = async (
         <div className="sm:col-span-2">
           <FormInput
             ref={refs.tenantBio}
-            label="Tenant Bio*"
+            label={tRegister("fields.tenantBio.requiredLabel")}
             placeholder="Leading hospitality group in South Asia."
             value={formData.tenant.bio || ""}
             onChange={(val: string) => {
               updateFormData("tenant", { bio: val });
               clearError("tenant.bio");
             }}
-            onBlur={() => validateField(tenantSchema, formData.tenant, "bio")}
+            onBlur={() =>
+              validateField(translatedTenantSchema, formData.tenant, "bio")
+            }
           />
           {errors["tenant.bio"] && (
             <p className="text-red-500 text-xs mt-1">
@@ -328,14 +395,14 @@ const handleRestaurantLogoChange = async (
 
       {/* Restaurant Info */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Restaurant Info
+        {tRegister("restaurant.title")}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         <div>
           <FormInput
             ref={refs.restaurantName}
-            label="Restaurant Name*"
+            label={tRegister("fields.restaurantName.requiredLabel")}
             placeholder="KFC Pakistan"
             value={formData.restaurant.name || ""}
           onChange={(val: string) => {
@@ -350,7 +417,11 @@ const handleRestaurantLogoChange = async (
   clearError("restaurant.slug");
 }}
             onBlur={() =>
-              validateField(restaurantSchema, formData.restaurant, "name")
+              validateField(
+                translatedRestaurantSchema,
+                formData.restaurant,
+                "name"
+              )
             }
           />
           {errors["restaurant.name"] && (
@@ -362,7 +433,9 @@ const handleRestaurantLogoChange = async (
 
         {/* Restaurant Logo */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Restaurant Logo</label>
+          <label className="text-sm font-medium">
+            {tRegister("restaurant.logo.label")}
+          </label>
 
           <label className="flex items-center gap-4 cursor-pointer rounded-lg hover:bg-gray-50 transition">
            <div className="relative w-14 h-14">
@@ -392,13 +465,13 @@ const handleRestaurantLogoChange = async (
 <div>
   <p className="text-sm font-medium">
     {uploading
-      ? "Uploading..."
+      ? tRegister("upload.uploading")
       : formData.restaurant.logoPreviewUrl
-      ? "Image selected"
-      : "Choose File"}
+      ? tRegister("upload.imageSelected")
+      : tRegister("upload.chooseFile")}
   </p>
   <p className="text-xs text-[#909090]">
-    PNG, JPG, JPEG upto 2MB
+    {tRegister("upload.helper2Mb")}
   </p>
 </div>
             <input
@@ -419,7 +492,7 @@ const handleRestaurantLogoChange = async (
         <div>
          <FormInput
   ref={refs.slug}
-  label="Slug*"
+  label={tRegister("fields.slug.requiredLabel")}
   placeholder="kfc-pakistan"
   value={formData.restaurant.slug || ""}
   
@@ -434,7 +507,7 @@ const handleRestaurantLogoChange = async (
         <div>
           <FormInput
             ref={refs.tagline}
-            label="Tagline*"
+            label={tRegister("fields.tagline.requiredLabel")}
             placeholder="It's Finger Lickin' Good"
             value={formData.restaurant.tagline || ""}
             onChange={(val: string) => {
@@ -442,7 +515,11 @@ const handleRestaurantLogoChange = async (
               clearError("restaurant.tagline");
             }}
             onBlur={() =>
-              validateField(restaurantSchema, formData.restaurant, "tagline")
+              validateField(
+                translatedRestaurantSchema,
+                formData.restaurant,
+                "tagline"
+              )
             }
           />
           {errors["restaurant.tagline"] && (
@@ -455,14 +532,14 @@ const handleRestaurantLogoChange = async (
 
       {/* Support Contact */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Support Contact
+        {tRegister("support.title")}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         <div>
           <FormInput
             ref={refs.supportEmail}
-            label="Support Email*"
+            label={tRegister("fields.supportEmail.requiredLabel")}
             placeholder="support@kfc.com.pk"
             value={formData.restaurant.supportContact.email || ""}
             onChange={(val: string) => {
@@ -485,7 +562,7 @@ const handleRestaurantLogoChange = async (
         <div>
           <FormInput
             ref={refs.supportPhone}
-            label="Support Phone*"
+            label={tRegister("fields.supportPhone.requiredLabel")}
             placeholder="111-532-532"
             value={formData.restaurant.supportContact.phone || ""}
             onChange={(val: string) => {
@@ -508,7 +585,7 @@ const handleRestaurantLogoChange = async (
         <div>
           <FormInput
             ref={refs.supportWhatsapp}
-            label="Support WhatsApp*"
+            label={tRegister("fields.supportWhatsapp.requiredLabel")}
             placeholder="+923000000000"
             value={formData.restaurant.supportContact.whatsapp || ""}
             onChange={(val: string) => {
@@ -531,14 +608,14 @@ const handleRestaurantLogoChange = async (
 
       {/* Branding */}
       <h2 className="text-[20px] font-semibold text-gray-900 mb-6">
-        Branding
+        {tRegister("branding.title")}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <FormInput
             ref={refs.primaryColor}
-            label="Primary Color*"
+            label={tRegister("fields.primaryColor.requiredLabel")}
             placeholder="#e4002b"
             value={formData.restaurant.branding.primaryColor || ""}
             onChange={(val: string) => {
@@ -561,7 +638,7 @@ const handleRestaurantLogoChange = async (
         <div>
           <FormInput
             ref={refs.secondaryColor}
-            label="Secondary Color*"
+            label={tRegister("fields.secondaryColor.requiredLabel")}
             placeholder="#ffffff"
             value={formData.restaurant.branding.secondaryColor || ""}
             onChange={(val: string) => {
@@ -583,7 +660,7 @@ const handleRestaurantLogoChange = async (
 
         <div>
           <FormSelect
-            placeholder="Font Family"
+            placeholder={tRegister("fields.fontFamily.label")}
             options={["Poppins", "Inter", "Roboto", "Open Sans"]}
             value={formData.restaurant.branding.fontFamily || "Poppins"}
             onChange={(val: string) =>
@@ -604,7 +681,7 @@ const handleRestaurantLogoChange = async (
           onClick={back}
           className="bg-gray-300 hover:bg-gray-400 px-6 py-2.5 rounded-[10px]"
         >
-          Back
+          {tCommon("actions.back")}
         </Button>
 
     <Button
@@ -612,7 +689,7 @@ const handleRestaurantLogoChange = async (
   disabled={uploading}
   className="bg-primary hover:bg-red-800 px-6 py-2.5 rounded-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
 >
-  {uploading ? "Uploading..." : "Save & Continue"}
+  {uploading ? tRegister("upload.uploading") : tCommon("actions.saveContinue")}
 </Button>
       </div>
     </div>

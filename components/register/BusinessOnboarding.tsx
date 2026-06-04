@@ -2,34 +2,64 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import StorePublished from "./StorePublished";
-import UserInfoStep from "./form/UserInfoStep";
-import TenantInfoStep from "./TenantInfoStep";
-import BranchStep from "./BranchStep";
-import SettingsStep from "./SettingsStep";
+import { StorePublished } from "./StorePublished";
+import { UserInfoStep } from "./form/UserInfoStep";
+import { TenantInfoStep } from "./TenantInfoStep";
+import { BranchStep } from "./BranchStep";
+import { SettingsStep } from "./SettingsStep";
 import { API_BASE_URL } from "@/lib/constants";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
-const steps = [
-  { id: 1, label: "Account" },
-  { id: 2, label: "Tenant & Restaurant" },
-  { id: 3, label: "Branch" },
-  { id: 4, label: "Type" },
-  { id: 5, label: "Published" },
+type PublishedResponseData = {
+  branchId?: unknown;
+  ownerId?: unknown;
+  restaurant?: {
+    id?: unknown;
+    restaurantId?: unknown;
+  };
+  restaurantId?: unknown;
+  tenantId?: unknown;
+};
+
+type OnboardingStepConfig = {
+  id: number;
+  labelKey: string;
+};
+
+type PlainObject = Record<string, unknown>;
+
+const ONBOARDING_STEPS: OnboardingStepConfig[] = [
+  { id: 1, labelKey: "steps.account" },
+  { id: 2, labelKey: "steps.tenantRestaurant" },
+  { id: 3, labelKey: "steps.branch" },
+  { id: 4, labelKey: "steps.type" },
+  { id: 5, labelKey: "steps.published" },
 ];
 
 const normalizeEmail = (email?: string) => {
   return String(email || "").trim().toLowerCase();
 };
 
-const isUserAlreadyExistsError = (data: any) => {
+const isPlainObject = (value: unknown): value is PlainObject => {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+};
+
+const getMessageValue = (value: unknown) => {
+  return typeof value === "string" ? value : "";
+};
+
+const isUserAlreadyExistsError = (data: unknown) => {
+  const response = normalizePlainObject(data);
+  const error = normalizePlainObject(response.error);
   const message = [
-    data?.message,
-    data?.error?.message,
-    data?.error?.code,
+    response.message,
+    error.message,
+    error.code,
   ]
+    .map(getMessageValue)
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
@@ -37,13 +67,14 @@ const isUserAlreadyExistsError = (data: any) => {
   return message.includes("user already exists");
 };
 
-const extractAccessToken = (data: any) => {
-  return (
-    data?.data?.accessToken ||
-    data?.data?.token ||
-    data?.accessToken ||
-    data?.token ||
-    ""
+const extractAccessToken = (data: unknown) => {
+  const response = normalizePlainObject(data);
+  const responseData = normalizePlainObject(response.data);
+  return toStringValue(
+    responseData.accessToken ||
+      responseData.token ||
+      response.accessToken ||
+      response.token
   );
 };
 
@@ -57,39 +88,52 @@ const toStringValue = (value: unknown, fallback = "") => {
   return String(value);
 };
 
-const normalizeArray = (value: any) => {
+const normalizeArray = (value: unknown) => {
   return Array.isArray(value) ? value : [];
 };
 
-const normalizePlainObject = (value: any) => {
-  return value && typeof value === "object" && !Array.isArray(value)
-    ? value
-    : {};
+const normalizePlainObject = (value: unknown): PlainObject => {
+  return isPlainObject(value) ? value : {};
 };
 
-const normalizeDeliveryMode = (mode: any) => {
+const omitAuthTokens = (value: PlainObject): PublishedResponseData => {
+  const { accessToken, token, ...rest } = value;
+  void accessToken;
+  void token;
+  return rest;
+};
+
+const normalizeDeliveryMode = (mode: unknown) => {
   return mode === "ZONE" || mode === "POSTAL_CODE" ? mode : "RADIUS";
 };
 
-const normalizeDeliveryZones = (zones: any) => {
+const normalizeDeliveryZones = (zones: unknown) => {
   return normalizeArray(zones)
-    .map((zone: any) => ({
-      name: toStringValue(zone?.name).trim(),
-      deliveryFee: toNumber(zone?.deliveryFee, 0),
-      minOrderAmount: toNumber(zone?.minOrderAmount, 0),
-      freeDeliveryThreshold: toNumber(zone?.freeDeliveryThreshold, 0),
-      polygon: normalizeArray(zone?.polygon)
-        .map((point: any) => ({
+    .map((zoneValue) => {
+      const zone = normalizePlainObject(zoneValue);
+
+      return {
+        name: toStringValue(zone.name).trim(),
+        deliveryFee: toNumber(zone.deliveryFee, 0),
+        minOrderAmount: toNumber(zone.minOrderAmount, 0),
+        freeDeliveryThreshold: toNumber(zone.freeDeliveryThreshold, 0),
+        polygon: normalizeArray(zone.polygon)
+        .map((pointValue) => {
+          const point = normalizePlainObject(pointValue);
+
+          return {
           lat: toNumber(point?.lat, NaN),
           lng: toNumber(point?.lng, NaN),
-        }))
+          };
+        })
         .filter(
-          (point: any) =>
+          (point) =>
             Number.isFinite(point.lat) && Number.isFinite(point.lng)
         ),
-    }))
+      };
+    })
     .filter(
-      (zone: any) =>
+      (zone) =>
         zone.name ||
         zone.deliveryFee > 0 ||
         zone.minOrderAmount > 0 ||
@@ -98,17 +142,21 @@ const normalizeDeliveryZones = (zones: any) => {
     );
 };
 
-const normalizeZoneBands = (bands: any) => {
+const normalizeZoneBands = (bands: unknown) => {
   return normalizeArray(bands)
-    .map((band: any) => ({
-      fromKm: toNumber(band?.fromKm, 0),
-      toKm: toNumber(band?.toKm, 0),
-      deliveryFee: toNumber(band?.deliveryFee, 0),
-      minOrderAmount: toNumber(band?.minOrderAmount, 0),
-      freeDeliveryThreshold: toNumber(band?.freeDeliveryThreshold, 0),
-    }))
+    .map((bandValue) => {
+      const band = normalizePlainObject(bandValue);
+
+      return {
+        fromKm: toNumber(band.fromKm, 0),
+        toKm: toNumber(band.toKm, 0),
+        deliveryFee: toNumber(band.deliveryFee, 0),
+        minOrderAmount: toNumber(band.minOrderAmount, 0),
+        freeDeliveryThreshold: toNumber(band.freeDeliveryThreshold, 0),
+      };
+    })
     .filter(
-      (band: any) =>
+      (band) =>
         band.fromKm > 0 ||
         band.toKm > 0 ||
         band.deliveryFee > 0 ||
@@ -117,20 +165,25 @@ const normalizeZoneBands = (bands: any) => {
     );
 };
 
-const normalizePostalCodeRules = (rules: any) => {
+const normalizePostalCodeRules = (rules: unknown) => {
   return normalizeArray(rules)
-    .map((rule: any) => ({
-      postalCode: toStringValue(rule?.postalCode).trim(),
-      deliveryFee: toNumber(rule?.deliveryFee, 0),
-    }))
-    .filter((rule: any) => rule.postalCode || rule.deliveryFee > 0);
+    .map((ruleValue) => {
+      const rule = normalizePlainObject(ruleValue);
+
+      return {
+        postalCode: toStringValue(rule.postalCode).trim(),
+        deliveryFee: toNumber(rule.deliveryFee, 0),
+      };
+    })
+    .filter((rule) => rule.postalCode || rule.deliveryFee > 0);
 };
 
-const buildBranchSettingsPayload = (settings: any) => {
-  const deliveryConfig = normalizePlainObject(settings?.deliveryConfig);
-  const automation = normalizePlainObject(settings?.automation);
-  const taxation = normalizePlainObject(settings?.taxation);
-  const contact = normalizePlainObject(settings?.contact);
+const buildBranchSettingsPayload = (settingsValue: unknown) => {
+  const settings = normalizePlainObject(settingsValue);
+  const deliveryConfig = normalizePlainObject(settings.deliveryConfig);
+  const automation = normalizePlainObject(settings.automation);
+  const taxation = normalizePlainObject(settings.taxation);
+  const contact = normalizePlainObject(settings.contact);
 
   const allowedOrderTypes = normalizeArray(settings?.allowedOrderTypes).length
     ? normalizeArray(settings.allowedOrderTypes)
@@ -184,9 +237,10 @@ const buildBranchSettingsPayload = (settings: any) => {
   };
 };
 
-export default function BusinessOnboarding() {
+export function BusinessOnboarding() {
+  const tRegister = useTranslations("register");
   const [activeStep, setActiveStep] = useState<number>(1);
-  const [publishedData, setPublishedData] = useState<any>(null);
+  const [publishedData, setPublishedData] = useState<PublishedResponseData | null>(null);
 
   /* ================= OTP STATES ================= */
 
@@ -318,7 +372,7 @@ export default function BusinessOnboarding() {
 
   /* ================= DERIVED VALUES ================= */
 
-  const activeIndex = steps.findIndex((s) => s.id === activeStep);
+  const activeIndex = ONBOARDING_STEPS.findIndex((s) => s.id === activeStep);
 
   const verificationEmail = useMemo(() => {
     return normalizeEmail(otpEmail || formData.user.email);
@@ -332,11 +386,11 @@ export default function BusinessOnboarding() {
 
   /* ================= UPDATE HELPER ================= */
 
-  const updateFormData = (section: string, data: any) => {
+  const updateFormData = (section: string, data: Record<string, unknown>) => {
     setFormData((prev) => ({
       ...prev,
       [section]: {
-        ...prev[section as keyof typeof prev],
+        ...normalizePlainObject(prev[section as keyof typeof prev]),
         ...data,
       },
     }));
@@ -454,7 +508,9 @@ export default function BusinessOnboarding() {
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const data: unknown = await response.json();
+      const responseData = normalizePlainObject(data);
+      const nestedResponseData = normalizePlainObject(responseData.data);
 
       if (!response.ok) {
         if (isUserAlreadyExistsError(data)) {
@@ -466,23 +522,23 @@ export default function BusinessOnboarding() {
             step: 1,
           });
 
-          toast.info("User already exists. Please verify the OTP sent to your email.");
+          toast.info(tRegister("toasts.userAlreadyExists"));
           return;
         }
 
-        toast.error(data?.message || "Failed to register");
+        toast.error(
+          getMessageValue(responseData.message) ||
+            tRegister("toasts.registrationFailed")
+        );
         return;
       }
 
       const token = extractAccessToken(data);
 
-      const { accessToken: _accessToken, token: _token, ...rest } =
-        data?.data || {};
-
-      setPublishedData(rest);
+      setPublishedData(omitAuthTokens(nestedResponseData));
 
       if (!token) {
-        toast.error("Access token not received");
+        toast.error(tRegister("toasts.accessTokenMissing"));
         return;
       }
 
@@ -492,9 +548,13 @@ export default function BusinessOnboarding() {
         step: 4,
       });
 
-      toast.success("Registration successful! Please verify OTP.");
-    } catch (error: any) {
-      toast.error(error?.message || "Something went wrong. Please try again.");
+      toast.success(tRegister("toasts.registrationSuccessful"));
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : tRegister("toasts.genericError")
+      );
     } finally {
       setLoading(false);
     }
@@ -504,12 +564,12 @@ export default function BusinessOnboarding() {
 
   const handleVerifyOtp = async () => {
     if (!cleanedOtp) {
-      toast.error("Please enter OTP");
+      toast.error(tRegister("otp.enterOtpError"));
       return;
     }
 
     if (!isOtpValid) {
-      toast.error("Please enter a valid OTP");
+      toast.error(tRegister("otp.validOtpError"));
       return;
     }
 
@@ -534,17 +594,19 @@ export default function BusinessOnboarding() {
         }),
       });
 
-      const data = await res.json();
+      const data: unknown = await res.json();
+      const responseData = normalizePlainObject(data);
+      const responseError = normalizePlainObject(responseData.error);
 
       if (!res.ok) {
         throw new Error(
-          data?.message ||
-            data?.error?.message ||
-            "OTP verification failed"
+            getMessageValue(responseData.message) ||
+            getMessageValue(responseError.message) ||
+            tRegister("otp.verificationFailed")
         );
       }
 
-      toast.success("Email verified successfully!");
+      toast.success(tRegister("otp.emailVerified"));
 
       localStorage.removeItem("tenantSignupToken");
 
@@ -554,8 +616,12 @@ export default function BusinessOnboarding() {
       setAccessToken("");
 
       setActiveStep(5);
-    } catch (error: any) {
-      toast.error(error?.message || "Verification failed");
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : tRegister("otp.verificationFailed")
+      );
     } finally {
       setOtpLoading(false);
     }
@@ -572,18 +638,19 @@ export default function BusinessOnboarding() {
           </div>
 
           <h2 className="text-xl font-semibold text-gray-900">
-            Verify Email
+            {tRegister("otp.title")}
           </h2>
 
           <p className="text-sm text-gray-500 mt-2 leading-6">
-            Enter the OTP sent to your email address to continue your business
-            onboarding.
+            {tRegister("otp.description")}
           </p>
 
           <div className="mt-4 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3">
-            <p className="text-xs text-gray-500">OTP sent to</p>
+            <p className="text-xs text-gray-500">
+              {tRegister("otp.sentTo")}
+            </p>
             <p className="text-sm font-semibold text-gray-900 break-all mt-1">
-              {verificationEmail || "your email address"}
+              {verificationEmail || tRegister("otp.fallbackEmail")}
             </p>
           </div>
         </div>
@@ -591,13 +658,13 @@ export default function BusinessOnboarding() {
         <div className="mt-6 space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-800">
-              Enter OTP
+              {tRegister("otp.fieldLabel")}
             </label>
 
             <Input
               inputMode="numeric"
               autoComplete="one-time-code"
-              placeholder="Enter OTP"
+              placeholder={tRegister("otp.placeholder")}
               value={cleanedOtp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
               onKeyDown={(e) => {
@@ -609,7 +676,7 @@ export default function BusinessOnboarding() {
             />
 
             <p className="text-xs text-gray-500 mt-2">
-              Please check your inbox or spam folder for the verification code.
+              {tRegister("otp.helper")}
             </p>
           </div>
 
@@ -618,7 +685,7 @@ export default function BusinessOnboarding() {
             disabled={otpLoading || !isOtpValid}
             className="w-full py-5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {otpLoading ? "Verifying..." : "Verify OTP"}
+            {otpLoading ? tRegister("otp.verifying") : tRegister("otp.verify")}
           </Button>
 
           <Button
@@ -628,7 +695,7 @@ export default function BusinessOnboarding() {
             disabled={otpLoading}
             className="w-full py-5 rounded-xl"
           >
-            Change Email
+            {tRegister("otp.changeEmail")}
           </Button>
         </div>
       </div>
@@ -698,10 +765,10 @@ export default function BusinessOnboarding() {
       {/* HEADER */}
       <div className="text-center mb-8 sm:mb-10">
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
-          Business Onboarding
+          {tRegister("title")}
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 mt-1">
-          Complete the steps below to set up your business
+          {tRegister("subtitle")}
         </p>
       </div>
 
@@ -713,11 +780,11 @@ export default function BusinessOnboarding() {
           <div
             className="absolute top-5 left-0 border-t border-dashed border-primary z-0"
             style={{
-              width: `${((activeIndex + 0.5) / steps.length) * 100}%`,
+              width: `${((activeIndex + 0.5) / ONBOARDING_STEPS.length) * 100}%`,
             }}
           />
 
-          {steps.map((step, index) => {
+          {ONBOARDING_STEPS.map((step, index) => {
             const isCompleted = index < activeIndex;
             const isActive = step.id === activeStep;
 
@@ -741,7 +808,7 @@ export default function BusinessOnboarding() {
                   className={`mt-2 text-[9px] sm:text-xs text-center
                   ${isActive ? "text-primary font-medium" : "text-[#909090]"}`}
                 >
-                  {step.label}
+                  {tRegister(step.labelKey)}
                 </span>
               </div>
             );

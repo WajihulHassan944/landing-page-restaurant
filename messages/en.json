@@ -1,0 +1,1218 @@
+{
+  "common": {
+    "getStarted": "Get Started",
+    "actions": {
+      "edit": "Edit",
+      "view": "View",
+      "image": "Image",
+      "message": "Message",
+      "more": "More actions",
+      "back": "Back",
+      "saveContinue": "Save & Continue"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "fileUploaded": "File uploaded"
+  },
+  "navigation": {
+    "about": "About",
+    "services": "Services",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "registration": "Registration",
+    "registrationSignIn": "Registration / Sign In",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "changeLanguage": "Change language"
+  },
+  "footer": {
+    "subscribe": "Subscribe",
+    "newsletterText": "Join our newsletter to stay up to date on features and releases.",
+    "emailPlaceholder": "Enter your email",
+    "privacyAgreement": "By subscribing you agree to our",
+    "quickLinks": "Quick Links",
+    "products": "Products",
+    "company": "Company",
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "superAdminDashboard": "Super Admin Dashboard",
+    "restaurantAdminDashboard": "Restaurant Admin Dashboard",
+    "customerApp": "Customer App",
+    "driverApp": "Driver App",
+    "merchantRestaurantApp": "Merchant (Restaurant) App",
+    "privacyPolicy": "Privacy Policy",
+    "support": "Support",
+    "termsOfService": "Terms of Service",
+    "copyright": "Copyright © 2025 Investo. All Rights Reserved"
+  },
+  "home": {
+    "hero": {
+      "badge": "Powering Food Businesses",
+      "titleLineOne": "The Complete Restaurant Management",
+      "titleLineTwo": "System That Handles Everything.",
+      "descriptionLineOne": "Empower Your Brand, Control Your Revenue.",
+      "descriptionLineTwo": "Launch Your Own Branded Food Ordering App in Days, Not Months.",
+      "primaryCta": "Get Started",
+      "secondaryCta": "Request a demo",
+      "totalIncome": "Total Income",
+      "foodLabels": {
+        "hotDog": "Hot Dog",
+        "pasta": "Pasta",
+        "donuts": "Donuts",
+        "burger": "Burger"
+      }
+    },
+    "sectionTwo": {
+      "stats": {
+        "operatingSystem": {
+          "title": "A complete operating system designed to help restaurants increase revenue and run daily operations effortlessly."
+        },
+        "trustedOwners": {
+          "title": "Trusted by restaurant owners for its unmatched reliability, intuitive design, and real-time order control."
+        },
+        "regionalGrowth": {
+          "title": "We help restaurants grow with a strong presence across multiple regions and delivery networks."
+        }
+      }
+    },
+    "sectionThree": {
+      "title": "Browse Popular Categories",
+      "descriptionLineOne": "Discover the perfect course from our top-loved selections,",
+      "descriptionLineTwo": "designed to help you learn, grow, and succeed",
+      "viewAll": "View all",
+      "categories": {
+        "menuManagement": {
+          "title": "Menu Management",
+          "description": "Easily update dishes, variations, prices & stock levels."
+        },
+        "orderDelivery": {
+          "title": "Order & Delivery Flow",
+          "description": "Easily update dishes, variations, prices & stock levels."
+        },
+        "salesAnalytics": {
+          "title": "Sales & Analytics",
+          "description": "Monitor revenue, popular items, peak hours & performance insights."
+        },
+        "customerFeedback": {
+          "title": "Customer Feedback",
+          "description": "View ratings, respond to reviews & boost your reputation."
+        },
+        "promotions": {
+          "title": "Promotions & Discounts",
+          "description": "Create offers, promo codes & highlight best-selling meals."
+        },
+        "staffRoles": {
+          "title": "Staff & Role Control",
+          "description": "Manage staff accounts, access levels & activity logs."
+        }
+      }
+    },
+    "sectionFour": {
+      "trustedBy": "Trusted by Over",
+      "industryLeaders": "Industry Leaders"
+    },
+    "sectionFive": {
+      "titleLineOne": "Grow Your Restaurant with",
+      "titleLineTwo": "a Smarter Delivery Platform",
+      "descriptionLineOne": "Our technology helps restaurants increase sales, streamline",
+      "descriptionLineTwo": "operations, and reach customers faster than ever—without the",
+      "descriptionLineThree": "hassle.",
+      "features": {
+        "createAccount": {
+          "title": "Create Your Restaurant Account",
+          "description": "Set up your digital storefront in minutes. Upload your menu, define pricing, add food images, and start receiving orders instantly through our fully automated onboarding flow."
+        },
+        "realTimeOrders": {
+          "title": "Manage Orders in Real-Time",
+          "description": "Track new orders, accepted orders, rider assignments, and delivery progress — all updated live. Everything stays synchronized across devices."
+        },
+        "support": {
+          "title": "24/7 Support for Restaurants",
+          "description": "Get priority assistance at any time. From technical help to menu optimization, our support team ensures your operations run smoothly."
+        }
+      }
+    },
+    "sectionSix": {
+      "titleLineOne": "Transforming",
+      "titleLineTwo": "Restaurant Growth,",
+      "titleLineThree": "One Order at a Time.",
+      "description": "Our platform empowers restaurants to operate smarter, serve faster, and scale effortlessly. Designed with advanced automation and real-time insights, we help food businesses stay ahead in a competitive delivery market.",
+      "checklist": {
+        "manageOrders": "Manage all incoming orders instantly",
+        "performanceTools": "Smart tools to boost restaurant performance",
+        "fasterDeliveries": "Faster deliveries, happier customers"
+      },
+      "features": {
+        "multiChannelSync": {
+          "title": "Multi-Channel Sync",
+          "description": "Aggregated orders from UberEats, DoorDash, and your website."
+        },
+        "kitchenDisplay": {
+          "title": "Kitchen Display System (KDS)",
+          "description": "Direct paperless communication between FOH and kitchen."
+        },
+        "realTimeDispatch": {
+          "title": "Real-time Dispatch",
+          "description": "Coordinate with local drivers or 3PL delivery partners instantly."
+        }
+      }
+    },
+    "sectionSeven": {
+      "titleLineOne": "Smooth and Easy",
+      "titleLineTwo": "Restaurant Order",
+      "titleLineThree": "Management",
+      "description": "With user-friendly features, competitive exchange rates, and robust security measures, our platform simplifies international transactions.",
+      "checklist": {
+        "orderFlow": "Seamless order flow from customers to your kitchen",
+        "menuControls": "Smart menu, pricing, and inventory controls"
+      }
+    },
+    "sectionEight": {
+      "eyebrow": "FAQ’S",
+      "titleLineOne": "Frequently",
+      "titleLineTwo": "Asked",
+      "titleLineThree": "Questions",
+      "description": "Ask any questions"
+    },
+    "faq": {
+      "allOrderTypes": {
+        "question": "Can I use the platform for both dine-in and delivery orders?",
+        "answer": "Yes, our system supports all order types — delivery, takeaway, and dine-in. Restaurants can easily manage them through a single dashboard designed for speed and efficiency."
+      },
+      "updateMenu": {
+        "question": "How do I update my restaurant menu?",
+        "answer": "You can update your menu directly from the restaurant dashboard. Add or remove items, update prices, manage variations, and control availability in real time without any technical assistance."
+      },
+      "deliveryRiders": {
+        "question": "Do you provide delivery riders?",
+        "answer": "We support both in-house and third-party delivery models. Restaurants can use their own riders or integrate with supported delivery partners depending on their business needs."
+      },
+      "joiningFees": {
+        "question": "Are there any fees for joining the platform?",
+        "answer": "There are no upfront setup fees. Pricing depends on your selected plan and order volume. Full details are available during onboarding or by contacting our sales team."
+      },
+      "multipleDevices": {
+        "question": "Can I manage orders from multiple devices?",
+        "answer": "Yes. Your account stays synchronized across all devices, allowing you to manage orders, menus, and analytics from multiple tablets, phones, or desktops simultaneously."
+      }
+    },
+    "sectionNine": {
+      "titleLineOne": "Download Our Restaurant App",
+      "titleLineTwo": "and Manage Orders Effortlessly!",
+      "descriptionLineOne": "Take full control of your restaurant operations from anywhere.",
+      "descriptionLineTwo": "Accept orders, update menus, track deliveries, and monitor performance — all",
+      "descriptionLineThree": "through our powerful, easy-to-use mobile app.",
+      "descriptionLineFour": "Enjoy real-time notifications, faster workflows, and a seamless",
+      "descriptionLineFive": "management experience designed for busy restaurant teams.",
+      "store": {
+        "googlePlayAlt": "Google Play",
+        "googlePlayEyebrow": "Get it on",
+        "googlePlay": "Google Play",
+        "appStoreAlt": "App Store",
+        "appStoreEyebrow": "Download on the",
+        "appStore": "App Store"
+      }
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Empowering Food Businesses",
+      "titleLineOne": "Our Mission: To",
+      "titleLineTwo": "Revolutionize",
+      "titleLineThree": "How the World Eats.",
+      "description": "We're building the infrastructure that allows restaurants of all sizes to thrive in a digital-first world. From small cafes to global franchises, we provide the tools to manage every detail seamlessly.",
+      "partnersLabel": "Global Partners Trust Us",
+      "imageOverlayEyebrow": "Innovation in every dish",
+      "imageOverlayTitle": "The Core of Our Operations",
+      "growthFactor": "Growth Factor"
+    },
+    "journey": {
+      "title": "Our Journey",
+      "description": "From a small startup in a garage to a global leader in restaurant technology. Here’s how we got here."
+    },
+    "timeline": {
+      "founded": {
+        "title": "Founded with Vision",
+        "description": "Our founders identified the friction between kitchen operations and digital ordering systems."
+      },
+      "pivot": {
+        "title": "The Great Pivot",
+        "description": "During the global pandemic, we helped over 10,000 restaurants transition to digital-only formats overnight."
+      },
+      "globalExpansion": {
+        "title": "Global Expansion",
+        "description": "Opened offices in London, Singapore, and New York to better serve our growing international client base."
+      }
+    },
+    "teamSection": {
+      "title": "Meet the Visionaries",
+      "description": "Leading the charge in redefining the food industry landscape."
+    },
+    "team": {
+      "marcus": {
+        "role": "CEO & Co-Founder",
+        "description": "Ex-Google engineer with a passion for streamlining complex logistics."
+      },
+      "sarah": {
+        "role": "CTO",
+        "description": "Leading our architecture to support 1M+ transactions per second."
+      },
+      "david": {
+        "role": "COO",
+        "description": "Focused on expanding our global footprint and operational excellence."
+      },
+      "elena": {
+        "role": "Head of Product",
+        "description": "Designing intuitive experiences for both chefs and customers."
+      }
+    },
+    "valuesSection": {
+      "title": "Values That Drive Us",
+      "description": "The core principles behind every line of code we write."
+    },
+    "values": {
+      "speed": {
+        "title": "Speed & Agility",
+        "description": "The food industry moves fast. Our platform moves faster to keep you ahead of the curve."
+      },
+      "restaurantFirst": {
+        "title": "Restaurant First",
+        "description": "Every feature we build starts with a conversation with a chef or restaurant owner."
+      },
+      "trust": {
+        "title": "Ironclad Trust",
+        "description": "Your data and your revenue are safe with our enterprise-grade security protocols."
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Business?",
+      "descriptionLineOne": "Join over 120,000+ restaurant owners who have taken their operations",
+      "descriptionLineTwo": "to the next level.",
+      "primaryButton": "Get Started Now",
+      "secondaryButton": "Request a Demo"
+    }
+  },
+  "services": {
+    "hero": {
+      "badge": "The Complete Platform",
+      "titleLineOne": "Solutions for",
+      "titleLineTwo": "Every Kitchen",
+      "description": "Streamline your operations, from back-of-house inventory to front-of-house service. Our unified platform empowers your team to deliver excellence in every dish and every interaction.",
+      "secondaryCta": "Watch Video"
+    },
+    "items": {
+      "inventoryManagement": {
+        "title": "Inventory Management",
+        "description": "Real-time tracking of ingredients, waste monitoring, and automated reordering to keep your costs down and kitchen running smoothly."
+      },
+      "staffScheduling": {
+        "title": "Staff Scheduling",
+        "description": "Easily manage shifts, monitor labor costs, and streamline employee communication with our intuitive drag-and-drop scheduling tool."
+      },
+      "posIntegration": {
+        "title": "POS Integration",
+        "description": "Connect your existing hardware seamlessly. Sync orders, payments, and kitchen displays in real-time for zero friction service."
+      }
+    },
+    "actions": {
+      "learnMore": "Learn More"
+    },
+    "builtForChefs": {
+      "title": "Built by Chefs, for Chefs.",
+      "description": "We understand the heat of the kitchen. That's why we've designed our interface to be lightning-fast, highly visible, and incredibly simple to use—even during the busiest dinner rushes.",
+      "features": {
+        "uptime": "99.9% Uptime reliability",
+        "prioritySupport": "24/7 Priority support line",
+        "mobileFirst": "Mobile-first design for on-the-go management"
+      }
+    },
+    "stats": {
+      "locationsSupported": {
+        "label": "Locations Supported"
+      },
+      "customerSatisfaction": {
+        "label": "Customer Satisfaction"
+      }
+    },
+    "requestDemo": {
+      "title": "Custom Enterprise Solutions",
+      "description": "Running a restaurant group or a national chain? We provide tailored workflows, multi-location consolidation, and advanced reporting tools designed to scale with your business growth.",
+      "formTitle": "Request a Custom Demo"
+    },
+    "operationalExcellence": {
+      "features": {
+        "multiChannelSync": {
+          "title": "Multi-Channel Sync",
+          "description": "Aggregated orders from UberEats, DoorDash, and your website."
+        },
+        "kitchenDisplay": {
+          "title": "Kitchen Display System (KDS)",
+          "description": "Direct paperless communication between FOH and kitchen."
+        },
+        "realTimeDispatch": {
+          "title": "Real-time Dispatch",
+          "description": "Coordinate with local drivers or 3PL delivery partners instantly."
+        }
+      }
+    }
+  },
+  "categories": {
+    "hero": {
+      "badge": "The Complete Platform",
+      "titleLineOne": "Full Suite of",
+      "titleLineTwo": "Restaurant Solutions",
+      "description": "Streamline your operations, boost your sales, and delight your customers with our all-in-one management platform built for modern dining.",
+      "secondaryCta": "Watch Video"
+    },
+    "sectionThree": {
+      "menuManagement": {
+        "title": "Menu Management",
+        "description": "Easily update dishes, variations, prices & stock levels."
+      },
+      "orderDelivery": {
+        "title": "Order & Delivery Flow",
+        "description": "Easily update dishes, variations, prices & stock levels."
+      },
+      "salesAnalytics": {
+        "title": "Sales & Analytics",
+        "description": "Monitor revenue, popular items, peak hours & performance insights."
+      },
+      "customerFeedback": {
+        "title": "Customer Feedback",
+        "description": "View ratings, respond to reviews & boost your reputation."
+      },
+      "promotions": {
+        "title": "Promotions & Discounts",
+        "description": "Create offers, promo codes & highlight best-selling meals."
+      },
+      "staffRoles": {
+        "title": "Staff & Role Control",
+        "description": "Manage staff accounts, access levels & activity logs."
+      }
+    },
+    "digitalFirst": {
+      "badge": "Digital First",
+      "title": "Menu Management",
+      "description": "Take full control of your digital and physical menus with real-time updates and seamless integration across all channels. Reduce printing costs and adapt instantly.",
+      "button": "Learn More",
+      "imageAlt": "Menu Management",
+      "features": {
+        "qrCode": {
+          "title": "QR Code Integration",
+          "description": "Instant QR generation for contact-less tableside ordering."
+        },
+        "inventorySync": {
+          "title": "Inventory Sync",
+          "description": "Automatically hide out-of-stock items across all platforms."
+        },
+        "dietaryTagging": {
+          "title": "Dietary Tagging",
+          "description": "Easily mark allergens and special diet options (GF, Vegan, etc)."
+        }
+      }
+    },
+    "operationalExcellence": {
+      "badge": "Operational Excellence",
+      "title": "Order & Delivery Flow",
+      "description": "Consolidate all your orders into one intuitive interface. Manage in-house dining and third-party delivery apps without the multi-tablet headache.",
+      "button": "Explore Flow",
+      "imageAlt": "Order & Delivery Flow",
+      "features": {
+        "multiChannelSync": {
+          "title": "Multi-Channel Sync",
+          "description": "Aggregated orders from UberEats, DoorDash, and your website."
+        },
+        "kitchenDisplay": {
+          "title": "Kitchen Display System (KDS)",
+          "description": "Direct paperless communication between FOH and kitchen."
+        },
+        "realTimeDispatch": {
+          "title": "Real-time Dispatch",
+          "description": "Coordinate with local drivers or 3PL delivery partners instantly."
+        }
+      }
+    },
+    "salesAnalytics": {
+      "badge": "Data Insights",
+      "title": "Sales & Analytics",
+      "description": "Make data-driven decisions. Understand your peak hours, most\nprofitable dishes, and customer behavior with detailed visual\nreports.",
+      "button": "View Samples",
+      "stats": {
+        "revenueGrowth": {
+          "label": "Revenue Growth"
+        },
+        "avgOrderSpeed": {
+          "label": "Avg Order Speed"
+        }
+      },
+      "features": {
+        "profitHeatmaps": {
+          "title": "Profit Heatmaps",
+          "description": "Identify high-margin items vs volume sellers."
+        },
+        "laborCostAnalysis": {
+          "title": "Labor Cost Analysis",
+          "description": "Optimize staffing based on historical sales trends."
+        }
+      },
+      "chart": {
+        "title": "Weekly Performance",
+        "subtitle": "Real-time revenue tracking"
+      }
+    }
+  },
+  "pricing": {
+    "hero": {
+      "titleLineOne": "Transparent",
+      "titleLineTwo": "Pricing Plans",
+      "description": "Simple, predictable pricing designed to scale with your restaurant. Choose the plan that fits your kitchen's needs."
+    },
+    "billing": {
+      "monthly": "Monthly Billing",
+      "annual": "Annual Billing",
+      "saveBadge": "Save 20%"
+    },
+    "plans": {
+      "mostPopular": "Most Popular",
+      "starter": {
+        "name": "Starter",
+        "description": "Perfect for single locations and small cafes.",
+        "buttonText": "Choose Starter",
+        "features": {
+          "singleLocation": "Single Location",
+          "corePosFeatures": "Core POS Features",
+          "basicInventoryTracking": "Basic Inventory Tracking",
+          "emailSupport": "Email Support"
+        }
+      },
+      "professional": {
+        "name": "Professional",
+        "description": "Optimized for growing full-service restaurants.",
+        "buttonText": "Start Free Trial",
+        "features": {
+          "upToThreeLocations": "Up to 3 Locations",
+          "advancedLaborManagement": "Advanced Labor Management",
+          "realTimeCostAnalytics": "Real-time Cost Analytics",
+          "smartInventoryForecasts": "Smart Inventory Forecasts",
+          "prioritySupport": "24/7 Priority Support"
+        }
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "Custom solutions for large chains and franchises.",
+        "buttonText": "Contact Sales",
+        "features": {
+          "unlimitedLocations": "Unlimited Locations",
+          "customApiAccess": "Custom API Access",
+          "dedicatedAccountManager": "Dedicated Account Manager",
+          "onsiteImplementation": "On-site Implementation"
+        }
+      }
+    },
+    "comparison": {
+      "title": "Detailed Feature Comparison",
+      "description": "Everything you need to know about our capabilities.",
+      "columns": {
+        "feature": "Feature"
+      },
+      "sections": {
+        "coreOperations": {
+          "title": "Core Operations"
+        },
+        "managementTools": {
+          "title": "Management Tools"
+        }
+      },
+      "features": {
+        "cloudPosIntegration": {
+          "name": "Cloud POS Integration"
+        },
+        "inventoryTracking": {
+          "name": "Inventory Tracking"
+        },
+        "kitchenDisplaySystem": {
+          "name": "Kitchen Display System"
+        },
+        "staffScheduling": {
+          "name": "Staff Scheduling"
+        },
+        "mobileManagementApp": {
+          "name": "Mobile Management App"
+        },
+        "financialReporting": {
+          "name": "Financial Reporting"
+        }
+      },
+      "values": {
+        "basic": "Basic",
+        "advanced": "Advanced",
+        "advancedApi": "Advanced + API",
+        "weekly": "Weekly",
+        "realTime": "Real-time",
+        "realTimeCustom": "Real-time + Custom"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Got questions? We've got answers.",
+      "switchPlans": {
+        "question": "Can I switch plans later?",
+        "answer": "Yes, you can upgrade or downgrade your plan at any time. When upgrading, new features become available immediately. Downgrades take effect at the end of your current billing cycle."
+      },
+      "existingHardware": {
+        "question": "Does Gusto work with my existing hardware?",
+        "answer": "Gusto is hardware-agnostic. We support most modern POS terminals, iPads, and Android tablets. Contact our team to verify your specific setup."
+      },
+      "supportIncluded": {
+        "question": "What kind of support is included?",
+        "answer": "Starter plans include email support. Professional and Enterprise plans include 24/7 priority phone and chat support with guaranteed response times under 30 minutes."
+      },
+      "hiddenFees": {
+        "question": "Are there any hidden setup fees?",
+        "answer": "No. We believe in transparent pricing. There are no mandatory implementation fees. Custom onboarding is available for Enterprise teams if needed."
+      }
+    }
+  },
+  "contact": {
+    "hero": {
+      "badge": "Contact Support",
+      "titleLineOne": "Get in Touch with",
+      "titleLineTwo": "Our Experts",
+      "description": "Need help managing your restaurant or interested in our enterprise solutions? Our team is available 24/7 to assist you."
+    },
+    "sections": {
+      "contactInformation": "Contact Information",
+      "officeLocations": "Office Locations"
+    },
+    "info": {
+      "supportPhone": {
+        "title": "Support Phone",
+        "note": "Available 24/7 for Professional & Enterprise plans"
+      },
+      "salesEmail": {
+        "title": "Sales Email",
+        "note": "Response time within 2 business hours"
+      }
+    },
+    "officeLocations": {
+      "newYork": {
+        "city": "New York"
+      },
+      "london": {
+        "city": "London"
+      }
+    },
+    "infrastructure": {
+      "title": "Global Support Infrastructure",
+      "description": "Providing seamless restaurant management solutions across 50+ countries with localized support teams."
+    },
+    "stats": {
+      "activeRestaurants": {
+        "label": "Active Restaurants"
+      },
+      "liveAssistance": {
+        "label": "Live Assistance"
+      },
+      "expertsGlobally": {
+        "label": "Experts Globally"
+      },
+      "avgResponseTime": {
+        "label": "Avg Response Time"
+      }
+    }
+  },
+  "register": {
+    "title": "Business Onboarding",
+    "subtitle": "Complete the steps below to set up your business",
+    "steps": {
+      "account": "Account",
+      "tenantRestaurant": "Tenant & Restaurant",
+      "branch": "Branch",
+      "type": "Type",
+      "published": "Published"
+    },
+    "user": {
+      "title": "User Info",
+      "profilePhoto": {
+        "optionalLabel": "Profile Photo (Optional)"
+      },
+      "email": {
+        "checking": "Checking email availability...",
+        "checkingShort": "Checking email...",
+        "available": "Email is available for this role",
+        "verifyFailed": "Unable to verify email",
+        "verifyUnavailable": "Unable to verify email right now",
+        "verifyUnavailableWithRetry": "Unable to verify email right now. Please try again.",
+        "existsForRole": "This email already exists for this role",
+        "noAccountForRole": "No account exists with this email for this role",
+        "notAllowed": "This email is not allowed",
+        "waitForVerification": "Please wait while we verify this email",
+        "useAvailable": "Please use an email that is available for this role"
+      }
+    },
+    "tenant": {
+      "title": "Tenant Info",
+      "logo": {
+        "label": "Tenant Logo"
+      }
+    },
+    "restaurant": {
+      "title": "Restaurant Info",
+      "logo": {
+        "label": "Restaurant Logo"
+      }
+    },
+    "support": {
+      "title": "Support Contact"
+    },
+    "branding": {
+      "title": "Branding"
+    },
+    "branch": {
+      "basic": {
+        "title": "Branch Info"
+      },
+      "fields": {
+        "name": {
+          "requiredLabel": "Branch Name*",
+          "placeholder": "F-6 Super Market"
+        },
+        "description": {
+          "requiredLabel": "Description*",
+          "placeholder": "Our flagship branch in Islamabad."
+        }
+      },
+      "coverImage": {
+        "label": "Cover Image",
+        "previewAlt": "Cover preview",
+        "clickToUpload": "Click to upload",
+        "dragDrop": "or drag and drop",
+        "helper": "JPG, JPEG, PNG less than 2MB"
+      },
+      "admin": {
+        "title": "Branch Admin Account",
+        "description": "Create the branch-level administrator who will manage this branch after registration.",
+        "fields": {
+          "firstName": {
+            "label": "First Name",
+            "placeholder": "Branch admin first name"
+          },
+          "lastName": {
+            "label": "Last Name",
+            "placeholder": "Branch admin last name"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "branch.admin@example.com"
+          },
+          "phone": {
+            "label": "Phone",
+            "placeholder": "+92 300 0000000"
+          },
+          "password": {
+            "label": "Password",
+            "placeholder": "Set branch admin password"
+          }
+        }
+      },
+      "address": {
+        "title": "Address",
+        "fields": {
+          "street": {
+            "requiredLabel": "Street*",
+            "placeholder": "Shop 12, Block A"
+          },
+          "area": {
+            "requiredLabel": "Area*",
+            "placeholder": "F-6 Super Market"
+          },
+          "city": {
+            "requiredLabel": "City*",
+            "placeholder": "Islamabad"
+          },
+          "state": {
+            "requiredLabel": "State*",
+            "placeholder": "ICT"
+          },
+          "country": {
+            "requiredLabel": "Country*",
+            "placeholder": "Germany"
+          },
+          "latitude": {
+            "requiredLabel": "Latitude*",
+            "placeholder": "33.7297"
+          },
+          "longitude": {
+            "requiredLabel": "Longitude*",
+            "placeholder": "73.0745"
+          }
+        }
+      },
+      "map": {
+        "addressFromGoogle": "Address from Google Maps*",
+        "searchPlaceholder": "Search restaurant address",
+        "searchButton": "Search Map",
+        "helper": "Select a suggestion, search the address, click the map, or drag the marker to set the branch location.",
+        "coordinatesNotSelected": "Coordinates not selected",
+        "loading": "Loading Google Map",
+        "previewUnavailable": "Google Map preview unavailable",
+        "enableMapHelp": "Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in env to enable map search and preview.",
+        "selectedAddress": "Selected: {address}",
+        "markerTitle": "Branch location",
+        "selectValidAddress": "Please select a valid Google Maps address.",
+        "missingApiKey": "Google Maps API key is missing. Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in env.",
+        "loadFailed": "Failed to load Google Maps. Please verify the API key.",
+        "selectSuggestion": "Please select an address from Google Maps suggestions.",
+        "enterAddress": "Please enter an address to search.",
+        "notReady": "Google Maps is not ready yet.",
+        "noMatch": "No matching address found. Try a more specific address.",
+        "coordinatesSavedOnly": "Google Maps is not ready yet. Coordinates were saved only.",
+        "addressNotResolved": "Location found, but address could not be resolved."
+      },
+      "location": {
+        "title": "Location",
+        "getLocation": "Get Location",
+        "useCurrent": "Use Current Location",
+        "fetching": "Fetching Location...",
+        "unsupported": "Geolocation is not supported in this browser.",
+        "blocked": "Location access is blocked. Please enable it in browser settings.",
+        "permissionDenied": "Please allow location access in your browser.",
+        "unavailable": "Location unavailable.",
+        "timeout": "Request timed out.",
+        "fetchFailed": "Unable to fetch location.",
+        "permissionCheckFailed": "Permission check failed."
+      },
+      "delivery": {
+        "title": "Order & Delivery Area Settings",
+        "description": "Configure customer-facing delivery charges, radius, polygon zones, radius bands, or postal-code based delivery rules.",
+        "modeLabel": "Delivery area calculation mode",
+        "modes": {
+          "radius": {
+            "label": "Radius",
+            "description": "Use straight-line distance from the branch location."
+          },
+          "zone": {
+            "label": "Polygon zones",
+            "description": "Draw multiple delivery areas directly on Google Maps."
+          },
+          "postalCode": {
+            "label": "Postal codes",
+            "description": "Charge delivery by one or more postal-code rules."
+          }
+        },
+        "fields": {
+          "baseDeliveryFee": {
+            "label": "Base Delivery Fee",
+            "placeholder": "Enter Base Delivery Fee"
+          },
+          "radiusKm": {
+            "label": "Radius (km)",
+            "placeholder": "Enter radius, e.g. 7.5"
+          },
+          "minOrderAmount": {
+            "label": "Minimum Order Amount",
+            "placeholder": "Minimum order amount"
+          },
+          "freeDeliveryThreshold": {
+            "label": "Free Delivery Threshold",
+            "placeholder": "Enter free delivery threshold"
+          },
+          "enableFreeDelivery": "Enable Free Delivery",
+          "fromKm": {
+            "label": "From Km"
+          },
+          "toKm": {
+            "label": "To Km"
+          },
+          "deliveryFee": {
+            "label": "Delivery Fee",
+            "placeholder": "Delivery fee"
+          },
+          "minOrder": {
+            "label": "Min Order",
+            "placeholder": "Min order"
+          },
+          "freeDeliveryFrom": {
+            "label": "Free Delivery From",
+            "placeholder": "Threshold"
+          },
+          "zoneName": {
+            "label": "Zone Name",
+            "placeholder": "Enter zone name"
+          },
+          "zoneDeliveryFee": {
+            "label": "Zone Delivery Fee",
+            "placeholder": "Zone delivery fee"
+          },
+          "zoneMinOrder": {
+            "label": "Zone Min Order"
+          },
+          "zoneFreeDeliveryFrom": {
+            "label": "Zone Free Delivery From"
+          },
+          "postalCode": {
+            "label": "Postal Code",
+            "placeholder": "Postal code"
+          }
+        },
+        "actions": {
+          "duplicate": "Duplicate",
+          "remove": "Remove"
+        },
+        "map": {
+          "radiusTitle": "Radius map preview",
+          "zoneTitle": "Polygon zone builder",
+          "radiusDescription": "Preview the straight-line delivery radius from branch latitude/longitude.",
+          "zoneDescription": "Search an area first, generate a starter zone, then fine-tune points by dragging markers.",
+          "searchPlaceholder": "Search area, street, city, or landmark",
+          "searchButton": "Search Map",
+          "generateStarterZone": "Generate Starter Zone",
+          "addCenterPoint": "Add Center Point",
+          "undoLastPoint": "Undo Last Point",
+          "fitActiveZone": "Fit Active Zone",
+          "clearActiveZone": "Clear Active Zone",
+          "selectedMapArea": "Selected map area: {area}",
+          "pointCount": "{count} point(s) selected",
+          "clickDragHelp": "Click map to add · drag markers to adjust",
+          "enableMapHelp": "Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in env to enable map selection.",
+          "radiusFooter": "Branch location comes from the address latitude/longitude above.",
+          "zoneFooter": "For faster setup: search area → generate starter zone → drag points if needed.",
+          "branchCoordinatesNotSelected": "Branch coordinates not selected",
+          "searchedAreaMarker": "Searched area center",
+          "invalidSelectedCoordinates": "Selected map result does not include coordinates.",
+          "enterSearch": "Please enter an area, city, street, or landmark to search.",
+          "noMatchingArea": "No matching area found. Try a more specific search.",
+          "selectSuggestion": "Please select an area from Google Maps suggestions."
+        },
+        "radiusBands": {
+          "title": "Radius Fee Bands",
+          "description": "Optional distance bands for radius-based delivery. Use decimal values like 2.5 or 7.5 km.",
+          "addBand": "Add Band",
+          "empty": "No radius fee band configured. The base delivery fee will be used for the configured radius.",
+          "bandLabel": "Band {number}"
+        },
+        "zones": {
+          "title": "Polygon Delivery Zones",
+          "description": "Add multiple zones. Search the area and use starter-zone generation for faster point selection.",
+          "add": "Add Zone",
+          "empty": "No delivery zone configured yet. Search an area and generate a starter zone, or click the map to start drawing one.",
+          "zoneLabel": "Zone {number}",
+          "defaultName": "Delivery Zone {number}",
+          "activePointCount": "{count} point(s) · Active on map",
+          "clickToEdit": "Click to edit on map",
+          "polygonPoints": "Polygon points",
+          "addEmptyPoint": "Add Empty Point",
+          "noPoints": "No points yet. Select this zone and click on the map, add center point, or generate a starter zone.",
+          "pointLabel": "Point {number}",
+          "removePoint": "Remove point"
+        },
+        "postalRules": {
+          "title": "Postal Code Rules",
+          "description": "Add one or more postal codes with separate delivery fees.",
+          "add": "Add Postal Code",
+          "remove": "Remove postal-code rule",
+          "empty": "No postal code rule configured yet."
+        },
+        "automation": {
+          "title": "Automation",
+          "autoAcceptLabel": "Auto Accept Orders",
+          "autoAcceptDescription": "Automatically accept incoming orders",
+          "estimatedPrepTimeLabel": "Estimated Preparation Time (Minutes)",
+          "estimatedPrepTimePlaceholder": "Preparation time"
+        }
+      }
+    },
+    "fields": {
+      "firstName": {
+        "requiredLabel": "First Name*"
+      },
+      "lastName": {
+        "requiredLabel": "Last Name*"
+      },
+      "email": {
+        "requiredLabel": "Email*"
+      },
+      "phone": {
+        "requiredLabel": "Phone Number*"
+      },
+      "password": {
+        "requiredLabel": "Password*"
+      },
+      "tenantName": {
+        "requiredLabel": "Tenant Name*"
+      },
+      "tenantBio": {
+        "requiredLabel": "Tenant Bio*"
+      },
+      "restaurantName": {
+        "requiredLabel": "Restaurant Name*"
+      },
+      "slug": {
+        "requiredLabel": "Slug*"
+      },
+      "tagline": {
+        "requiredLabel": "Tagline*"
+      },
+      "supportEmail": {
+        "requiredLabel": "Support Email*"
+      },
+      "supportPhone": {
+        "requiredLabel": "Support Phone*"
+      },
+      "supportWhatsapp": {
+        "requiredLabel": "Support WhatsApp*"
+      },
+      "primaryColor": {
+        "requiredLabel": "Primary Color*"
+      },
+      "secondaryColor": {
+        "requiredLabel": "Secondary Color*"
+      },
+      "fontFamily": {
+        "label": "Font Family"
+      }
+    },
+    "upload": {
+      "uploading": "Uploading...",
+      "imageUploaded": "Image uploaded",
+      "imageSelected": "Image selected",
+      "chooseFile": "Choose File",
+      "helper2Mb": "PNG, JPG, JPEG upto 2MB"
+    },
+    "otp": {
+      "title": "Verify Email",
+      "description": "Enter the OTP sent to your email address to continue your business onboarding.",
+      "sentTo": "OTP sent to",
+      "fallbackEmail": "your email address",
+      "fieldLabel": "Enter OTP",
+      "placeholder": "Enter OTP",
+      "helper": "Please check your inbox or spam folder for the verification code.",
+      "verifying": "Verifying...",
+      "verify": "Verify OTP",
+      "changeEmail": "Change Email",
+      "enterOtpError": "Please enter OTP",
+      "validOtpError": "Please enter a valid OTP",
+      "verificationFailed": "OTP verification failed",
+      "emailVerified": "Email verified successfully!"
+    },
+    "toasts": {
+      "userAlreadyExists": "User already exists. Please verify the OTP sent to your email.",
+      "registrationFailed": "Failed to register",
+      "accessTokenMissing": "Access token not received",
+      "registrationSuccessful": "Registration successful! Please verify OTP.",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "settings": {
+      "title": "Order Types Supported",
+      "orderTypes": {
+        "takeaway": {
+          "label": "Takeaway",
+          "description": "Customers collect orders from you"
+        },
+        "delivery": {
+          "label": "Delivery",
+          "description": "Delivered to customer's location"
+        },
+        "dineIn": {
+          "label": "Dine-in / QR",
+          "description": "Table service with QR code ordering"
+        }
+      },
+      "actions": {
+        "publish": "Publish",
+        "publishing": "Publishing..."
+      }
+    },
+    "ordersPublish": {
+      "tabs": {
+        "orders": "Orders",
+        "publish": "Publish"
+      },
+      "orderProcessing": "Order Processing"
+    },
+    "publish": {
+      "storeUsername": "Store Username",
+      "nameLabel": "Name*",
+      "uniqueUrl": "Unique URL",
+      "chooseUniqueUsername": "Choose a unique username for your store URL",
+      "suggestions": "Suggestions",
+      "previewUrl": "Preview URL Link",
+      "publishStore": "Publish Store"
+    },
+    "published": {
+      "successBadge": "Store setup completed successfully",
+      "title": "Your store is now live",
+      "description": "Your business account, restaurant profile, branch setup, and dashboard access are ready. Use the secure login link or scan the QR code to access the admin dashboard.",
+      "actions": {
+        "openDashboard": "Open Dashboard",
+        "copyLink": "Copy Link",
+        "copying": "Copying...",
+        "open": "Open",
+        "visitDashboard": "Visit Dashboard",
+        "downloadQr": "Download QR",
+        "downloading": "Downloading..."
+      },
+      "toasts": {
+        "dashboardLinkCopied": "Dashboard link copied",
+        "dashboardLinkCopyFailed": "Unable to copy dashboard link",
+        "qrDownloaded": "QR code downloaded",
+        "qrDownloadFailed": "Unable to download QR code"
+      },
+      "summary": {
+        "title": "Store Summary",
+        "description": "Review the details created during onboarding.",
+        "active": "Active"
+      },
+      "dashboardAccess": {
+        "title": "Dashboard Access",
+        "description": "The owner can sign in using the registered email address. The dashboard link includes the restaurant context for a smoother login experience.",
+        "loginUrl": "Login URL"
+      },
+      "systemReferences": {
+        "title": "System References",
+        "description": "Internal IDs generated by the platform after successful onboarding."
+      },
+      "qr": {
+        "title": "QR Code",
+        "description": "Scan this QR code to open the admin dashboard login page directly.",
+        "linkedEmail": "Linked Email",
+        "securityNote": "Share this QR only with authorized business users. Anyone with the link can open the login page, but authentication is still required."
+      },
+      "labels": {
+        "restaurant": "Restaurant",
+        "tenant": "Tenant",
+        "branch": "Branch",
+        "ownerEmail": "Owner Email",
+        "ownerId": "Owner ID",
+        "tenantId": "Tenant ID",
+        "restaurantId": "Restaurant ID",
+        "branchId": "Branch ID"
+      },
+      "fallbacks": {
+        "businessAccount": "Business Account",
+        "mainBranch": "Main Branch",
+        "yourRestaurant": "Your Restaurant",
+        "notAvailable": "Not available"
+      }
+    }
+  },
+  "forms": {
+    "fields": {
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "John Doe"
+      },
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "First Name"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "placeholder": "Last Name"
+      },
+      "workEmail": {
+        "label": "Work Email",
+        "placeholder": "john@restaurant.com",
+        "shortPlaceholder": "Work Email"
+      },
+      "restaurantName": {
+        "label": "Restaurant Name",
+        "placeholder": "The Gusto Kitchen"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "How can we help your business today?"
+      },
+      "companySize": {
+        "label": "Company Size",
+        "placeholder": "Select company size"
+      }
+    },
+    "companySizeOptions": {
+      "tenToFifty": "10-50 Employees",
+      "fiftyOneToTwoHundred": "51-200 Employees",
+      "twoHundredOneToFiveHundred": "201-500 Employees",
+      "fiveHundredPlus": "500+ Employees"
+    },
+    "actions": {
+      "sendMessage": "Send Message",
+      "bookDemo": "Book Your Demo",
+      "submitting": "Submitting..."
+    },
+    "contact": {
+      "needInstantAnswers": "Need instant answers?",
+      "checkFaq": "Check our FAQ"
+    },
+    "status": {
+      "submitSuccess": "Message sent successfully.",
+      "submitError": "Something went wrong. Please try again."
+    }
+  },
+  "validation": {
+    "register": {
+      "validEmail": "Please enter a valid email address",
+      "profilePhotoMaxSize": "Profile photo must be less than {size}MB.",
+      "tenantLogoMaxSize": "Tenant logo must be less than {size}MB.",
+      "restaurantLogoMaxSize": "Restaurant logo must be less than {size}MB.",
+      "branchCoverImageMaxSize": "Cover image must be less than {size}MB.",
+      "areaRequired": "Area is required",
+      "branchNameRequired": "Branch name is required",
+      "cityRequired": "City is required",
+      "countryRequired": "Country is required",
+      "descriptionRequired": "Description is required",
+      "emailRequired": "Email is required",
+      "fileMaxSize": "File must be less than {size}MB",
+      "fileRequired": "File is required",
+      "firstNameMin": "First name must be at least 2 characters",
+      "firstNameRequired": "First name is required",
+      "fontFamilyRequired": "Font family is required",
+      "imageRequired": "Image is required",
+      "imageTypes": "Only PNG, JPG, JPEG allowed",
+      "invalidAmount": "Invalid amount",
+      "invalidEmail": "Invalid email",
+      "invalidEmailFormat": "Invalid email format",
+      "invalidFile": "Invalid file",
+      "invalidHexColor": "Invalid hex color",
+      "invalidPhoneNumber": "Invalid phone number",
+      "invalidPrepTime": "Invalid prep time",
+      "invalidRadius": "Invalid radius",
+      "invalidTaxValue": "Invalid tax value",
+      "invalidWhatsappNumber": "Invalid WhatsApp number",
+      "lastNameMin": "Last name must be at least 2 characters",
+      "lastNameRequired": "Last name is required",
+      "latitudeNumber": "Latitude must be a number",
+      "latitudeRequired": "Latitude is required",
+      "longitudeNumber": "Longitude must be a number",
+      "longitudeRequired": "Longitude is required",
+      "minOrderRequired": "Minimum order required",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordRequired": "Password is required",
+      "phoneRequired": "Phone number is required",
+      "prepTimeRequired": "Prep time required",
+      "primaryColorRequired": "Primary color is required",
+      "radiusRequired": "Radius required",
+      "restaurantNameRequired": "Restaurant name is required",
+      "secondaryColorRequired": "Secondary color is required",
+      "slugInvalid": "Slug must contain lowercase letters, numbers, and hyphens only",
+      "slugRequired": "Slug is required",
+      "stateRequired": "State is required",
+      "streetRequired": "Street is required",
+      "supportEmailRequired": "Support email is required",
+      "supportPhoneRequired": "Support phone is required",
+      "taglineRequired": "Tagline is required",
+      "taxPercentageRequired": "Tax percentage required",
+      "tenantBioRequired": "Tenant bio is required",
+      "tenantNameRequired": "Tenant name is required",
+      "whatsappRequired": "WhatsApp number is required"
+    }
+  },
+  "errors": {
+    "uploadUrlFailed": "Failed to get upload URL",
+    "invalidPresignedResponse": "Invalid presigned response",
+    "uploadFailed": "Upload failed"
+  }
+}
