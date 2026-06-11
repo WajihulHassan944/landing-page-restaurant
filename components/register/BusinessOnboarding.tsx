@@ -14,7 +14,12 @@ import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 
 type PublishedResponseData = {
+  branchAdminCredentials?: {
+    email?: unknown;
+    password?: unknown;
+  };
   branchId?: unknown;
+  email?: unknown;
   ownerId?: unknown;
   restaurant?: {
     id?: unknown;
@@ -88,6 +93,18 @@ const toStringValue = (value: unknown, fallback = "") => {
   return String(value);
 };
 
+const createSlug = (value: string, fallback = "restaurant") => {
+  const slug = value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return slug || fallback;
+};
+
 const normalizeArray = (value: unknown) => {
   return Array.isArray(value) ? value : [];
 };
@@ -104,7 +121,11 @@ const omitAuthTokens = (value: PlainObject): PublishedResponseData => {
 };
 
 const normalizeDeliveryMode = (mode: unknown) => {
-  return mode === "ZONE" || mode === "POSTAL_CODE" ? mode : "RADIUS";
+  if (mode === "ZONE" || mode === "POSTAL_CODE" || mode === "ZONE_BANDS") {
+    return mode;
+  }
+
+  return "RADIUS";
 };
 
 const normalizeDeliveryZones = (zones: unknown) => {
@@ -173,9 +194,133 @@ const normalizePostalCodeRules = (rules: unknown) => {
       return {
         postalCode: toStringValue(rule.postalCode).trim(),
         deliveryFee: toNumber(rule.deliveryFee, 0),
+        minOrderAmount: toNumber(rule.minOrderAmount, 0),
+        freeDeliveryThreshold: toNumber(rule.freeDeliveryThreshold, 0),
       };
     })
-    .filter((rule) => rule.postalCode || rule.deliveryFee > 0);
+    .filter(
+      (rule) =>
+        rule.postalCode ||
+        rule.deliveryFee > 0 ||
+        rule.minOrderAmount > 0 ||
+        rule.freeDeliveryThreshold > 0
+    );
+};
+
+const createRestaurantBrandingPayload = (brandingValue: unknown) => {
+  const branding = normalizePlainObject(brandingValue);
+  const darkInput = normalizePlainObject(branding.dark);
+  const themeInput = normalizePlainObject(branding.theme);
+  const themeDarkInput = normalizePlainObject(themeInput.dark);
+  const appInput = normalizePlainObject(branding.app);
+  const checkoutInput = normalizePlainObject(branding.checkout);
+  const assetsInput = normalizePlainObject(branding.assets);
+  const assetLogosInput = normalizePlainObject(assetsInput.logos);
+  const logoInput = normalizePlainObject(branding.logo);
+  const primaryColor = toStringValue(branding.primaryColor, "#c1000a");
+  const secondaryColor = toStringValue(branding.secondaryColor, "#030401");
+  const accentColor = toStringValue(branding.accentColor, "#F59E0B");
+  const backgroundColor = toStringValue(branding.backgroundColor, "#F5F5F5");
+  const textColor = toStringValue(branding.textColor, "#030401");
+  const fontFamily = toStringValue(
+    branding.fontFamily,
+    "var(--font-onest), 'Onest', 'Onest Fallback', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  );
+  const headingFontFamily = toStringValue(
+    branding.headingFontFamily,
+    fontFamily
+  );
+  const borderRadius = toStringValue(branding.borderRadius, "12px");
+  const buttonStyle = toStringValue(branding.buttonStyle, "rounded");
+  const dark = {
+    primaryColor: toStringValue(
+      darkInput.primaryColor ?? themeDarkInput.primaryColor,
+      "#FF4D57"
+    ),
+    secondaryColor: toStringValue(
+      darkInput.secondaryColor ?? themeDarkInput.secondaryColor,
+      "#F5F5F5"
+    ),
+    accentColor: toStringValue(
+      darkInput.accentColor ?? themeDarkInput.accentColor,
+      "#FBBF24"
+    ),
+    backgroundColor: toStringValue(
+      darkInput.backgroundColor ?? themeDarkInput.backgroundColor,
+      "#030401"
+    ),
+    textColor: toStringValue(
+      darkInput.textColor ?? themeDarkInput.textColor,
+      "#F5F5F5"
+    ),
+  };
+
+  return {
+    primaryColor,
+    secondaryColor,
+    accentColor,
+    backgroundColor,
+    textColor,
+    dark,
+    fontFamily,
+    headingFontFamily,
+    borderRadius,
+    buttonStyle,
+    theme: {
+      mode: toStringValue(themeInput.mode, "light"),
+      primaryColor: toStringValue(themeInput.primaryColor, primaryColor),
+      secondaryColor: toStringValue(themeInput.secondaryColor, secondaryColor),
+      accentColor: toStringValue(themeInput.accentColor, accentColor),
+      backgroundColor: toStringValue(themeInput.backgroundColor, backgroundColor),
+      textColor: toStringValue(themeInput.textColor, textColor),
+      dark,
+      fontFamily: toStringValue(themeInput.fontFamily, fontFamily),
+      headingFontFamily: toStringValue(themeInput.headingFontFamily, headingFontFamily),
+      borderRadius: toStringValue(themeInput.borderRadius, borderRadius),
+      buttonStyle: toStringValue(themeInput.buttonStyle, buttonStyle),
+      homeLayout: toStringValue(themeInput.homeLayout, "hero"),
+      menuCardStyle: toStringValue(themeInput.menuCardStyle, "image-top"),
+      showPopularItems: Boolean(themeInput.showPopularItems ?? true),
+      showCategories: Boolean(themeInput.showCategories ?? true),
+    },
+    app: {
+      homeLayout: toStringValue(appInput.homeLayout, "hero"),
+      menuCardStyle: toStringValue(appInput.menuCardStyle, "image-top"),
+      showTagline: Boolean(appInput.showTagline ?? true),
+      showHeroBanner: Boolean(appInput.showHeroBanner ?? true),
+      splashColor: toStringValue(appInput.splashColor, primaryColor),
+      statusBarColor: toStringValue(appInput.statusBarColor, secondaryColor),
+      bottomNavColor: toStringValue(appInput.bottomNavColor, backgroundColor),
+    },
+    checkout: {
+      showLogo: Boolean(checkoutInput.showLogo ?? true),
+      showSupportContact: Boolean(checkoutInput.showSupportContact ?? true),
+      successMessage: toStringValue(
+        checkoutInput.successMessage,
+        "Thank you for ordering with us."
+      ),
+      highlightColor: toStringValue(checkoutInput.highlightColor, primaryColor),
+      successColor: toStringValue(checkoutInput.successColor, "#00A63E"),
+      warningColor: toStringValue(checkoutInput.warningColor, accentColor),
+      errorColor: toStringValue(checkoutInput.errorColor, primaryColor),
+    },
+    assets: {
+      logoUrl: toStringValue(assetsInput.logoUrl),
+      coverImage: toStringValue(assetsInput.coverImage),
+      heroBannerUrl: toStringValue(assetsInput.heroBannerUrl),
+      placeholderImage: toStringValue(assetsInput.placeholderImage),
+      faviconUrl: toStringValue(assetsInput.faviconUrl),
+      logos: {
+        primaryLogoUrl: toStringValue(assetLogosInput.primaryLogoUrl),
+        compactLogoUrl: toStringValue(assetLogosInput.compactLogoUrl),
+        faviconUrl: toStringValue(assetLogosInput.faviconUrl),
+      },
+    },
+    logo: {
+      light: toStringValue(logoInput.light),
+      dark: toStringValue(logoInput.dark),
+    },
+  };
 };
 
 const buildBranchSettingsPayload = (settingsValue: unknown) => {
@@ -184,21 +329,21 @@ const buildBranchSettingsPayload = (settingsValue: unknown) => {
   const automation = normalizePlainObject(settings.automation);
   const taxation = normalizePlainObject(settings.taxation);
   const contact = normalizePlainObject(settings.contact);
+  const serviceCharge = normalizePlainObject(settings.serviceCharge);
 
   const allowedOrderTypes = normalizeArray(settings?.allowedOrderTypes).length
     ? normalizeArray(settings.allowedOrderTypes)
     : ["DELIVERY"];
 
-  const allowedPaymentMethods = normalizeArray(settings?.allowedPaymentMethods)
-    .length
-    ? normalizeArray(settings.allowedPaymentMethods)
-    : ["COD"];
-
   return {
     deliveryTime: toNumber(settings?.deliveryTime, 45),
     tableReservationsEnabled: Boolean(settings?.tableReservationsEnabled ?? false),
+    tableReservationAutoAccept: Boolean(
+      settings?.tableReservationAutoAccept ?? false
+    ),
+    tableCount: toNumber(settings?.tableCount, 0),
     allowedOrderTypes,
-    allowedPaymentMethods,
+    allowedPaymentMethods: ["COD", "PAYPAL"],
     deliveryConfig: {
       mode: normalizeDeliveryMode(deliveryConfig?.mode),
       radiusKm: toNumber(deliveryConfig?.radiusKm ?? settings?.radiusKm, 0),
@@ -229,6 +374,14 @@ const buildBranchSettingsPayload = (settingsValue: unknown) => {
     },
     taxation: {
       taxPercentage: toNumber(taxation?.taxPercentage ?? settings?.taxPercentage, 0),
+    },
+    serviceCharge: {
+      isEnabled: Boolean(serviceCharge?.isEnabled ?? false),
+      type:
+        serviceCharge?.type === "AMOUNT" || serviceCharge?.type === "PERCENTAGE"
+          ? serviceCharge.type
+          : "PERCENTAGE",
+      value: toNumber(serviceCharge?.value, 0),
     },
     contact: {
       whatsapp: toStringValue(contact?.whatsapp),
@@ -299,9 +452,83 @@ export function BusinessOnboarding() {
         phone: "",
       },
       branding: {
-        primaryColor: "#e4002b",
-        secondaryColor: "#ffffff",
-        fontFamily: "Poppins",
+        primaryColor: "#c1000a",
+        secondaryColor: "#030401",
+        accentColor: "#F59E0B",
+        backgroundColor: "#F5F5F5",
+        textColor: "#030401",
+        dark: {
+          primaryColor: "#FF4D57",
+          secondaryColor: "#F5F5F5",
+          accentColor: "#FBBF24",
+          backgroundColor: "#030401",
+          textColor: "#F5F5F5",
+        },
+        fontFamily:
+          "var(--font-onest), 'Onest', 'Onest Fallback', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        headingFontFamily:
+          "var(--font-onest), 'Onest', 'Onest Fallback', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        borderRadius: "12px",
+        buttonStyle: "rounded",
+        theme: {
+          mode: "light",
+          primaryColor: "#c1000a",
+          secondaryColor: "#030401",
+          accentColor: "#F59E0B",
+          backgroundColor: "#F5F5F5",
+          textColor: "#030401",
+          dark: {
+            primaryColor: "#FF4D57",
+            secondaryColor: "#F5F5F5",
+            accentColor: "#FBBF24",
+            backgroundColor: "#030401",
+            textColor: "#F5F5F5",
+          },
+          fontFamily:
+            "var(--font-onest), 'Onest', 'Onest Fallback', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          headingFontFamily:
+            "var(--font-onest), 'Onest', 'Onest Fallback', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          borderRadius: "12px",
+          buttonStyle: "rounded",
+          homeLayout: "hero",
+          menuCardStyle: "image-top",
+          showPopularItems: true,
+          showCategories: true,
+        },
+        app: {
+          homeLayout: "hero",
+          menuCardStyle: "image-top",
+          showTagline: true,
+          showHeroBanner: true,
+          splashColor: "#c1000a",
+          statusBarColor: "#030401",
+          bottomNavColor: "#F5F5F5",
+        },
+        checkout: {
+          showLogo: true,
+          showSupportContact: true,
+          successMessage: "Thank you for ordering with us.",
+          highlightColor: "#c1000a",
+          successColor: "#00A63E",
+          warningColor: "#F59E0B",
+          errorColor: "#c1000a",
+        },
+        assets: {
+          logoUrl: "",
+          coverImage: "",
+          heroBannerUrl: "",
+          placeholderImage: "",
+          faviconUrl: "",
+          logos: {
+            primaryLogoUrl: "",
+            compactLogoUrl: "",
+            faviconUrl: "",
+          },
+        },
+        logo: {
+          light: "",
+          dark: "",
+        },
       },
       socialMedia: {},
     },
@@ -314,8 +541,9 @@ export function BusinessOnboarding() {
       coverImageFile: undefined as File | undefined,
       description: "",
       address: {
+        houseNumber: "",
         street: "",
-        area: "",
+        postalCode: "",
         city: "",
         state: "",
         country: "Pakistan",
@@ -326,13 +554,15 @@ export function BusinessOnboarding() {
       settings: {
         deliveryTime: 45,
         tableReservationsEnabled: false,
+        tableReservationAutoAccept: false,
+        tableCount: 0,
         allowedOrderTypes: ["DELIVERY"],
-        allowedPaymentMethods: ["COD"],
+        allowedPaymentMethods: ["COD", "PAYPAL"],
         deliveryConfig: {
           mode: "RADIUS",
-          radiusKm: 0,
+          radiusKm: 5,
           minOrderAmount: 0,
-          deliveryFee: 0,
+          deliveryFee: 150,
           isFreeDelivery: false,
           freeDeliveryThreshold: 0,
           zones: [],
@@ -341,7 +571,7 @@ export function BusinessOnboarding() {
         },
         automation: {
           autoAcceptOrders: false,
-          estimatedPrepTime: 0,
+          estimatedPrepTime: 30,
         },
         taxation: {
           taxPercentage: 0,
@@ -350,16 +580,21 @@ export function BusinessOnboarding() {
           whatsapp: "",
           phone: "",
         },
+        serviceCharge: {
+          isEnabled: false,
+          type: "PERCENTAGE",
+          value: 0,
+        },
 
         // Legacy fields kept for backward compatibility with older step components.
         taxPercentage: 0,
         isFreeDelivery: false,
         freeDeliveryThreshold: 0,
-        deliveryFee: 0,
+        deliveryFee: 150,
         minOrderAmount: 0,
-        radiusKm: 0,
+        radiusKm: 5,
         autoAcceptOrders: false,
-        estimatedPrepTime: 0,
+        estimatedPrepTime: 30,
       },
     },
   });
@@ -437,6 +672,10 @@ export function BusinessOnboarding() {
     const branchSettingsPayload = buildBranchSettingsPayload(
       formData.branch.settings
     );
+    const tenantSlug = createSlug(
+      formData.tenant.slug || formData.tenant.name || formData.restaurant.name,
+      "tenant"
+    );
 
     const payload = {
       user: {
@@ -456,7 +695,7 @@ export function BusinessOnboarding() {
       },
       tenant: {
         name: formData.tenant.name,
-        slug: formData.tenant.slug || formData.restaurant.slug,
+        slug: tenantSlug,
         logoUrl: formData.tenant.logoUrl,
         bio: formData.tenant.bio,
         socialLinks: normalizePlainObject(formData.tenant.socialLinks),
@@ -464,7 +703,6 @@ export function BusinessOnboarding() {
       },
       restaurant: {
         name: formData.restaurant.name,
-        slug: formData.restaurant.slug,
         logoUrl: formData.restaurant.logoUrl,
         coverImage:
           formData.restaurant.coverImage || formData.branch.coverImage || "",
@@ -472,7 +710,7 @@ export function BusinessOnboarding() {
         bio: formData.restaurant.bio || "",
         tagline: formData.restaurant.tagline,
         supportContact: normalizePlainObject(formData.restaurant.supportContact),
-        branding: normalizePlainObject(formData.restaurant.branding),
+        branding: createRestaurantBrandingPayload(formData.restaurant.branding),
         socialMedia: normalizePlainObject(formData.restaurant.socialMedia),
       },
       branch: {
@@ -485,8 +723,11 @@ export function BusinessOnboarding() {
         coverImage: formData.branch.coverImage,
         description: formData.branch.description,
         settings: branchSettingsPayload,
-        street: formData.branch.address.street,
-        area: formData.branch.address.area,
+        street: [formData.branch.address.houseNumber, formData.branch.address.street]
+          .filter(Boolean)
+          .join(" ")
+          .trim(),
+        area: formData.branch.address.postalCode || "",
         city: formData.branch.address.city,
         state: formData.branch.address.state,
         country: formData.branch.address.country,

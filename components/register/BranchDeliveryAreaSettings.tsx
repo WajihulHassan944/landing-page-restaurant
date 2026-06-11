@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { FormInput } from "./form/FormInput";
 import { DeliveryMap } from "./delivery/DeliveryMap";
 import { DeliveryModeSelector } from "./delivery/DeliveryModeSelector";
@@ -95,7 +96,9 @@ export function BranchDeliveryAreaSettings({
 
   const deliveryConfig = settings?.deliveryConfig || {};
   const deliveryMode: DeliveryMode =
-    deliveryConfig.mode === "ZONE" || deliveryConfig.mode === "POSTAL_CODE"
+    deliveryConfig.mode === "ZONE" ||
+    deliveryConfig.mode === "POSTAL_CODE" ||
+    deliveryConfig.mode === "ZONE_BANDS"
       ? deliveryConfig.mode
       : "RADIUS";
 
@@ -193,6 +196,39 @@ export function BranchDeliveryAreaSettings({
     }
 
     emitSettings(nextSettings);
+  };
+
+  const updateSetting = (
+    key: keyof BranchDeliverySettings,
+    value: boolean | number | string
+  ) => {
+    emitSettings({
+      ...settings,
+      [key]: value,
+    });
+  };
+
+  const updateServiceCharge = (
+    key: "isEnabled" | "type" | "value",
+    value: boolean | number | string
+  ) => {
+    emitSettings({
+      ...settings,
+      serviceCharge: {
+        ...(settings.serviceCharge || {}),
+        [key]: value,
+      },
+    });
+  };
+
+  const updateContact = (key: "phone" | "whatsapp", value: string) => {
+    emitSettings({
+      ...settings,
+      contact: {
+        ...(settings.contact || {}),
+        [key]: value,
+      },
+    });
   };
 
 
@@ -1015,7 +1051,10 @@ export function BranchDeliveryAreaSettings({
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+      <section
+        className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+        data-field="branch.settings.deliveryConfig"
+      >
         <div className="mb-5">
           <h2 className="text-[20px] font-semibold text-gray-900">
             {tRegister("branch.delivery.title")}
@@ -1031,18 +1070,8 @@ export function BranchDeliveryAreaSettings({
             onModeChange={(mode) => updateDeliveryConfig("mode", mode)}
           />
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <FormInput
-              label={tRegister("branch.delivery.fields.baseDeliveryFee.label")}
-              placeholder={tRegister(
-                "branch.delivery.fields.baseDeliveryFee.placeholder"
-              )}
-              value={toInputNumber(delivery.deliveryFee)}
-              onChange={(val) =>
-                updateDeliveryConfig("deliveryFee", val ? Number(val) : 0)
-              }
-            />
-
+          {deliveryMode === "RADIUS" || deliveryMode === "ZONE_BANDS" ? (
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <FormInput
               label={tRegister("branch.delivery.fields.radiusKm.label")}
               value={toInputNumber(delivery.radiusKm)}
@@ -1055,45 +1084,70 @@ export function BranchDeliveryAreaSettings({
               }}
             />
 
-            <FormInput
-              label={tRegister("branch.delivery.fields.minOrderAmount.label")}
-              placeholder={tRegister(
-                "branch.delivery.fields.minOrderAmount.placeholder"
-              )}
-              value={toInputNumber(delivery.minOrderAmount)}
-              onChange={(val) =>
-                updateDeliveryConfig("minOrderAmount", val ? Number(val) : 0)
-              }
-            />
+            {deliveryMode === "RADIUS" ? (
+              <>
+                <FormInput
+                  label={tRegister(
+                    "branch.delivery.fields.baseDeliveryFee.label"
+                  )}
+                  placeholder={tRegister(
+                    "branch.delivery.fields.baseDeliveryFee.placeholder"
+                  )}
+                  value={toInputNumber(delivery.deliveryFee)}
+                  onChange={(val) =>
+                    updateDeliveryConfig("deliveryFee", val ? Number(val) : 0)
+                  }
+                />
 
-            <FormInput
-              label={tRegister(
-                "branch.delivery.fields.freeDeliveryThreshold.label"
-              )}
-              placeholder={tRegister(
-                "branch.delivery.fields.freeDeliveryThreshold.placeholder"
-              )}
-              value={toInputNumber(delivery.freeDeliveryThreshold)}
-              onChange={(val) =>
-                updateDeliveryConfig(
-                  "freeDeliveryThreshold",
-                  val ? Number(val) : 0
-                )
-              }
-            />
+                <FormInput
+                  label={tRegister(
+                    "branch.delivery.fields.minOrderAmount.label"
+                  )}
+                  placeholder={tRegister(
+                    "branch.delivery.fields.minOrderAmount.placeholder"
+                  )}
+                  value={toInputNumber(delivery.minOrderAmount)}
+                  onChange={(val) =>
+                    updateDeliveryConfig(
+                      "minOrderAmount",
+                      val ? Number(val) : 0
+                    )
+                  }
+                />
+
+                <FormInput
+                  label={tRegister(
+                    "branch.delivery.fields.freeDeliveryThreshold.label"
+                  )}
+                  placeholder={tRegister(
+                    "branch.delivery.fields.freeDeliveryThreshold.placeholder"
+                  )}
+                  value={toInputNumber(delivery.freeDeliveryThreshold)}
+                  onChange={(val) =>
+                    updateDeliveryConfig(
+                      "freeDeliveryThreshold",
+                      val ? Number(val) : 0
+                    )
+                  }
+                />
+              </>
+            ) : null}
           </div>
+          ) : null}
 
-          <label className="flex w-fit cursor-pointer items-center gap-3 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
-            <Checkbox
-              checked={Boolean(delivery.isFreeDelivery)}
-              onCheckedChange={(val) =>
-                updateDeliveryConfig("isFreeDelivery", val === true)
-              }
-            />
-            <span className="text-sm">
-              {tRegister("branch.delivery.fields.enableFreeDelivery")}
-            </span>
-          </label>
+          {deliveryMode === "RADIUS" ? (
+            <label className="flex w-fit cursor-pointer items-center gap-3 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
+              <Checkbox
+                checked={Boolean(delivery.isFreeDelivery)}
+                onCheckedChange={(val) =>
+                  updateDeliveryConfig("isFreeDelivery", val === true)
+                }
+              />
+              <span className="text-sm">
+                {tRegister("branch.delivery.fields.enableFreeDelivery")}
+              </span>
+            </label>
+          ) : null}
 
           {shouldShowMap ? (
             <DeliveryMap
@@ -1127,7 +1181,7 @@ export function BranchDeliveryAreaSettings({
             />
           ) : null}
 
-          {deliveryMode === "RADIUS" ? (
+          {deliveryMode === "ZONE_BANDS" ? (
             <RadiusDeliverySettings
               onAddBand={addZoneBand}
               onDuplicateBand={duplicateZoneBand}
@@ -1182,7 +1236,7 @@ export function BranchDeliveryAreaSettings({
                 {tRegister("branch.delivery.automation.autoAcceptDescription")}
               </span>
 
-              <Checkbox
+              <Switch
                 checked={Boolean(settings.automation?.autoAcceptOrders)}
                 onCheckedChange={(val) =>
                   updateAutomation("autoAcceptOrders", val === true)
@@ -1209,6 +1263,158 @@ export function BranchDeliveryAreaSettings({
                   val === "" ? 0 : Number(val)
                 )
               }
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-[26px] border border-gray-100 bg-gradient-to-br from-white via-[#fff8f8] to-white shadow-[0_22px_55px_rgba(15,23,42,0.07)]">
+        <div className="border-b border-white/80 p-5 lg:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                Optional branch controls
+              </p>
+              <h2 className="mt-2 text-[22px] font-semibold text-gray-950">
+                Branch Experience Settings
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                Prefilled operational defaults for launch. These stay optional
+                for the user, but the complete settings object still goes to the
+                backend.
+              </p>
+            </div>
+            <span className="rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+              Hidden: payment methods & tax
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 p-5 lg:grid-cols-2 lg:p-6">
+          <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)]">
+            <FormInput
+              label="Delivery Time (minutes) (Optional)"
+              placeholder="45"
+              value={toInputNumber(settings.deliveryTime)}
+              onChange={(val) =>
+                updateSetting("deliveryTime", val === "" ? 0 : Number(val))
+              }
+            />
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)]">
+            <FormInput
+              label="Table Count (Optional)"
+              placeholder="0"
+              value={toInputNumber(settings.tableCount)}
+              onChange={(val) =>
+                updateSetting("tableCount", val === "" ? 0 : Number(val))
+              }
+            />
+          </div>
+
+          <label className="flex min-h-[96px] cursor-pointer items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)] transition hover:border-primary/30">
+            <span>
+              <span className="block text-sm font-semibold text-gray-950">
+                Table Reservations (Optional)
+              </span>
+              <span className="mt-1 block text-xs leading-5 text-gray-500">
+                Allow customers to request table bookings.
+              </span>
+            </span>
+            <Switch
+              checked={Boolean(settings.tableReservationsEnabled)}
+              onCheckedChange={(val) =>
+                updateSetting("tableReservationsEnabled", val === true)
+              }
+            />
+          </label>
+
+          <label className="flex min-h-[96px] cursor-pointer items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)] transition hover:border-primary/30">
+            <span>
+              <span className="block text-sm font-semibold text-gray-950">
+                Auto-accept Reservations (Optional)
+              </span>
+              <span className="mt-1 block text-xs leading-5 text-gray-500">
+                Confirm reservations automatically when enabled.
+              </span>
+            </span>
+            <Switch
+              checked={Boolean(settings.tableReservationAutoAccept)}
+              onCheckedChange={(val) =>
+                updateSetting("tableReservationAutoAccept", val === true)
+              }
+            />
+          </label>
+
+          <div className="lg:col-span-2">
+            <div className="rounded-[22px] border border-primary/10 bg-white p-4 shadow-[0_16px_40px_rgba(193,0,10,0.07)]">
+              <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <label className="flex cursor-pointer items-center gap-4">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    %
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-gray-950">
+                      Service Charge (Optional)
+                    </span>
+                    <span className="mt-1 block text-xs leading-5 text-gray-500">
+                      Add a percentage or fixed amount service fee at checkout.
+                    </span>
+                  </span>
+                </label>
+                <Switch
+                  checked={Boolean(settings.serviceCharge?.isEnabled)}
+                  onCheckedChange={(val) =>
+                    updateServiceCharge("isEnabled", val === true)
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <label className="block">
+                  <span className="mb-2 block text-[16px] font-medium text-gray-900">
+                    Charge Type
+                  </span>
+                  <select
+                    value={settings.serviceCharge?.type || "PERCENTAGE"}
+                    onChange={(event) =>
+                      updateServiceCharge("type", event.target.value)
+                    }
+                    className="h-[52px] w-full rounded-[10px] border border-[#BBBBBB] bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="PERCENTAGE">Percentage</option>
+                    <option value="AMOUNT">Fixed Amount</option>
+                  </select>
+                </label>
+
+                <FormInput
+                  label="Charge Value"
+                  placeholder="0"
+                  value={toInputNumber(settings.serviceCharge?.value)}
+                  onChange={(val) =>
+                    updateServiceCharge("value", val === "" ? 0 : Number(val))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)]">
+            <FormInput
+              label="Branch Phone (Optional)"
+              placeholder="+923001234567"
+              value={settings.contact?.phone || ""}
+              onChange={(val) => updateContact("phone", val)}
+            />
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)]">
+            <FormInput
+              label="Branch WhatsApp (Optional)"
+              placeholder="+923001234567"
+              value={settings.contact?.whatsapp || ""}
+              onChange={(val) => updateContact("whatsapp", val)}
             />
           </div>
         </div>

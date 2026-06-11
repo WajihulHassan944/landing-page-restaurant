@@ -10,6 +10,8 @@ import {
   CheckCircle2,
   Copy,
   Download,
+  Eye,
+  EyeOff,
   ExternalLink,
   Mail,
   MapPin,
@@ -38,11 +40,17 @@ type OnboardingPublishedFormData = {
   };
   user?: {
     email?: string;
+    password?: string;
   };
 };
 
 type PublishedResponseData = {
+  branchAdminCredentials?: {
+    email?: unknown;
+    password?: unknown;
+  };
   branchId?: unknown;
+  email?: unknown;
   ownerId?: unknown;
   restaurant?: {
     id?: unknown;
@@ -124,6 +132,43 @@ function IdRow({
   );
 }
 
+function CredentialRow({
+  label,
+  value,
+  hidden = false,
+}: {
+  hidden?: boolean;
+  label: string;
+  value: string;
+}) {
+  const [visible, setVisible] = useState(!hidden);
+  const displayValue = hidden && !visible ? "••••••••••" : value;
+
+  return (
+    <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0">
+        <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+          {label}
+        </p>
+        <p className="mt-1 break-all text-sm font-semibold text-gray-900">
+          {displayValue}
+        </p>
+      </div>
+
+      {hidden ? (
+        <button
+          type="button"
+          onClick={() => setVisible((current) => !current)}
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 transition hover:border-primary/40 hover:text-primary"
+          aria-label={visible ? "Hide password" : "Show password"}
+        >
+          {visible ? <EyeOff size={17} /> : <Eye size={17} />}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export function StorePublished({ formData, publishedData }: Props) {
   const tRegister = useTranslations("register");
   const qrRef = useRef<HTMLDivElement>(null);
@@ -165,6 +210,13 @@ export function StorePublished({ formData, publishedData }: Props) {
     tRegister("published.fallbacks.mainBranch")
   );
   const ownerEmail = getValue(formData?.user?.email, notAvailable);
+  const ownerPassword = getValue(formData?.user?.password, notAvailable);
+  const branchAdminEmail = getOptionalString(
+    publishedData?.branchAdminCredentials?.email
+  );
+  const branchAdminPassword = getOptionalString(
+    publishedData?.branchAdminCredentials?.password
+  );
   const tenantName = getValue(
     formData?.tenant?.name,
     tRegister("published.fallbacks.businessAccount")
@@ -215,14 +267,16 @@ export function StorePublished({ formData, publishedData }: Props) {
     <div className="min-h-[80vh] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* SUCCESS HEADER */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 px-6 py-8 text-white shadow-xl sm:px-10 sm:py-10">
-          <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-primary/30 blur-3xl" />
-          <div className="absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+        <div className="relative overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#8f0010_0%,#c1000a_36%,#ef304f_72%,#ff7aa2_128%)] px-6 py-8 text-white shadow-[0_26px_70px_rgba(193,0,10,0.26)] sm:px-10 sm:py-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_0%,rgba(255,255,255,0.24),transparent_32%),radial-gradient(circle_at_88%_8%,rgba(255,190,212,0.55),transparent_34%),linear-gradient(90deg,rgba(55,0,8,0.28),rgba(55,0,8,0)_58%)]" />
+          <div className="absolute -right-12 -top-16 h-44 w-44 rounded-full border border-white/20 bg-white/10" />
+          <div className="absolute bottom-5 right-8 hidden h-20 w-20 rounded-full bg-white/10 blur-sm sm:block" />
+          <div className="absolute -bottom-14 left-1/2 h-32 w-32 rounded-full bg-[#ffbfd1]/25 blur-2xl" />
 
           <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur">
-                <CheckCircle2 size={18} className="text-green-300" />
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-sm font-medium text-white shadow-sm backdrop-blur">
+                <CheckCircle2 size={18} className="text-white" />
                 {tRegister("published.successBadge")}
               </div>
 
@@ -230,7 +284,7 @@ export function StorePublished({ formData, publishedData }: Props) {
                 {tRegister("published.title")}
               </h1>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/85 sm:text-base">
                 {tRegister("published.description")}
               </p>
             </div>
@@ -238,7 +292,7 @@ export function StorePublished({ formData, publishedData }: Props) {
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
               <Button
                 onClick={openDashboard}
-                className="h-12 rounded-xl bg-white px-6 text-gray-950 hover:bg-gray-100"
+                className="h-12 rounded-xl bg-white px-6 text-[#9f0010] shadow-lg shadow-black/10 hover:bg-[#fff4f7]"
               >
                 {tRegister("published.actions.openDashboard")}
                 <ArrowRight size={18} className="ml-2" />
@@ -249,7 +303,7 @@ export function StorePublished({ formData, publishedData }: Props) {
                 variant="outline"
                 onClick={copyDashboardLink}
                 disabled={copying}
-                className="h-12 rounded-xl border-white/20 bg-white/10 px-6 text-white hover:bg-white/20 hover:text-white"
+                className="h-12 rounded-xl border-white/25 bg-white/15 px-6 text-white shadow-sm backdrop-blur hover:bg-white/25 hover:text-white"
               >
                 <Copy size={17} className="mr-2" />
                 {copying
@@ -305,6 +359,52 @@ export function StorePublished({ formData, publishedData }: Props) {
                   label={tRegister("published.labels.ownerEmail")}
                   value={ownerEmail}
                 />
+              </div>
+            </div>
+
+            {/* CREDENTIALS */}
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
+              <div className="flex items-start gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <ShieldCheck size={22} />
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {tRegister("published.credentials.title")}
+                  </h2>
+                  <p className="mt-1 text-sm leading-6 text-gray-500">
+                    {tRegister("published.credentials.description")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 gap-3">
+                <CredentialRow
+                  label={tRegister("published.credentials.ownerEmail")}
+                  value={ownerEmail}
+                />
+                <CredentialRow
+                  hidden
+                  label={tRegister("published.credentials.ownerPassword")}
+                  value={ownerPassword}
+                />
+
+                {branchAdminEmail || branchAdminPassword ? (
+                  <>
+                    <CredentialRow
+                      label={tRegister("published.credentials.branchAdminEmail")}
+                      value={branchAdminEmail || notAvailable}
+                    />
+                    <CredentialRow
+                      hidden
+                      label={tRegister(
+                        "published.credentials.branchAdminPassword"
+                      )}
+                      value={branchAdminPassword || notAvailable}
+                    />
+                  </>
+                ) : null}
               </div>
             </div>
 

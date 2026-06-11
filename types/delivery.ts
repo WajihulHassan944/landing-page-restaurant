@@ -1,6 +1,6 @@
 import type { GoogleAutocomplete, GoogleGeocoderResult } from "@/types/register";
 
-export type DeliveryMode = "POSTAL_CODE" | "RADIUS" | "ZONE";
+export type DeliveryMode = "POSTAL_CODE" | "RADIUS" | "ZONE" | "ZONE_BANDS";
 
 export type LatLngKey = "lat" | "lng";
 
@@ -29,6 +29,8 @@ export type DeliveryZoneBand = {
 
 export type PostalCodeRule = {
   deliveryFee?: number | string;
+  freeDeliveryThreshold?: number | string;
+  minOrderAmount?: number | string;
   postalCode?: string;
 };
 
@@ -49,15 +51,32 @@ export type AutomationSettings = {
   estimatedPrepTime?: number | string;
 };
 
+export type ServiceChargeSettings = {
+  isEnabled?: boolean;
+  type?: "AMOUNT" | "PERCENTAGE";
+  value?: number | string;
+};
+
+export type BranchContactSettings = {
+  phone?: string;
+  whatsapp?: string;
+};
+
 export type BranchDeliverySettings = {
   automation?: AutomationSettings;
+  contact?: BranchContactSettings;
   deliveryConfig?: DeliveryConfig;
   deliveryFee?: number | string;
+  deliveryTime?: number | string;
   estimatedPrepTime?: number | string;
   freeDeliveryThreshold?: number | string;
   isFreeDelivery?: boolean;
   minOrderAmount?: number | string;
   radiusKm?: number | string;
+  serviceCharge?: ServiceChargeSettings;
+  tableCount?: number | string;
+  tableReservationAutoAccept?: boolean;
+  tableReservationsEnabled?: boolean;
 };
 
 export type BranchDeliveryAddress = {
