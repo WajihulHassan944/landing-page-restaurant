@@ -5,13 +5,21 @@ import { Switch } from "@/components/ui/switch";
 import { Bike, ShoppingBag, UtensilsCrossed } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { BranchSettingsValue, RegisterFormData } from "@/types/register";
+import type { PackagePlan } from "@/types/package-plans";
+import { PlanCard } from "@/components/cards/PlanCard";
 
 interface Props {
+  packagePlans: PackagePlan[];
+  packagePlansError: string;
+  packagePlansLoading: boolean;
   formData: RegisterFormData;
   updateFormData: (section: string, data: Record<string, unknown>) => void;
   next: () => void;
   back: () => void;
+  disabledReason?: string;
   isLoading: boolean;
+  onPackagePlanChange: (packagePlanId: string) => void;
+  selectedPackagePlanId: string;
 }
 
 type OrderTypeValue = "TAKEAWAY" | "DELIVERY" | "DINE_IN";
@@ -47,11 +55,17 @@ const getStringArray = (value: unknown) => {
 };
 
 export function SettingsStep({
+  packagePlans,
+  packagePlansError,
+  packagePlansLoading,
   formData,
   updateFormData,
   next,
   back,
+  disabledReason,
   isLoading,
+  onPackagePlanChange,
+  selectedPackagePlanId,
 }: Props) {
   const tCommon = useTranslations("common");
   const tRegister = useTranslations("register");
@@ -89,6 +103,52 @@ export function SettingsStep({
         ))}
       </div>
 
+      <div className="mb-10 rounded-2xl border border-primary/10 bg-slate-50 p-5">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {tRegister("plans.finalStepTitle")}
+            </h3>
+            <p className="mt-1 text-sm text-gray-600">
+              {tRegister("plans.finalStepDescription")}
+            </p>
+          </div>
+
+          {packagePlansLoading ? (
+            <span className="text-sm font-medium text-primary">
+              {tRegister("plans.loading")}
+            </span>
+          ) : null}
+        </div>
+
+        {packagePlansError ? (
+          <p className="mt-4 rounded-xl bg-white px-4 py-3 text-sm text-primary">
+            {packagePlansError}
+          </p>
+        ) : null}
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-8 lg:flex-row lg:items-stretch">
+          {packagePlans.map((plan) => {
+            const selected = selectedPackagePlanId === plan.id;
+
+            return (
+              <PlanCard
+                key={plan.id}
+                actionLabel={
+                  selected
+                    ? tRegister("plans.selectedAction")
+                    : tRegister("plans.chooseAction")
+                }
+                badgeLabel={tRegister("plans.selectedAction")}
+                isHighlighted={selected}
+                onSelect={() => onPackagePlanChange(plan.id)}
+                plan={plan}
+              />
+            );
+          })}
+        </div>
+      </div>
+
       {/* FOOTER */}
       <div className="flex justify-between items-center">
         <Button
@@ -98,20 +158,27 @@ export function SettingsStep({
           {tCommon("actions.back")}
         </Button>
 
-        <Button
-          onClick={next}
-          disabled={isLoading}
-          className="bg-primary hover:bg-red-800 px-16 py-2.5 rounded-[10px] flex items-center justify-center min-w-[180px]"
-        >
-          {isLoading ? (
-            <>
-              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-              {tRegister("settings.actions.publishing")}
-            </>
-          ) : (
-            tRegister("settings.actions.publish")
-          )}
-        </Button>
+        <div className="flex flex-col items-end gap-2">
+          {disabledReason ? (
+            <p className="max-w-xs text-right text-xs text-primary">
+              {disabledReason}
+            </p>
+          ) : null}
+          <Button
+            onClick={next}
+            disabled={isLoading}
+            className="bg-primary hover:bg-red-800 px-16 py-2.5 rounded-[10px] flex items-center justify-center min-w-[180px]"
+          >
+            {isLoading && !disabledReason ? (
+              <>
+                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                {tRegister("settings.actions.publishing")}
+              </>
+            ) : (
+              tRegister("settings.actions.publish")
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );

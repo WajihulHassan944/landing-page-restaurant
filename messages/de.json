@@ -629,6 +629,17 @@
     "title": "Business-Onboarding",
     "subtitle": "Schließen Sie die Schritte unten ab, um Ihr Unternehmen einzurichten",
     "selectedPlan": "Ausgewählter Paketplan:",
+    "plans": {
+      "label": "Paketplan",
+      "loading": "Paketpläne werden geladen...",
+      "placeholder": "Aktiven Paketplan auswählen",
+      "required": "Wählen Sie vor dem Veröffentlichen einen aktiven Paketplan aus.",
+      "loadError": "Paketpläne konnten nicht geladen werden",
+      "finalStepTitle": "Wählen Sie Ihren Paketplan",
+      "finalStepDescription": "Wählen Sie vor dem Veröffentlichen den Plan für dieses Unternehmen. Zahlung oder Rechnung folgt nach der Registrierung.",
+      "chooseAction": "Plan auswählen",
+      "selectedAction": "Ausgewählt"
+    },
     "steps": {
       "account": "Konto",
       "tenantRestaurant": "Mandant & Restaurant",
@@ -1016,11 +1027,16 @@
       "helper": "Bitte prüfen Sie Ihren Posteingang oder Spam-Ordner auf den Verifizierungscode.",
       "verifying": "Wird verifiziert...",
       "verify": "OTP verifizieren",
+      "resending": "OTP wird gesendet...",
+      "resend": "OTP erneut senden",
       "changeEmail": "E-Mail ändern",
       "enterOtpError": "Bitte geben Sie den OTP ein",
       "validOtpError": "Bitte geben Sie einen gültigen OTP ein",
       "verificationFailed": "OTP-Verifizierung fehlgeschlagen",
-      "emailVerified": "E-Mail erfolgreich verifiziert!"
+      "emailVerified": "E-Mail erfolgreich verifiziert!",
+      "emailMissing": "E-Mail-Adresse fehlt",
+      "resendSent": "Falls das Konto existiert, wurde der OTP gesendet",
+      "resendFailed": "OTP konnte nicht erneut gesendet werden"
     },
     "toasts": {
       "userAlreadyExists": "Benutzer existiert bereits. Bitte verifizieren Sie den OTP, der an Ihre E-Mail gesendet wurde.",
@@ -1154,6 +1170,15 @@
         "label": "Restaurantname",
         "placeholder": "The Gusto Kitchen"
       },
+      "restaurantSelect": {
+        "label": "Restaurant",
+        "loading": "Restaurants werden geladen...",
+        "placeholder": "Restaurant auswählen"
+      },
+      "subject": {
+        "label": "Betreff",
+        "placeholder": "Frage zu meiner Bestellung"
+      },
       "message": {
         "label": "Nachricht",
         "placeholder": "Wie können wir Ihrem Unternehmen heute helfen?"
@@ -1180,7 +1205,9 @@
     },
     "status": {
       "submitSuccess": "Nachricht erfolgreich gesendet.",
-      "submitError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+      "submitError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "missingRestaurant": "Bitte wählen Sie ein Restaurant aus.",
+      "restaurantsLoadError": "Restaurants konnten nicht geladen werden."
     }
   },
   "validation": {
