@@ -708,7 +708,7 @@
         "previewAlt": "Titelbild-Vorschau",
         "clickToUpload": "Zum Hochladen klicken",
         "dragDrop": "oder per Drag-and-drop",
-        "helper": "JPG, JPEG, PNG unter 2 MB"
+        "helper": "JPG, JPEG, PNG bis 20 MB"
       },
       "admin": {
         "title": "Filial-Admin-Konto",
@@ -1015,7 +1015,7 @@
       "imageUploaded": "Bild hochgeladen",
       "imageSelected": "Bild ausgewählt",
       "chooseFile": "Datei auswählen",
-      "helper2Mb": "PNG, JPG, JPEG bis 2 MB"
+      "helper2Mb": "PNG, JPG, JPEG bis 20 MB"
     },
     "otp": {
       "title": "E-Mail verifizieren",
@@ -1023,15 +1023,15 @@
       "sentTo": "OTP gesendet an",
       "fallbackEmail": "Ihre E-Mail-Adresse",
       "fieldLabel": "OTP eingeben",
-      "placeholder": "OTP eingeben",
-      "helper": "Bitte prüfen Sie Ihren Posteingang oder Spam-Ordner auf den Verifizierungscode.",
+      "placeholder": "6-stelligen OTP eingeben",
+      "helper": "Bitte prüfen Sie Ihren Posteingang oder Spam-Ordner auf den 6-stelligen Verifizierungscode.",
       "verifying": "Wird verifiziert...",
       "verify": "OTP verifizieren",
       "resending": "OTP wird gesendet...",
       "resend": "OTP erneut senden",
       "changeEmail": "E-Mail ändern",
       "enterOtpError": "Bitte geben Sie den OTP ein",
-      "validOtpError": "Bitte geben Sie einen gültigen OTP ein",
+      "validOtpError": "Bitte geben Sie einen gültigen 6-stelligen OTP ein",
       "verificationFailed": "OTP-Verifizierung fehlgeschlagen",
       "emailVerified": "E-Mail erfolgreich verifiziert!",
       "emailMissing": "E-Mail-Adresse fehlt",
@@ -1039,7 +1039,7 @@
       "resendFailed": "OTP konnte nicht erneut gesendet werden"
     },
     "toasts": {
-      "userAlreadyExists": "Benutzer existiert bereits. Bitte verifizieren Sie den OTP, der an Ihre E-Mail gesendet wurde.",
+      "userAlreadyExists": "Benutzer existiert bereits. Bitte melden Sie sich an oder verwenden Sie eine andere E-Mail.",
       "registrationFailed": "Registrierung fehlgeschlagen",
       "accessTokenMissing": "Access Token nicht erhalten",
       "registrationSuccessful": "Registrierung erfolgreich! Bitte verifizieren Sie den OTP.",

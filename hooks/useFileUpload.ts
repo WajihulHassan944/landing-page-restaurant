@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { API_BASE_URL } from "@/lib/constants";
+import { prepareUploadFile } from "@/lib/prepare-upload-file";
 import { useTranslations } from "next-intl";
 
 interface UploadResult {
@@ -22,11 +23,15 @@ type PresignedUploadResponse = {
   data?: PresignedUploadData;
 };
 
+export const MAX_UPLOAD_FILE_SIZE_MB = 20;
+export const MAX_UPLOAD_FILE_SIZE_BYTES = MAX_UPLOAD_FILE_SIZE_MB * 1024 * 1024;
+
 export const useFileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const tCommon = useTranslations("common");
   const tErrors = useTranslations("errors");
+  const tValidation = useTranslations("validation.register");
 
   const uploadFile = async (file: File): Promise<UploadResult | null> => {
     if (!file) return null;
@@ -34,6 +39,12 @@ export const useFileUpload = () => {
     try {
       setUploading(true);
       setProgress(0);
+
+      if (file.size > MAX_UPLOAD_FILE_SIZE_BYTES) {
+        throw new Error(tValidation("fileMaxSize", { size: MAX_UPLOAD_FILE_SIZE_MB }));
+      }
+
+      const prepared = await prepareUploadFile(file);
 
       const token =
         typeof window !== "undefined"
@@ -50,8 +61,9 @@ export const useFileUpload = () => {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({
-            fileName: file.name,
-            contentType: file.type,
+            fileName: prepared.file.name,
+            contentType: prepared.file.type,
+            fileSize: prepared.file.size,
           }),
         }
       );
@@ -100,7 +112,7 @@ export const useFileUpload = () => {
 
         xhr.onerror = () => reject(new Error(tErrors("uploadFailed")));
 
-        xhr.send(file);
+        xhr.send(prepared.file);
       });
 
       toast.success(tCommon("fileUploaded"));
